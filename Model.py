@@ -21,3 +21,6 @@ data = pd.read_csv('path_to_data.csv')
 
 data['Tomorrow'] = data['TodayClose'].shift(-1)
 
+# Create another column to parameterize (0 or 1) if tomorrow's opening is higher than today's close. Feed this to ML.
+data["Target"] = (data["Tomorrow"] > data["TodayClose"]).astype(int)
+
