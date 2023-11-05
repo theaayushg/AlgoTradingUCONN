@@ -1,6 +1,6 @@
 # Just brainstorming the variables I need to build the Alg.
 What I need? 
-- Stock data: opening price, closing price, high, low, and volume. 
+- Stock data: opening price, closing price, high, low, volume, change_in_x_years, change_in_x_months.
 - Alternative Data: Sentiment from news articles, social media, economic reports, etc
 float:
   Porfolio_size
