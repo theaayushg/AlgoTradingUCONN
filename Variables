@@ -1,3 +1,7 @@
 # Just brainstorming the variables I need to build the Alg.
-Int:
-Porfolio_size
+What I need? 
+- Stock data: opening price, closing price, high, low, and volume. 
+- Alternative Data: Sentiment from news articles, social media, economic reports, etc
+float:
+  Porfolio_size
+  # of a specific stock
