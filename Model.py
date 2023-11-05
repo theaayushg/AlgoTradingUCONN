@@ -4,8 +4,10 @@
 # high momentum return stock or value base on price (1yearreturn/currentprice).
 
 
-#Machine learning: compare prices between today and yesterday 
-# Import
+#Machine learning: compare prices between today and yesterday
+#supervised, unsupervised, and reinforcement learning algorithms
+
+# Import libaries
 import numpy as np
 import pandas as pd
 import math
