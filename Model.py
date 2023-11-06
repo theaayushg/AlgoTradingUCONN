@@ -10,6 +10,7 @@
 # Import libaries
 import numpy as np
 import pandas as pd
+import pandas_ta
 import math
 import xlsxwriter
 from sklearn.ensemble import RandomForestClassifier
@@ -28,7 +29,7 @@ data["Target"] = (data["Tomorrow"] > data["TodayClose"]).astype(int)
 
 # Calculate features of that stock
 # Garman-klass votatility
-# RSI
+# Relative Strength Index
 # Bollinger Bands
 # ATR, MACD
 # Dollar volume
