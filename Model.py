@@ -17,10 +17,18 @@ from sklearn.ensemble import RandomForestClassifier
 
 # Historical data needs to be in a csv format
 # Load historical stock data. The visualization needs to show price on yesterday, today
+# data needs to have close, high, low, open, volume
 data = pd.read_csv('path_to_data.csv')
 
 data['Tomorrow'] = data['TodayClose'].shift(-1)
 
-# Create another column to parameterize (0 or 1) if tomorrow's opening is higher than today's close. Feed this to ML.
+# Create another column to parameterize (0 or 1) if tomorrow's opening is higher than today's close.
+# Can use this column as input to ML.
 data["Target"] = (data["Tomorrow"] > data["TodayClose"]).astype(int)
 
+# Calculate features of that stock
+# Garman-klass votatility
+# RSI
+# Bollinger Bands
+# ATR, MACD
+# Dollar volume
