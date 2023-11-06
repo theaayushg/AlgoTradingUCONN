@@ -32,3 +32,13 @@ data["Target"] = (data["Tomorrow"] > data["TodayClose"]).astype(int)
 # Bollinger Bands
 # ATR, MACD
 # Dollar volume
+data['garman_klass_vol'] = ((np.log(data['high'])-np.log(data['low']))**2)/2-(2*np.log(2)-1)*((np.log(data['adj close'])-np.log(data['open']))**2)
+
+data['rsi'] = data.groupby(level=1)['adj close'].transform(lambda x: pandas_ta.rsi(close=x, length=20))
+
+data['bb_low'] = data.groupby(level=1)['adj close'].transform(lambda x: pandas_ta.bbands(close=np.log1p(x), length=20).iloc[:,0])
+                                                          
+data['bb_mid'] = data.groupby(level=1)['adj close'].transform(lambda x: pandas_ta.bbands(close=np.log1p(x), length=20).iloc[:,1])
+                                                          
+data['bb_high'] = data.groupby(level=1)['adj close'].transform(lambda x: pandas_ta.bbands(close=np.log1p(x), length=20).iloc[:,2])
+
