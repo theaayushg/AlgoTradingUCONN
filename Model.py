@@ -18,7 +18,7 @@ from sklearn.ensemble import RandomForestClassifier
 
 # Historical data needs to be in a csv format
 # Load historical stock data. The visualization needs to show price on yesterday, today
-# data needs to have close, high, low, open, volume
+# data needs to have adj close, close, high, low, open, volume
 data = pd.read_csv('path_to_data.csv')
 
 data['Tomorrow'] = data['TodayClose'].shift(-1)
