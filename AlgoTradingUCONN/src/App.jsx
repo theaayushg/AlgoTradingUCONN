@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 
 import Login from './components/Login';
 import Home from './components/Home';
-import firebase from './services/firebase';
+import auth from './services/firebase';
 
 import './App.css';
 
@@ -12,7 +12,7 @@ function App() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    firebase.auth().onAuthStateChanged(user => {
+    auth.onAuthStateChanged(user => {
       setUser(user);
     })
   }, [])
@@ -20,9 +20,12 @@ function App() {
   console.log(user);
 
   return (
+    <>
+    
     <div className="app">
       {user ? <Home user={user} /> : <Login />}
     </div>
+    </>
   );
 }
 
