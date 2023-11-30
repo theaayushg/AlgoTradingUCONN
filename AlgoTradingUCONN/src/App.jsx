@@ -20,12 +20,9 @@ function App() {
   console.log(user);
 
   return (
-    <>
-    
     <div className="app">
       {user ? <Home user={user} /> : <Login />}
     </div>
-    </>
   );
 }
 
