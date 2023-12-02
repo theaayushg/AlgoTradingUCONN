@@ -3,7 +3,7 @@
 Steps to run
 
 (pre reqs)
-    - npm
+    - Node.js
 
 1. Install firebase by running command:
         npm install firebase
