@@ -1,0 +1,29 @@
+.user-info-container {
+  display: flex;
+  align-items: center;
+}
+
+.user-info-left {
+  display: flex;
+  flex-direction: column;
+  margin-right: 5px;
+}
+
+.user-info-left h6 {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-right: 10px;
+  margin-bottom: 0;
+}
+
+.user-info-right {
+  max-width: 100px;
+}
+
+.user-info-right img {
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  max-height: 100px;
+}

@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
-
-import Login from './components/Login';
-import Home from './components/Home';
 import auth from './services/firebase';
-
+import Header from './components/Header';
+import Graph from './components/Graph';
 import './App.css';
 
 
@@ -21,7 +19,14 @@ function App() {
 
   return (
     <div className="app">
-      {user ? <Home user={user} /> : <Login />}
+      {/* Header */}
+      <div className="app__header">
+        <Header user={user}/>
+      </div>
+      {/* Body */}
+      <div className="app__body">
+        < Graph />
+      </div>
     </div>
   );
 }
