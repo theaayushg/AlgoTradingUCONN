@@ -1,0 +1,35 @@
+.header__wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  color: white;
+  padding: 10px;
+}
+
+.header__logo img {
+  margin-left: 48px;
+  width: 55px;
+  height: auto;
+}
+
+.header__title {
+  margin-left: 48px;
+  color: #64b9ff;
+  font-size: large;
+}
+
+.header__menuItems {
+  margin-left: 48px;
+  margin-right: 48px;
+}
+
+.header__menuItems a {
+  color: #64b9ff;
+  font-weight: bold;
+  text-decoration: none;
+  padding: 0 10px;
+}
+.header__menuItems a:hover {
+  color: #53daf2;
+}
