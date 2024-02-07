@@ -1,7 +1,8 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth"; 
+import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged} from "firebase/auth"; 
+import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -23,10 +24,43 @@ const analytics = getAnalytics(app);
 
 // added for user authentication
 export const auth = getAuth(app);
+export const db = getFirestore(app);
+
 
 const provider = new GoogleAuthProvider();
 provider.setCustomParameters({ prompt: 'select_account' });
 
-export const signInWithGoogle = () => signInWithPopup(auth, provider);
+export const signInWithGoogle = () => {
+  try {
+    return signInWithPopup(auth, provider);
+  } catch (error) {
+    console.error("Error signing in with Google:", error);
+    throw error;
+  }
+};
+
+const createOrUpdateUser = async (user) => {
+  const userRef = doc(db, "user_test", user.uid);
+
+  try {
+    const docSnapshot = await getDoc(userRef);
+
+    if (!docSnapshot.exists()){
+      await setDoc(userRef, {
+        Name: user.displayName,
+        email: user.email,
+        balance: 0.00,
+      });
+    }
+  } catch (error) {
+    console.error("Error checking/updating user in Firestore:", error);
+  }
+};
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    createOrUpdateUser(user);
+  }
+});
 
 export default auth;

@@ -1,23 +1,78 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import {DocumentSnapshot, doc, getDoc, onSnapshot } from 'firebase/firestore';
+import { db } from '../services/firebase';
 import Login from './Login';
 import Logout from './Logout';
 import '../styles/DisplayUserInfo.css';
 
-export function DisplayUserInfo({ user }) {
+export function DisplayUserInfo({ user, onBalanceChange }) {
+  const fallbackImageUrl = 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.istockphoto.com%2Fphotos%2Fuser-profile&psig=AOvVaw2Vm_odSVOsoydD_nS912ve&ust=1701632213627000&source=images&cd=vfe&ved=0CBIQjRxqFwoTCPjp5I7A8YIDFQAAAAAdAAAAABAE';
+  const [balance, setBalance] = useState(0);
+  const [loading, setLoading] = useState(true);
 
-  if(!user) {
-    return <Login />
+  useEffect(() => {
+    if (!user || !user.uid) {
+      setLoading(false);
+      return;
+    }
+
+    const userRef = doc(db, "user_test", user.uid);
+
+    const unsubscribe = onSnapshot(userRef, (docSnapshot) => {
+      if (docSnapshot.exists()) {
+        const newBalance = docSnapshot.data().balance || 0;
+        setBalance(newBalance);
+
+        if (onBalanceChange) {
+          onBalanceChange(newBalance);
+        }
+      }
+      setLoading(false);
+    });
+
+    return () => {
+      unsubscribe();
+    }
+    ////old code
+    // const fetchBalance = async () => {
+    //   try {
+    //     if (user) {
+    //       const userRef = doc(db, "user_test", user.uid);
+    //       const docSnapshot = await getDoc(userRef);
+
+    //       if (docSnapshot.exists()){
+    //         const newBalance = docSnapshot.data().balance || 0;
+    //         setBalance(newBalance);
+
+    //         if (onBalanceChange) {
+    //           onBalanceChange(newBalance);
+    //         }
+    //       }
+    //     }
+    //   } catch (error) {
+    //     console.error("Error fetching balance:", error);
+    //   } finally {
+    //     setLoading(false);
+    //   }
+    // };
+    // fetchBalance();
+  }, [user, onBalanceChange]);
+
+  if (loading) {
+    return <div>Loading ...</div>;
   }
 
-  const fallbackImageUrl = 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.istockphoto.com%2Fphotos%2Fuser-profile&psig=AOvVaw2Vm_odSVOsoydD_nS912ve&ust=1701632213627000&source=images&cd=vfe&ved=0CBIQjRxqFwoTCPjp5I7A8YIDFQAAAAAdAAAAABAE';
+  if (!user) {
+    return <Login />
+  }
 
   return (
     <div className="user-info-container">
       
       <div className="user-info-left">
         <h6>{user.displayName || 'No Display Name'}</h6>
-        <h6>Balance: $0.00 </h6>
-        <Logout />
+        <h6>Balance: ${balance.toFixed(2)}</h6>
+        <Logout /> 
       </div>
       
       <div className="user-info-right">
