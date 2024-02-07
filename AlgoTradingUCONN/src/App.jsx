@@ -1,33 +1,57 @@
 import { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import auth from './services/firebase';
 import Header from './components/Header';
+import Portfolio from './components/Portfolio';
+import AddFunds from './components/AddFunds';
+import Account from './components/Account';
 import Graph from './components/Graph';
 import './App.css';
 
-
+//current issue: line 46, getting the add funds button to work
+// try to get the pages working first, and then implement the button
 
 function App() {
   const [user, setUser] = useState(null);
 
-  useEffect(() => {
-    auth.onAuthStateChanged(user => {
-      setUser(user);
-    })
-  }, [])
 
-  console.log(user);
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setUser(user);
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
+  ////pre pages change useEffect
+  // useEffect(() => {
+  //   auth.onAuthStateChanged(user => {
+  //     setUser(user);
+  //   })
+  // }, [])
+
+  //console.log(user);
 
   return (
-    <div className="app">
-      {/* Header */}
-      <div className="app__header">
-        <Header user={user}/>
+    <Router>
+      <div className="app">
+        {/* Header */}
+        <div className="app__header">
+          <Header user={user}/>
+        </div>
+        {/* Body */}
+        <div className="app__body">
+          <Routes>
+            <Route path="/" element={<Graph />} />
+            <Route path="/portfolio" element={<Portfolio />} />
+            <Route path="/add-funds" element={<AddFunds user={user} />} />
+            <Route path="/account" element={<Account />} />
+          </Routes>
+        </div>
       </div>
-      {/* Body */}
-      <div className="app__body">
-        < Graph />
-      </div>
-    </div>
+    </Router>
   );
 }
 
