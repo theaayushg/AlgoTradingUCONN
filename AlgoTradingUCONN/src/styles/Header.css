@@ -1,10 +1,10 @@
 .header__wrapper {
+  background-color: black;
+  color: white;
   display: flex;
   align-items: center;
   justify-content: space-between;
   height: 64px;
-  color: white;
-  padding: 10px;
 }
 
 .header__logo img {
@@ -30,6 +30,7 @@
   text-decoration: none;
   padding: 0 10px;
 }
-.header__menuItems a:hover {
+.header__menuItems a:hover,
+.header__menuItems a:active {
   color: #53daf2;
 }

@@ -63,16 +63,22 @@ export function DisplayUserInfo({ user, onBalanceChange }) {
   }
 
   if (!user) {
-    return <Login />
+    return (
+      <div className="user-info-container">
+        <div className="user-info-login">
+          <Login />
+        </div>
+      </div>
+    )
   }
 
   return (
     <div className="user-info-container">
       
       <div className="user-info-left">
-        <h6>{user.displayName || 'No Display Name'}</h6>
-        <h6>Balance: ${balance.toFixed(2)}</h6>
-        <Logout /> 
+        <p>{user.displayName || 'No Display Name'}</p>
+        <p>Balance: ${balance.toFixed(2)}</p>
+        <Logout />
       </div>
       
       <div className="user-info-right">

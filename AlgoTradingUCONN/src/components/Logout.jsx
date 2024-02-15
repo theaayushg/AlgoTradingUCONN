@@ -1,12 +1,10 @@
 import React from 'react';
 import { auth } from '../services/firebase'
-import '../App.css';
+import "../styles/Logout.css"
 
 const Logout = () => {
   return (
-    <div className="logout">
-      <button className="button signout" onClick={() => auth.signOut()}>Sign out</button>
-    </div>
+      <button className="button__signout" onClick={() => auth.signOut()}>Sign out</button>
   )
 }
 

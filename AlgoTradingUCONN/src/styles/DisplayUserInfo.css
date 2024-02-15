@@ -1,15 +1,17 @@
 .user-info-container {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+  font-size: small;
 }
 
 .user-info-left {
   display: flex;
   flex-direction: column;
   margin-right: 5px;
+  align-items: center;
 }
 
-.user-info-left h6 {
+.user-info-left p {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -22,8 +24,16 @@
 }
 
 .user-info-right img {
-  width: 100%;
+  width: 50%;
   height: auto;
   max-width: 100%;
   max-height: 100px;
+}
+
+.user-info-login {
+  display: flex;
+  flex-direction: column;
+  margin-left: 0;
+  margin-right: 100px;
+  align-items: center;
 }

@@ -3,9 +3,7 @@ import '../App.css';
 
 const Login = () => {
   return (
-    <div>
-      <button className="button" onClick={signInWithGoogle}><i className="fab fa-google"></i>Sign in</button>
-    </div>
+      <button className="button" onClick={signInWithGoogle}><i className="fab_fa-google"></i>Sign in</button>
   )
 }
 

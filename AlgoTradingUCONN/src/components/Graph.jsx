@@ -11,8 +11,8 @@ const Graph = () => {
 
     if (context) {
       const margin = { top: 20, right: 20, bottom: 30, left: 40 };
-      const width = 800 - margin.left - margin.right;
-      const height = 600 - margin.top - margin.bottom;
+      const width = 750 - margin.left - margin.right;
+      const height = 500 - margin.top - margin.bottom;
 
       const getRandomNumber = (min, max) => Math.random() * (max - min) + min;
       const data = Array.from({ length: 100 }, () => ({

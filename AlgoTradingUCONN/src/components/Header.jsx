@@ -8,10 +8,6 @@ import '../styles/Header.css';
 function Header({ user }) {
   const [currentBalance, setCurrentBalance] = useState(0);
 
-  // const handleAddFunds = () => {
-  //   increaseBalance(user, currentBalance, 10);
-  // };
-
   const handleBalanceChange = (newBalance) => {
     setCurrentBalance(newBalance);
   }

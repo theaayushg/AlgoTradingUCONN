@@ -6,10 +6,11 @@ import Portfolio from './components/Portfolio';
 import AddFunds from './components/AddFunds';
 import Account from './components/Account';
 import Graph from './components/Graph';
+import NewsFeed from './components/NewsFeed';
+import Stats from './components/Stats';
 import './App.css';
 
 //current issue: line 46, getting the add funds button to work
-// try to get the pages working first, and then implement the button
 
 function App() {
   const [user, setUser] = useState(null);
@@ -44,7 +45,12 @@ function App() {
         {/* Body */}
         <div className="app__body">
           <Routes>
-            <Route path="/" element={<Graph />} />
+            <Route path="/" element={
+              <div className="app__container">
+                <NewsFeed />
+                <Stats />
+              </div>
+            } />
             <Route path="/portfolio" element={<Portfolio />} />
             <Route path="/add-funds" element={<AddFunds user={user} />} />
             <Route path="/account" element={<Account />} />
