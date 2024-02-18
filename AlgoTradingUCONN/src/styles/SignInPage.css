@@ -1,0 +1,44 @@
+/* SignInPage.css */
+body, html {
+  height: 100%;
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+.signin-page {
+  background: #0e0e10; /* Dark background for the whole page */
+  color: #ffffff; /* Light text color */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  text-align: center;
+}
+
+h1 {
+  margin-bottom: 2rem;
+  font-size: 2.5rem;
+  color: #ffffff;
+}
+
+.button {
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  color: #0e0e10;
+  background-color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px 0 rgba(0,0,0,0.25);
+  transition: background-color 0.3s ease;
+}
+
+.button:hover {
+  background-color: #f2f2f2;
+}
+
+/* If you're using a Google sign-in icon, you can style it as follows: */
+.i.fab_fa-google {
+  margin-right: 0.5rem;
+}

@@ -8,13 +8,11 @@ import Account from './components/Account';
 import Graph from './components/Graph';
 import NewsFeed from './components/NewsFeed';
 import Stats from './components/Stats';
+import SignInPage from './components/SignInPage';
 import './App.css';
-
-//current issue: line 46, getting the add funds button to work
 
 function App() {
   const [user, setUser] = useState(null);
-
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -35,33 +33,34 @@ function App() {
 
   //console.log(user);
 
-  return (
-    <Router>
-      <div className="app">
-        {/* Header */}
-        <div className="app__header">
-          <Header user={user}/>
-        </div>
-        {/* Body */}
-        <div className="app__body">
-          <Routes>
-            <Route path="/" element={
-              <div className="app__container">
+    return (
+      <Router>
+        <div className="app">
+          {/* Header - you may want to hide this if not logged in */}
+          {user && <div className="app__header">
+            <Header user={user}/>
+          </div>}
+          {/* Body */}
+          <div className="app__body">
+            <Routes>
+              <Route path="/" element={user ? <Navigate to="/portfolio" /> : <SignInPage />} />
+  
+              <Route path="/portfolio" element={user ? <div className="app__container">
+                <Portfolio />
                 <NewsFeed />
                 <Stats />
-              </div>
-            } />
-            <Route path="/portfolio" element={<Portfolio />} />
-            <Route path="/add-funds" element={<AddFunds user={user} />} />
-            <Route path="/account" element={<Account />} />
-          </Routes>
+              </div> : <Navigate to="/" />} 
+              />
+              <Route path="/add-funds" element={user ? <AddFunds user={user} /> : <Navigate to="/" />} />
+              <Route path="/account" element={user ? <Account /> : <Navigate to="/" />} />
+            </Routes>
+          </div>
         </div>
-      </div>
-    </Router>
-  );
-}
-
-export default App;
+      </Router>
+    );
+  }
+  
+  export default App;
 
 
 // import { useState } from 'react'
