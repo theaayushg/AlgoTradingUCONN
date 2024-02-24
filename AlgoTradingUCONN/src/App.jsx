@@ -46,7 +46,7 @@ function App() {
               <Route path="/" element={user ? <Navigate to="/portfolio" /> : <SignInPage />} />
   
               <Route path="/portfolio" element={user ? <div className="app__container">
-                <Portfolio />
+                {/* <Portfolio />  is currently just text */} 
                 <NewsFeed />
                 <Stats />
               </div> : <Navigate to="/" />} 
