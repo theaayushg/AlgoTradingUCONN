@@ -8,7 +8,7 @@ const SignInPage = () => {
   return (
     <div className="signin-page">
       <h1>Welcome to Algo Trading Simulator</h1>
-      <button className="button" onClick={signInWithGoogle}>Sign in with Google</button>
+      <button onClick={signInWithGoogle}>Sign in with Google</button>
     </div>
   );
 };

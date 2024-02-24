@@ -1,5 +1,5 @@
 /* SignInPage.css */
-body, html {
+.signin-page body, html {
   height: 100%;
   margin: 0;
   font-family: Arial, sans-serif;
@@ -16,13 +16,13 @@ body, html {
   text-align: center;
 }
 
-h1 {
+.signin-page h1 {
   margin-bottom: 2rem;
   font-size: 2.5rem;
   color: #ffffff;
 }
 
-.button {
+.signin-page button {
   padding: 1rem 2rem;
   font-size: 1rem;
   color: #0e0e10;
@@ -34,7 +34,7 @@ h1 {
   transition: background-color 0.3s ease;
 }
 
-.button:hover {
+.singin-page button:hover {
   background-color: #f2f2f2;
 }
 
