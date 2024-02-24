@@ -23,7 +23,7 @@ function Header({ user }) {
       {/* page title */}
         <h1 className="header__title"> Team 38 Algorithmic Trading Simulator</h1>
       {/* menuitems */}
-      <div className="header__menuItems">
+      <div className="header__menuItems"> 
         <Link to="/portfolio">Portfolio</Link>
         <Link to="/add-funds">Add Funds</Link>
         <Link to="/account">Account</Link>
