@@ -1,138 +1,109 @@
 import React, { useEffect, useRef, useState } from 'react';
-import {Line} from 'react-chartjs-2'
+//import {Line} from 'react-chartjs-2'
 import './Graph.css';
-// import Chart from 'chart.js/auto';
-// import {db} from '../services/firebase';
+import Chart from 'chart.js/auto';
+import {db} from '../services/firebase';
+import {DocumentSnapshot, doc, getDoc, onSnapshot } from 'firebase/firestore';
+import applStockData from './DataGen'
 
-function Graph() {
+function Graph(user) {
 
-    // const getMyStocks = () => {
-    //     db
-    //     .collection('stocks')
-    //     .onSnapshot(snapshot => {
-    //         console.log(snapshot);
-    //     });
-    // };
+  //   const userRef = doc(db, "user_test", 'sLSyh9pz7JSLdTCvMK8lQEuLtjo1');
+  //   const docbase=onSnapshot(userRef, (docSnapshot) => {
+  //     if (docSnapshot.exists()) {
+  //       console.log(docSnapshot.data().balance || 0);
+  //     };
+  //   }
+  // );
+  //   docbase;
+
+  // const getdata = async (user) => {
+  //   const userRef = doc(db, "user_test", 'sLSyh9pz7JSLdTCvMK8lQEuLtjo1');
+  
+  //   try {
+  //     const docSnapshot = await getDoc(userRef);
+  
+  //     console.log(docSnapshot.balance);
+  //   } catch (error) {
+  //     console.error("Error checking/updating user in Firestore:", error);
+  //   }
+  // };
+  // getdata();
+    // getMyStocks();
     
-    //getMyStocks();
-    const applStockData = {
-      date: [],
-      close: [],
-      open: [],
-      high: [],
-      low: [],
-      volume: []
-    };
     
-    // Set initial values for the first day
-    let previousClose = 100; // Initial closing price
-    let previousHigh = 110; // Initial high price
-    let previousLow = 90; // Initial low price
-    
-    for (let i = 0; i < 100; i++) {
-      // Generate date
-      const currentDate = new Date('2023-01-01');
-      currentDate.setDate(currentDate.getDate() + i);
-      const dateString = currentDate.toISOString().slice(0, 10);
-      applStockData.date.push(dateString);
-      
-      // Generate opening price with reduced volatility
-      const openingDiff = (Math.random() - 0.5) * 2; // Random change within +/- 2
-      let openingPrice = previousClose + openingDiff;
-      openingPrice = Math.max(openingPrice, previousLow); // Ensure opening price is not lower than previous low
-      openingPrice = Math.min(openingPrice, previousHigh); // Ensure opening price is not higher than previous high
-      applStockData.open.push(openingPrice);
-    
-      // Generate closing price with reduced volatility
-      const closingDiff = (Math.random() - 0.5) * 2; // Random change within +/- 2
-      let closingPrice = openingPrice + closingDiff;
-      closingPrice = Math.max(closingPrice, previousLow); // Ensure closing price is not lower than previous low
-      closingPrice = Math.min(closingPrice, previousHigh); // Ensure closing price is not higher than previous high
-      applStockData.close.push(closingPrice);
-      
-      // Generate high price with reduced volatility
-      const highDiff = Math.random() * 5; // Random change up to 5
-      const highPrice = Math.max(openingPrice, closingPrice) + highDiff;
-      applStockData.high.push(highPrice);
-      
-      // Generate low price with reduced volatility
-      const lowDiff = Math.random() * 5; // Random change up to 5
-      const lowPrice = Math.min(openingPrice, closingPrice) - lowDiff;
-      applStockData.low.push(lowPrice);
-      
-      // Update previous prices for next iteration
-      previousClose = closingPrice;
-      previousHigh = highPrice;
-      previousLow = lowPrice;
-      
-      // Generate volume
-      applStockData.volume.push(Math.random() * 100000);
-    }
-    
-    // const [chartInstance, setChartInstance] = useState(null);
-    // const [containerWidth, setContainerWidth] = useState(0);
-    // const canvasRef = useRef(null);
+    const [chartInstance, setChartInstance] = useState(null);
+    const [containerWidth, setContainerWidth] = useState(0);
+    const canvasRef = useRef(null);
 
-    // useEffect(() => {
-    //     const handleResize = () => {
-    //         const width = canvasRef.current.parentElement.clientWidth;
-    //         setContainerWidth(width);
-    //     };
+    useEffect(() => {
+        const handleResize = () => {
+            const width = canvasRef.current.parentElement.clientWidth;
+            setContainerWidth(width);
+        };
 
-    //     handleResize();
+        handleResize();
 
-    //     window.addEventListener('resize', handleResize);
+        window.addEventListener('resize', handleResize);
 
-    //     return () => {
-    //         window.removeEventListener('resize', handleResize);
-    //     };
-    // }, []);
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
 
-    // useEffect(() => {
-    //     if (!containerWidth) return;
+    useEffect(() => {
+        if (!containerWidth) return;
 
-    //     if (chartInstance) {
-    //         chartInstance.destroy();
-    //     }
+        if (chartInstance) {
+            chartInstance.destroy();
+        }
 
-    //     const ctx = canvasRef.current.getContext('2d');
-    //     const newChartInstance = new Chart(ctx, {
-    //         type: 'line',
-    //         data: {
-    //             labels: applStockData.date,
-    //             datasets: [{
-    //                 label: 'My First Dataset',
-    //                 data: applStockData.close,
-    //                 backgroundColor: 'rgba(255, 99, 132, 0.2)',
-    //                 borderColor: 'rgba(255, 99, 132, 1)',
-    //                 borderWidth: 1
-    //             }]
-    //         },
-    //         options: {
-    //             responsive: true,
-    //             maintainAspectRatio: false
-    //         }
-    //     });
-    //     setChartInstance(newChartInstance);
-    // }, [containerWidth]);
-
-    const data = {
-        datasets: [
-            {
-                type: "line",
-                data: applStockData.date.map((date,index) => ({
-                    x:date,
-                    y:applStockData.close[index]
-                }))
+        const ctx = canvasRef.current.getContext('2d');
+        const newChartInstance = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: applStockData.date,
+                datasets: [{
+                    label: 'close',
+                    data: applStockData.close,
+                    backgroundColor: 'purple',
+                    borderColor: 'rgba(50, 50, 200, 1)',
+                    borderWidth: 1
+                },
+              {
+                label:'open',
+                data:applStockData.open,
+                borderColor: 'rgba(50, 50, 200, 1)',
+              },
+              {
+                label:'high',
+                data:applStockData.high,
+                backgroundColor: 'green',
+                borderColor: 'rgba(50, 50, 200, 1)',
+              },
+              {
+                label:'low',
+                data:applStockData.low,
+                backgroundColor: 'yellow',
+                borderColor: 'rgba(50, 50, 200, 1)',
+              },
+              ]},
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                color:'white',
+                backgroundColor:'#9BD0F5',
             }
-        ]
-    };
+        });
+        setChartInstance(newChartInstance);
+    }, [containerWidth]);
+
     return (
-        <div className='linegraph'>
-            {/* <canvas ref={canvasRef}></canvas> */}
-            <Line data={data}/>
-        </div>
-    );
+      <div className='linegraph'>
+          <canvas ref={canvasRef} className='chartStyle'></canvas>
+          {/* <Line data={{}} id="chart" /> */}
+      </div>
+  );
 }
 
 export default Graph;

@@ -1,11 +1,12 @@
-import { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import auth from './services/firebase';
 import Header from './components/Header';
 import Portfolio from './components/Portfolio';
 import AddFunds from './components/AddFunds';
 import Account from './components/Account';
-import Graph from './components/Graph';
+import ThreeScene from './components/Three';
+import Graph from './components/Graph'
 import './App.css';
 
 //current issue: line 46, getting the add funds button to work
@@ -44,7 +45,8 @@ function App() {
         {/* Body */}
         <div className="app__body">
           <Routes>
-            <Route path="/" element={<Graph />} />
+            <Route path="/" element={<ThreeScene />} />
+            <Route path="/" element={<Graph user={user}/>} />
             <Route path="/portfolio" element={<Portfolio />} />
             <Route path="/add-funds" element={<AddFunds user={user} />} />
             <Route path="/account" element={<Account />} />

@@ -1,0 +1,13 @@
+.chartStyle{
+    background-color: rgb(140, 167, 167);
+}
+
+.linegraph{
+    height: 512px;
+}
+
+.canvas {
+    display:flex;
+    overflow-clip-margin:inherit;
+    overflow:auto;
+}

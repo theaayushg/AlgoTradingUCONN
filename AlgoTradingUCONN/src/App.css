@@ -10,5 +10,7 @@ body {
   background-color: black;
 }
 /**/
-
+.app__body{
+  height: 512px;
+}
 
