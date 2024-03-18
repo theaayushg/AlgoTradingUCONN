@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "chartjs-adapter-date-fns": "^3.0.0",
     "firebase": "^10.8.0",
     "react": "^18.2.0",
     "three": "^0.161.0"

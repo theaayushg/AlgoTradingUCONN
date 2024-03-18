@@ -1,37 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
-//import {Line} from 'react-chartjs-2'
 import './Graph.css';
-import Chart from 'chart.js/auto';
-import {db} from '../services/firebase';
-import {DocumentSnapshot, doc, getDoc, onSnapshot } from 'firebase/firestore';
-import applStockData from './DataGen'
+import { Chart, registerables } from 'chart.js';
+import 'chartjs-adapter-date-fns';
+import applStockData from './DataGen'; 
 
 function Graph(user) {
-
-  //   const userRef = doc(db, "user_test", 'sLSyh9pz7JSLdTCvMK8lQEuLtjo1');
-  //   const docbase=onSnapshot(userRef, (docSnapshot) => {
-  //     if (docSnapshot.exists()) {
-  //       console.log(docSnapshot.data().balance || 0);
-  //     };
-  //   }
-  // );
-  //   docbase;
-
-  // const getdata = async (user) => {
-  //   const userRef = doc(db, "user_test", 'sLSyh9pz7JSLdTCvMK8lQEuLtjo1');
-  
-  //   try {
-  //     const docSnapshot = await getDoc(userRef);
-  
-  //     console.log(docSnapshot.balance);
-  //   } catch (error) {
-  //     console.error("Error checking/updating user in Firestore:", error);
-  //   }
-  // };
-  // getdata();
-    // getMyStocks();
-    
-    
     const [chartInstance, setChartInstance] = useState(null);
     const [containerWidth, setContainerWidth] = useState(0);
     const canvasRef = useRef(null);
@@ -58,52 +31,72 @@ function Graph(user) {
             chartInstance.destroy();
         }
 
+        Chart.register(...registerables); // Register necessary components
+
         const ctx = canvasRef.current.getContext('2d');
         const newChartInstance = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: applStockData.date,
                 datasets: [{
-                    label: 'close',
+                    label: 'Close',
                     data: applStockData.close,
                     backgroundColor: 'purple',
                     borderColor: 'rgba(50, 50, 200, 1)',
                     borderWidth: 1
                 },
-              {
-                label:'open',
-                data:applStockData.open,
-                borderColor: 'rgba(50, 50, 200, 1)',
-              },
-              {
-                label:'high',
-                data:applStockData.high,
-                backgroundColor: 'green',
-                borderColor: 'rgba(50, 50, 200, 1)',
-              },
-              {
-                label:'low',
-                data:applStockData.low,
-                backgroundColor: 'yellow',
-                borderColor: 'rgba(50, 50, 200, 1)',
-              },
-              ]},
+                {
+                    label: 'Open',
+                    data: applStockData.open,
+                    borderColor: 'rgba(50, 50, 200, 1)',
+                },
+                {
+                    label: 'High',
+                    data: applStockData.high,
+                    backgroundColor: 'green',
+                    borderColor: 'rgba(50, 50, 200, 1)',
+                },
+                {
+                    label: 'Low',
+                    data: applStockData.low,
+                    backgroundColor: 'yellow',
+                    borderColor: 'rgba(50, 50, 200, 1)',
+                }]
+            },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                color:'white',
-                backgroundColor:'#9BD0F5',
+                color: 'white',
+                backgroundColor: '#9BD0F5',
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Date'
+                        },
+                        type: 'time', // Set x-axis scale type to time
+                        time: {
+                            unit: 'day' // Define time unit
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Value'
+                        }
+                    }
+                }
             }
         });
+
         setChartInstance(newChartInstance);
     }, [containerWidth]);
 
     return (
-      <div className='linegraph'>
-          <canvas ref={canvasRef} className='chartStyle'></canvas>
-          {/* <Line data={{}} id="chart" /> */}
-      </div>
-  );
+        <div className='linegraph'>
+                <canvas ref={canvasRef} className='chartStyle'></canvas>
+        </div>
+    );
 }
 
 export default Graph;

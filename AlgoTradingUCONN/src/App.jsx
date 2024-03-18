@@ -44,9 +44,9 @@ function App() {
         </div>
         {/* Body */}
         <div className="app__body">
+        <Graph/>
           <Routes>
             <Route path="/" element={<ThreeScene />} />
-            <Route path="/" element={<Graph user={user}/>} />
             <Route path="/portfolio" element={<Portfolio />} />
             <Route path="/add-funds" element={<AddFunds user={user} />} />
             <Route path="/account" element={<Account />} />

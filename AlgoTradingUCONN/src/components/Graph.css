@@ -3,10 +3,13 @@
 }
 
 .linegraph{
-    height: 512px;
+    height: 50%;
+    width: 40%;
+    z-index: 1;
 }
 
 .canvas {
+    z-index: 0;
     display:flex;
     overflow-clip-margin:inherit;
     overflow:auto;
