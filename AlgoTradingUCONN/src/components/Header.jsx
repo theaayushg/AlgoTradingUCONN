@@ -5,11 +5,11 @@ import { DisplayUserInfo } from './DisplayUserInfo';
 import { increaseBalance } from '../services/IncreaseBalance';
 import '../styles/Header.css';
 
-function Header({ user }) {
-  const [currentBalance, setCurrentBalance] = useState(0);
+function Header({ user, balance, setBalance }) {
+  //const [currentBalance, setCurrentBalance] = useState(0);
 
   const handleBalanceChange = (newBalance) => {
-    setCurrentBalance(newBalance);
+    setBalance(newBalance);
   }
 
   return (
@@ -32,7 +32,7 @@ function Header({ user }) {
         <a href="#">Account</a> */}
       </div>
       <div className="header_userInfo">
-        < DisplayUserInfo user={user} onBalanceChange={handleBalanceChange}/>
+        < DisplayUserInfo user={user} onBalanceChange={handleBalanceChange} balance={balance} setBalance={setBalance} />
       </div>
     </div>
   )

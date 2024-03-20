@@ -13,6 +13,7 @@ import './App.css';
 
 function App() {
   const [user, setUser] = useState(null);
+  const [balance, setBalance] = useState(0);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -38,7 +39,7 @@ function App() {
         <div className="app">
           {/* Header - you may want to hide this if not logged in */}
           {user && <div className="app__header">
-            <Header user={user}/>
+            <Header user={user} balance={balance} setBalance={setBalance} />
           </div>}
           {/* Body */}
           <div className="app__body">
@@ -51,7 +52,7 @@ function App() {
                 <Stats />
               </div> : <Navigate to="/" />} 
               />
-              <Route path="/add-funds" element={user ? <AddFunds user={user} /> : <Navigate to="/" />} />
+              <Route path="/add-funds" element={user ? <AddFunds user={user} balance={balance} setBalance={setBalance} /> : <Navigate to="/" />} />
               <Route path="/account" element={user ? <Account /> : <Navigate to="/" />} />
             </Routes>
           </div>

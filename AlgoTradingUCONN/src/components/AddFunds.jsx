@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { increaseBalance } from "../services/IncreaseBalance";
 
-function AddFunds({ user }) {
-  const [currentBalance, setCurrentBalance] = useState(0);
+function AddFunds({ user, balance, setBalance }) {
+  //const [currentBalance, setCurrentBalance] = useState(0);
 
   const handleAddFunds = () => {
-    increaseBalance(user, currentBalance, 10, setCurrentBalance);
+    increaseBalance(user, balance, 10, setBalance);
   }
 
   return (

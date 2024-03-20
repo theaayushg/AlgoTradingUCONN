@@ -5,9 +5,9 @@ import Login from './Login';
 import Logout from './Logout';
 import '../styles/DisplayUserInfo.css';
 
-export function DisplayUserInfo({ user, onBalanceChange }) {
+export function DisplayUserInfo({ user, balance, setBalance, onBalanceChange }) {
   const fallbackImageUrl = 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.istockphoto.com%2Fphotos%2Fuser-profile&psig=AOvVaw2Vm_odSVOsoydD_nS912ve&ust=1701632213627000&source=images&cd=vfe&ved=0CBIQjRxqFwoTCPjp5I7A8YIDFQAAAAAdAAAAABAE';
-  const [balance, setBalance] = useState(0);
+  //const [balance, setBalance] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
