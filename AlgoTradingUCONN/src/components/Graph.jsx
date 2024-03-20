@@ -1,14 +1,31 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './Graph.css';
 import { Chart, registerables } from 'chart.js';
-import 'chartjs-adapter-date-fns';
+import { db } from '../services/firebase'; 
+import { doc, onSnapshot } from 'firebase/firestore'; 
 import applStockData from './DataGen'; 
 
-function Graph(user) {
+function Graph({ user }) { 
     const [chartInstance, setChartInstance] = useState(null);
     const [containerWidth, setContainerWidth] = useState(0);
+    const [balance, setBalance] = useState(0);
     const canvasRef = useRef(null);
 
+    useEffect(() => {
+        if (user) {
+            const userRef = doc(db, "portfolios", user.uid);
+            const unsubscribe = onSnapshot(userRef, (docSnapshot) => {
+                if (docSnapshot.exists()) {
+                    const data = docSnapshot.data();
+                    const currentBalance = data["Current Cash Balance"] || 0;
+                    setBalance(currentBalance);
+                }
+            });
+
+            return () => unsubscribe(); // Unsubscribe from the listener when the component unmounts
+        }
+    }, [user]);
+    
     useEffect(() => {
         const handleResize = () => {
             const width = canvasRef.current.parentElement.clientWidth;
@@ -94,7 +111,8 @@ function Graph(user) {
 
     return (
         <div className='linegraph'>
-                <canvas ref={canvasRef} className='chartStyle'></canvas>
+            <p>Balance: {balance}</p> {/* Display the balance */}
+            <canvas ref={canvasRef} className='chartStyle'></canvas>
         </div>
     );
 }

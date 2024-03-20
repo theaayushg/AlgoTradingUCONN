@@ -1,0 +1,10 @@
+{
+  "hosting": {
+    "public": "AlgoTradingUCONN",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}

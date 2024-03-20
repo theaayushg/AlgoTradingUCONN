@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import Graph from './Graph';
+import user from "../App"
+import './Three.css'
 
 const xbound = 100;
 const ybound = 100;
@@ -190,7 +192,10 @@ const ThreeScene = () => {
   
   return (
     <div className='container'>
-      <canvas id="bg" className='background'/>
+      <Graph/>
+      <div className='bg_container'>
+        <canvas id="bg" className='background'/>
+      </div>
     </div>
   );
 };

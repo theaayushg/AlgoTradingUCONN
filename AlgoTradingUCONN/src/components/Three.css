@@ -1,0 +1,17 @@
+.container{
+    height: inherit;
+}
+
+.canvas{
+    height: inherit;
+}
+
+.background{
+    height: inherit;
+    display: inherit;
+}
+
+.bg_container{
+    height: inherit;
+    display: inherit;
+}

@@ -44,7 +44,6 @@ function App() {
         </div>
         {/* Body */}
         <div className="app__body">
-        <Graph/>
           <Routes>
             <Route path="/" element={<ThreeScene />} />
             <Route path="/portfolio" element={<Portfolio />} />
