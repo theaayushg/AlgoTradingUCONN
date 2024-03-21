@@ -1,30 +1,121 @@
-import React, { useEffect, useRef } from 'react';
-import * as d3 from 'd3';
-import { drawGraph } from '../services/DataVisualization/dist/graph'; // Assuming this is your drawing logic
+import React, { useEffect, useRef, useState } from 'react';
+import '../styles/Graph.css';
+import { Chart, registerables } from 'chart.js';
+import { db } from '../services/firebase';
+import { doc, onSnapshot } from 'firebase/firestore';
+import 'chartjs-adapter-date-fns';
+import applStockData from '../services/DataGen';
 
-const Graph = () => {
+function Graph({ user }) {
+  const [chartInstance, setChartInstance] = useState(null);
+  const [containerWidth, setContainerWidth] = useState(0);
+  const [balance, setBalance] = useState(0);
   const canvasRef = useRef(null);
 
   useEffect(() => {
-    const canvas = d3.select(canvasRef.current);
-    const context = canvas.node().getContext('2d');
+    if (user) {
+      const userRef = doc(db, "portfolios", user.uid);
+      const unsubscribe = onSnapshot(userRef, (docSnapshot) => {
+        if (docSnapshot.exists()) {
+          const data = docSnapshot.data();
+          const currentBalance = data["Current Cash Balance"] || 0;
+          setBalance(currentBalance);
+        }
+      });
 
-    if (context) {
-      const margin = { top: 20, right: 20, bottom: 30, left: 40 };
-      const width = 750 - margin.left - margin.right;
-      const height = 500 - margin.top - margin.bottom;
-
-      const getRandomNumber = (min, max) => Math.random() * (max - min) + min;
-      const data = Array.from({ length: 100 }, () => ({
-        x: getRandomNumber(margin.left, width - margin.right),
-        y: getRandomNumber(margin.top, height - margin.bottom)
-      }));
-
-      drawGraph(context, data, width, height, margin);
+      return () => unsubscribe(); // Unsubscribe from the listener when the component unmounts
     }
-  }, []); // Run this effect only once when the component mounts
+  }, [user]);
 
-  return <canvas ref={canvasRef} width="800" height="600" />;
-};
+  useEffect(() => {
+    const handleResize = () => {
+      const width = canvasRef.current.parentElement.clientWidth;
+      setContainerWidth(width);
+    };
+
+    handleResize();
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!containerWidth) return;
+
+    if (chartInstance) {
+      chartInstance.destroy();
+    }
+
+    Chart.register(...registerables); // Register necessary components
+
+    const ctx = canvasRef.current.getContext('2d');
+    const newChartInstance = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: applStockData.date,
+        datasets: [{
+          label: 'Close',
+          data: applStockData.close,
+          backgroundColor: 'purple',
+          borderColor: 'rgba(50, 50, 200, 1)',
+          borderWidth: 1
+        },
+        {
+          label: 'Open',
+          data: applStockData.open,
+          borderColor: 'rgba(50, 50, 200, 1)',
+        },
+        {
+          label: 'High',
+          data: applStockData.high,
+          backgroundColor: 'green',
+          borderColor: 'rgba(50, 50, 200, 1)',
+        },
+        {
+          label: 'Low',
+          data: applStockData.low,
+          backgroundColor: 'yellow',
+          borderColor: 'rgba(50, 50, 200, 1)',
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        color: 'white',
+        backgroundColor: '#9BD0F5',
+        scales: {
+          x: {
+            title: {
+              display: true,
+              text: 'Date'
+            },
+            type: 'time', // Set x-axis scale type to time
+            time: {
+              unit: 'day' // Define time unit
+            }
+          },
+          y: {
+            title: {
+              display: true,
+              text: 'Value'
+            }
+          }
+        }
+      }
+    });
+
+    setChartInstance(newChartInstance);
+  }, [containerWidth]);
+
+  return (
+    <div className='linegraph'>
+      {/* <p>Balance: {balance}</p>  */}
+      <canvas ref={canvasRef} className='chartStyle'></canvas>
+    </div>
+  );
+}
 
 export default Graph;

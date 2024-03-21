@@ -1,0 +1,18 @@
+.chartStyle {
+  background-color: rgb(140, 167, 167);
+  display: inherit;
+}
+
+.linegraph {
+  display: flex;
+  position: absolute;
+  width: 50%;
+  height: 60%;
+  z-index: 1;
+}
+
+.canvas {
+  display: flex;
+  overflow-clip-margin: inherit;
+  overflow: auto;
+}
