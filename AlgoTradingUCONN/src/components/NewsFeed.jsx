@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles/NewsFeed.css"
+import "../styles/NewsFeed.css";
 import Graph from "./Graph";
 
 function NewsFeed() {
