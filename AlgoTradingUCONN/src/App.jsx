@@ -49,7 +49,7 @@ function App() {
               <Route path="/portfolio" element={user ? <div className="app__container">
                 {/* <Portfolio />  is currently just text */} 
                 <NewsFeed />
-                <Stats />
+                <Stats userid={user.uid} />
               </div> : <Navigate to="/" />} 
               />
               <Route path="/add-funds" element={user ? <AddFunds user={user} balance={balance} setBalance={setBalance} /> : <Navigate to="/" />} />
