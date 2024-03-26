@@ -21,12 +21,12 @@ function Header({ user, balance, setBalance }) {
         </Link>
       </div>
       {/* page title */}
-        <h1 className="header__title"> Team 38 Algorithmic Trading Simulator</h1>
+        <h1 className="header__title"> AlgoTradingUCONN</h1>
       {/* menuitems */}
       <div className="header__menuItems"> 
-        <Link to="/portfolio">Portfolio</Link>
-        <Link to="/add-funds">Add Funds</Link>
-        <Link to="/account">Account</Link>
+        <Link to="/portfolio">MachLearn</Link>
+        <Link to="/add-funds">Invest</Link>
+        <Link to="/account">Account Management</Link>
         {/* <a href="#">Portfolio</a>  
         <a href="#" onClick={handleAddFunds}>Add $10</a>
         <a href="#">Account</a> */}
