@@ -1,16 +1,16 @@
-.chartStyle {
+/* .chartStyle {
   background-color: rgb(140, 167, 167);
   display: inherit;
-}
+} */
 
-.linegraph {
+.bargraph {
   display: flex;
   position: absolute;
   z-index: 1;
 }
 
-.canvas {
+/* .canvas {
   display: flex;
   overflow-clip-margin: inherit;
   overflow: auto;
-}
+} */

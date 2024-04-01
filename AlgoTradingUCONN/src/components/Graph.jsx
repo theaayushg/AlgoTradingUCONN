@@ -6,8 +6,7 @@ import { db } from '../services/firebase';
 function Graph({ user }) {
   const [chartInstance, setChartInstance] = useState(null);
   const [containerWidth, setContainerWidth] = useState(0);
-  const [Balance,setbalance]=useState(0);
-  const [depositWithdrawal, setDepositWithdrawal] = useState(null);
+  const [portfolioData, setPortfolioData] = useState([]);
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -15,13 +14,18 @@ function Graph({ user }) {
       const userRef = doc(db, "user_test", user.uid);
       const unsubscribe = onSnapshot(userRef, (docSnapshot) => {
         if (docSnapshot.exists()) {
-          const currentbalance=docSnapshot.data().balance || 0;
-          // const depWithArray = data["Deposit/Withdrawal History"] || [];
-          // setDepositWithdrawal(depWithArray);
-          setbalance(currentbalance);
+          const portfolio = docSnapshot.data().Portfolio || {};
+          const data = Object.entries(portfolio).map(([ticker, { BuyPrice, Shares }]) => ({
+            ticker,
+            value: parseFloat(BuyPrice) * parseInt(Shares)
+          }));
+          setPortfolioData(data);
+          console.log('Portfolio Data:', data); // Log portfolioData
+        } else {
+          console.log("No snapshot available for the user");
         }
       });
-
+  
       return () => unsubscribe(); // Unsubscribe from the listener when the component unmounts
     }
   }, [user]);
@@ -42,7 +46,7 @@ function Graph({ user }) {
   }, []);
 
   useEffect(() => {
-    if (!containerWidth || !depositWithdrawal) return;
+    if (!containerWidth || !portfolioData.length) return;
 
     if (chartInstance) {
       chartInstance.destroy();
@@ -50,54 +54,39 @@ function Graph({ user }) {
 
     Chart.register(...registerables);
 
-    // const data = depositWithdrawal.map(transaction => ({
-    //   date: new Date(transaction.Date),
-    //   amount: transaction.Amount
-    // }));
-
-    // const sortedData = data.sort((a, b) => a.date - b.date);
-
     const ctx = canvasRef.current.getContext('2d');
     const newChartInstance = new Chart(ctx, {
       type: 'line',
       data: {
-        labels: balance,
+        labels: portfolioData.map(item => item.ticker),
         datasets: [{
-          label: 'Value',
-          data: balance,
-          borderColor: 'rgba(75, 192, 192, 1)',
+          label: 'Portfolio Value',
+          data: portfolioData.map(item => item.value),
           backgroundColor: 'rgba(75, 192, 192, 0.2)',
-          borderWidth: 1,
-          fill: true
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 1
         }]
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
         scales: {
-          x: {
-            type: 'time',
-            time: {
-              unit: 'day'
-            }
-          },
           y: {
+            beginAtZero: true,
             title: {
               display: true,
-              text: 'Amount'
-            },
-            beginAtZero: true
+              text: 'Portfolio Value ($)'
+            }
           }
         }
       }
     });
 
     setChartInstance(newChartInstance);
-  }, [containerWidth]);
+  }, [containerWidth, portfolioData]);
 
   return (
-    <div className='linegraph'>
-      <p>Balance: {Balance}</p> 
+    <div className='bargraph'>
       <canvas ref={canvasRef}></canvas>
     </div>
   );
