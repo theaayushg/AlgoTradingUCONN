@@ -6,8 +6,6 @@
 .linegraph {
   display: flex;
   position: absolute;
-  width: 50%;
-  height: 60%;
   z-index: 1;
 }
 

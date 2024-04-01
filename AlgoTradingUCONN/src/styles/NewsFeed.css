@@ -3,6 +3,9 @@
   color: white;
 }
 
+.newsfeed__container{
+  height: inherit;
+}
 .newsfeed__portfolio {
   text-align: left;
 }
@@ -16,11 +19,11 @@
 }
 
 .newsfeed__chartSection {
-  display: flex;
-  flex-direction: column;
+  height: auto;
 }
 
 .newsfeed__chart {
   width: 100%;
+  height: inherit;
 }
 

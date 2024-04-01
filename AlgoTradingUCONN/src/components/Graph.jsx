@@ -1,25 +1,24 @@
 import React, { useEffect, useRef, useState } from 'react';
-import '../styles/Graph.css';
 import { Chart, registerables } from 'chart.js';
-import { db } from '../services/firebase';
 import { doc, onSnapshot } from 'firebase/firestore';
-import 'chartjs-adapter-date-fns';
-import applStockData from '../services/DataGen';
+import { db } from '../services/firebase';
 
 function Graph({ user }) {
   const [chartInstance, setChartInstance] = useState(null);
   const [containerWidth, setContainerWidth] = useState(0);
-  const [balance, setBalance] = useState(0);
+  const [Balance,setbalance]=useState(0);
+  const [depositWithdrawal, setDepositWithdrawal] = useState(null);
   const canvasRef = useRef(null);
 
   useEffect(() => {
     if (user) {
-      const userRef = doc(db, "portfolios", user.uid);
+      const userRef = doc(db, "user_test", user.uid);
       const unsubscribe = onSnapshot(userRef, (docSnapshot) => {
         if (docSnapshot.exists()) {
-          const data = docSnapshot.data();
-          const currentBalance = data["Current Cash Balance"] || 0;
-          setBalance(currentBalance);
+          const currentbalance=docSnapshot.data().balance || 0;
+          // const depWithArray = data["Deposit/Withdrawal History"] || [];
+          // setDepositWithdrawal(depWithArray);
+          setbalance(currentbalance);
         }
       });
 
@@ -43,65 +42,51 @@ function Graph({ user }) {
   }, []);
 
   useEffect(() => {
-    if (!containerWidth) return;
+    if (!containerWidth || !depositWithdrawal) return;
 
     if (chartInstance) {
       chartInstance.destroy();
     }
 
-    Chart.register(...registerables); // Register necessary components
+    Chart.register(...registerables);
+
+    // const data = depositWithdrawal.map(transaction => ({
+    //   date: new Date(transaction.Date),
+    //   amount: transaction.Amount
+    // }));
+
+    // const sortedData = data.sort((a, b) => a.date - b.date);
 
     const ctx = canvasRef.current.getContext('2d');
     const newChartInstance = new Chart(ctx, {
       type: 'line',
       data: {
-        labels: applStockData.date,
+        labels: balance,
         datasets: [{
-          label: 'Close',
-          data: applStockData.close,
-          backgroundColor: 'purple',
-          borderColor: 'rgba(50, 50, 200, 1)',
-          borderWidth: 1
-        },
-        {
-          label: 'Open',
-          data: applStockData.open,
-          borderColor: 'rgba(50, 50, 200, 1)',
-        },
-        {
-          label: 'High',
-          data: applStockData.high,
-          backgroundColor: 'green',
-          borderColor: 'rgba(50, 50, 200, 1)',
-        },
-        {
-          label: 'Low',
-          data: applStockData.low,
-          backgroundColor: 'yellow',
-          borderColor: 'rgba(50, 50, 200, 1)',
+          label: 'Value',
+          data: balance,
+          borderColor: 'rgba(75, 192, 192, 1)',
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          borderWidth: 1,
+          fill: true
         }]
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        color: 'white',
-        backgroundColor: '#9BD0F5',
         scales: {
           x: {
-            title: {
-              display: true,
-              text: 'Date'
-            },
-            type: 'time', // Set x-axis scale type to time
+            type: 'time',
             time: {
-              unit: 'day' // Define time unit
+              unit: 'day'
             }
           },
           y: {
             title: {
               display: true,
-              text: 'Value'
-            }
+              text: 'Amount'
+            },
+            beginAtZero: true
           }
         }
       }
@@ -112,8 +97,8 @@ function Graph({ user }) {
 
   return (
     <div className='linegraph'>
-      {/* <p>Balance: {balance}</p>  */}
-      <canvas ref={canvasRef} className='chartStyle'></canvas>
+      <p>Balance: {Balance}</p> 
+      <canvas ref={canvasRef}></canvas>
     </div>
   );
 }
