@@ -3,32 +3,60 @@ import "../styles/Stats.css"
 import axios from "axios";
 import StatsRow from './StatsRow';
 import { db } from '../services/firebase';
+import { collection, doc, getDoc } from "firebase/firestore";
 
 const TOKEN = "cnd3ll1r01qr85dtaltgcnd3ll1r01qr85dtalu0";
 const BASE_URL = "https://finnhub.io/api/v1/quote";
 
-function Stats() {
+function Stats(userid) {
 
   const [stockData, setStockData] = useState([])
-  const [myStocks, setmyStocks] = useState([])
+  const [myStocks, setMyStocks] = useState([])
 
-  const getMyStocks = () => {
-    db
-    .collection('user_test')
-    .onSnapshot(snapshot => {
-      let promises = [];
-      let tempData = [];
-      snapshot.docs.map((doc) => {
-        console.log(doc.data());
-        //promises.push(getStockData(doc.data().))
+  const getMyStocks = async (userId) => {
+    let promises = [];
+    let tempData = [];
 
-      })
-    })
+    const userIdString = userId.userid
+    //console.log(userIdString);
+    const userRef = doc(db,'user_test', userIdString);
+    const userDoc = await getDoc(userRef);
+    //console.log(userDoc.data().Portfolio);
+    
+    if(userDoc && userDoc.data().Portfolio){
+      const portfolio = userDoc.data().Portfolio;
+      Object.keys(portfolio).forEach(ticker => {
+        const cur_stockData = portfolio[ticker];
+        promises.push(
+          getStockData(ticker)
+            .then(res => {
+              tempData.push({
+                ticker: ticker,
+                avgSharePrice: cur_stockData.BuyPrice,
+                numShares: cur_stockData.Shares,
+                info: res.data,
+              });
+            })
+            .catch(error => {
+              console.error(`Error fetching stock data for ${ticker}:`, error);
+            })
+        );
+      });
 
-  }
+      Promise.all(promises)
+        .then(() => {
+          //console.log(tempData);
+          setMyStocks(tempData);
+          //console.log(myStocks);
+        })
+        .catch(error => {
+          console.error('Error fetching stock data:', error);
+        });
+    }
+  };
 
 
-  const getStockData = (stock) => {
+  const getStockData = async (stock) => {
     return axios
       .get(`${BASE_URL}?symbol=${stock}&token=${TOKEN}`)
       .catch((error) => {
@@ -37,12 +65,12 @@ function Stats() {
   };
 
   useEffect(()=>{
+    const stocksList = ['AAPL', 'MSFT', 'JNJ', 'PG', 'KO', 'XOM', 'WMT', 'IBM', 'GE', 'F', 'GOOGL', 'AMZN', 'META', 'TSLA', 'NFLX', 'INTC', 'AMD', 'NVDA', 'V', 'PYPL'];
+
+    getMyStocks(userid); 
+    
     let tempStockData = []
-    // in future connect this with the list of stocks user owns from portfolio
-    const stocksList = ["AAPL", "MSFT", "TSLA", "SBUX"];
-    //const stocksList = ['AAPL', 'MSFT', 'JNJ', 'PG', 'KO', 'XOM', 'WMT', 'IBM', 'GE', 'F', 'GOOGL', 'AMZN', 'META', 'TSLA', 'NFLX', 'INTC', 'AMD', 'NVDA', 'V', 'PYPL'];
     let promises = [];
-    //getMyStocks(); //testing purposes
     stocksList.map((stock) => {
       promises.push(
         getStockData(stock)
@@ -59,21 +87,30 @@ function Stats() {
       setStockData(tempStockData);
     })
 
-  }, [])
+  }, []);
 
   return (
     <div className="stats">
       <div className="stats__container">
         <div className="stats__header">
-          <p>Stocks</p>
+          <p>My Stocks</p>
         </div>
         <div className="stats__content">
           <div className="stats__rows">
-           
+           {myStocks.map((stock) => (
+            <StatsRow
+              key={stock.ticker}
+              name={stock.ticker}
+              openPrice={stock.info.o}
+              volume={stock.numShares}
+              price={stock.info.c}
+            />
+           ))}
           </div>
         </div>
-        <div className="stats__header">
-          <p>Lists</p>
+        
+        <div className="stats__header stats__lists">
+          <p>Listed Stocks</p>
         </div>
         <div className="stats__content">
           <div className="stats__rows">

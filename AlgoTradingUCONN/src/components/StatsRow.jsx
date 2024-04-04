@@ -11,8 +11,8 @@ function StatsRow(props) {
       <div className="row__intro">
         <h1>{props.name}</h1>
         <p>
-          {props.shares &&
-          (props.shares + " shares")
+          {props.volume &&
+          (props.volume + " shares")
           }
         </p>
       </div>

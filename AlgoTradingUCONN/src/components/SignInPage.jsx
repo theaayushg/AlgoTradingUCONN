@@ -7,12 +7,9 @@ import ThreeScene from './SignInBG';
 
 const SignInPage = () => {
   return (
-    <div>
-      <div className="signin-page">
-        <ThreeScene/>
-        <h1>Welcome to Algo Trading Simulator</h1>
-        <button onClick={signInWithGoogle}>Sign in with Google</button>
-      </div>
+    <div className="signin-page">
+      <h1>Welcome To AlgoTradingUCONN!</h1>
+      <button onClick={signInWithGoogle}>Sign in with Google</button>
     </div>
   );
 };
