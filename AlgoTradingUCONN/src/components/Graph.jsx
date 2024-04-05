@@ -1,7 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Chart, registerables } from 'chart.js';
-import { doc, onSnapshot } from 'firebase/firestore';
-import { db } from '../services/firebase';
+import axios from 'axios';
+
+const TOKEN = "cnd3ll1r01qr85dtaltgcnd3ll1r01qr85dtalu0";
+const BASE_URL = "https://finnhub.io/api/v1/quote";
 
 function Graph({ user }) {
   const [chartInstance, setChartInstance] = useState(null);
@@ -10,24 +12,28 @@ function Graph({ user }) {
   const canvasRef = useRef(null);
 
   useEffect(() => {
-    if (user) {
-      const userRef = doc(db, "user_test", user.uid);
-      const unsubscribe = onSnapshot(userRef, (docSnapshot) => {
-        if (docSnapshot.exists()) {
-          const portfolio = docSnapshot.data().Portfolio || {};
-          const data = Object.entries(portfolio).map(([ticker, { BuyPrice, Shares }]) => ({
-            ticker,
-            value: parseFloat(BuyPrice) * parseInt(Shares)
-          }));
+    const fetchPortfolioData = async () => {
+      const stocksList = ['AAPL', 'MSFT', 'JNJ', 'PG', 'KO', 'XOM', 'WMT', 'IBM', 'GE', 'F', 'GOOGL', 'AMZN', 'META', 'TSLA', 'NFLX', 'INTC', 'AMD', 'NVDA', 'V', 'PYPL'];
+      const promises = [];
+
+      for (const stock of stocksList) {
+        promises.push(
+          axios.get(`${BASE_URL}?symbol=${stock}&token=${TOKEN}`)
+            .then(res => ({
+              ticker: stock,
+              value: res.data.c, // Assuming you're fetching the closing price
+            }))
+            .catch(error => console.error("Error fetching stock data:", error))
+        );
+      }
+
+      Promise.all(promises)
+        .then(data => {
           setPortfolioData(data);
-          console.log('Portfolio Data:', data); // Log portfolioData
-        } else {
-          console.log("No snapshot available for the user");
-        }
-      });
-  
-      return () => unsubscribe(); // Unsubscribe from the listener when the component unmounts
-    }
+        });
+    };
+
+    fetchPortfolioData();
   }, [user]);
 
   useEffect(() => {
@@ -37,7 +43,6 @@ function Graph({ user }) {
     };
 
     handleResize();
-
     window.addEventListener('resize', handleResize);
 
     return () => {
@@ -83,11 +88,21 @@ function Graph({ user }) {
     });
 
     setChartInstance(newChartInstance);
-  }, [containerWidth, portfolioData]);
+  }, [containerWidth, portfolioData, chartInstance]);
 
   return (
-    <div className='bargraph'>
-      <canvas ref={canvasRef}></canvas>
+    <div>
+      <div className='bargraph'>
+        <canvas ref={canvasRef}></canvas>
+      </div>
+      <div>
+        {/* Display Ticker symbol and value for each stock */}
+        {portfolioData.map((stock) => (
+          <div key={stock.ticker}>
+            <p>{stock.ticker}: ${stock.value}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

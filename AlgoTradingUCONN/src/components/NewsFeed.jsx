@@ -3,7 +3,7 @@ import "../styles/NewsFeed.css";
 import Graph from "./Graph";
 import TimeLine from "./TimeLine";
 
-function NewsFeed() {
+function NewsFeed(user) {
   return (
     <div className="newsfeed">
       <div className="newsfeed__container">
@@ -13,7 +13,7 @@ function NewsFeed() {
             <p>+$44.63 (0.04%) Today</p>
           </div>  
           <div className="newsfeed__chart">
-            <Graph />
+            <Graph user={user.uid}/>
             <TimeLine />
           </div>
         </div>

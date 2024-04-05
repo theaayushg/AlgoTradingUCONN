@@ -48,7 +48,7 @@ function App() {
   
               <Route path="/portfolio" element={user ? <div className="app__container">
                 {/* <Portfolio />  is currently just text */} 
-                <NewsFeed />
+                <NewsFeed user={user}/>
                 <Stats userid={user.uid} />
               </div> : <Navigate to="/" />} 
               />
