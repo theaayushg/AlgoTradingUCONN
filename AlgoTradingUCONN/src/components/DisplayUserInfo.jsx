@@ -7,7 +7,6 @@ import '../styles/DisplayUserInfo.css';
 
 export function DisplayUserInfo({ user, balance, setBalance, onBalanceChange }) {
   const fallbackImageUrl = 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.istockphoto.com%2Fphotos%2Fuser-profile&psig=AOvVaw2Vm_odSVOsoydD_nS912ve&ust=1701632213627000&source=images&cd=vfe&ved=0CBIQjRxqFwoTCPjp5I7A8YIDFQAAAAAdAAAAABAE';
-  //const [balance, setBalance] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -33,29 +32,7 @@ export function DisplayUserInfo({ user, balance, setBalance, onBalanceChange }) 
     return () => {
       unsubscribe();
     }
-    ////old code
-    // const fetchBalance = async () => {
-    //   try {
-    //     if (user) {
-    //       const userRef = doc(db, "user_test", user.uid);
-    //       const docSnapshot = await getDoc(userRef);
 
-    //       if (docSnapshot.exists()){
-    //         const newBalance = docSnapshot.data().balance || 0;
-    //         setBalance(newBalance);
-
-    //         if (onBalanceChange) {
-    //           onBalanceChange(newBalance);
-    //         }
-    //       }
-    //     }
-    //   } catch (error) {
-    //     console.error("Error fetching balance:", error);
-    //   } finally {
-    //     setLoading(false);
-    //   }
-    // };
-    // fetchBalance();
   }, [user, onBalanceChange]);
 
   if (loading) {
