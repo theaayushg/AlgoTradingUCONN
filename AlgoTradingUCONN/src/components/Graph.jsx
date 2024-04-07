@@ -1,16 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Chart, registerables } from 'chart.js';
-import { doc, getDoc } from "firebase/firestore";
-import axios from 'axios';
-import { db } from '../services/firebase';
 
-const TOKEN = "cnd3ll1r01qr85dtaltgcnd3ll1r01qr85dtalu0";
-const BASE_URL = "https://finnhub.io/api/v1/quote";
-
-function Graph( user ) {
+function Graph({ user_portfolio }) {
   const [chartInstance, setChartInstance] = useState(null);
   const [containerWidth, setContainerWidth] = useState(0);
-  const [myStocks, setMyStocks] = useState([]);
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -28,54 +21,7 @@ function Graph( user ) {
   }, []);
 
   useEffect(() => {
-    const getMyStocks = async (userId) => {
-      const userIdString = userId.userid;
-      const userRef = doc(db, 'user_test', userIdString);
-      const userDoc = await getDoc(userRef);
-
-      if (userDoc.exists() && userDoc.data().Portfolio) {
-        const portfolio = userDoc.data().Portfolio;
-        const promises = [];
-
-        for (const ticker in portfolio) {
-          const cur_stockData = portfolio[ticker];
-          promises.push(
-            getStockData(ticker)
-              .then(res => {
-                const value = res.data.c * cur_stockData.Shares;
-                return {
-                  ticker: ticker,
-                  value: value,
-                  info: res.data
-                };
-              })
-              .catch(error => {
-                console.error(`Error fetching stock data for ${ticker}:`, error);
-                return null;
-              })
-          );
-        }
-
-        Promise.all(promises)
-          .then(values => {
-            const filteredValues = values.filter(value => value !== null);
-            setMyStocks(filteredValues);
-          })
-          .catch(error => {
-            console.error('Error fetching stock data:', error);
-          });
-      }
-    };
-
-    const getStockData = async (stock) => {
-      return axios.get(`${BASE_URL}?symbol=${stock}&token=${TOKEN}`);
-    };
-
-    getMyStocks(user);
-  }, []);
-
-  useEffect(() => {
-    if (!containerWidth || !myStocks.length || !canvasRef.current) return;
+    if (!containerWidth || !user_portfolio.length) return;
 
     if (chartInstance) {
       chartInstance.destroy();
@@ -84,15 +30,20 @@ function Graph( user ) {
     Chart.register(...registerables);
 
     const ctx = canvasRef.current.getContext('2d');
+
+    // Aggregate data for bar chart
+    const labels = user_portfolio.map(stock => stock.ticker);
+    const data = user_portfolio.map(stock => stock.numShares * stock.avgSharePrice);
+
     const newChartInstance = new Chart(ctx, {
       type: 'bar',
       data: {
-        labels: myStocks.map(item => item.ticker),
+        labels: labels,
         datasets: [{
-          label: 'Portfolio Value',
-          data: myStocks.map(item => item.value),
-          backgroundColor: 'rgba(75, 192, 192, 0.2)',
-          borderColor: 'rgba(75, 192, 192, 1)',
+          label: 'Total Value',
+          data: data,
+          backgroundColor: 'rgba(54, 162, 235, 0.6)', // Blue color for bars
+          borderColor: 'rgba(54, 162, 235, 1)',
           borderWidth: 1
         }]
       },
@@ -104,25 +55,26 @@ function Graph( user ) {
             beginAtZero: true,
             title: {
               display: true,
-              text: 'Portfolio Value ($)'
+              text: 'Ticker'
             }
           },
           x: {
             title: {
               display: true,
-              text: 'Ticker'
-            }
+              text: 'Total Value'
+            },
+            beginAtZero: true
           }
         }
       }
     });
 
     setChartInstance(newChartInstance);
-  }, [containerWidth, myStocks, chartInstance]);
+  }, [containerWidth, user_portfolio]);
 
   return (
     <div className='bargraph'>
-      <canvas ref={canvasRef}></canvas>
+      <canvas ref={canvasRef} className='chartStyle'></canvas>
     </div>
   );
 }

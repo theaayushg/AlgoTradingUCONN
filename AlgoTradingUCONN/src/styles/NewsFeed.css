@@ -1,11 +1,19 @@
 .newsfeed {
+  display: flex;
+  flex-direction: column;
+  width: max-content;
   flex: 0.7;
   color: white;
+  background-color: black;
 }
 
-.newsfeed__container{
-  height: inherit;
+.newsfeed__container {
+  flex-direction: column;
+  flex: 1;
+  background-color: black;
+  font-size: 12px;
 }
+
 .newsfeed__portfolio {
   text-align: left;
 }
@@ -19,11 +27,17 @@
 }
 
 .newsfeed__chartSection {
-  height: auto;
+  display: flex;
+  flex-direction: column;
+  width: inherit;
+  flex: inherit;
+  overflow: auto;
 }
 
 .newsfeed__chart {
+  display: flex;
+  flex-direction: column;
   width: 100%;
-  height: inherit;
+  height: auto;
 }
 
