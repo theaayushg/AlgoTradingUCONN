@@ -1,31 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
-import '../styles/Graph.css';
 import { Chart, registerables } from 'chart.js';
-import { db } from '../services/firebase';
-import { doc, onSnapshot } from 'firebase/firestore';
-import 'chartjs-adapter-date-fns';
-import applStockData from '../services/DataGen';
 
-function Graph({ user }) {
+function Graph({ user_portfolio }) {
   const [chartInstance, setChartInstance] = useState(null);
   const [containerWidth, setContainerWidth] = useState(0);
-  const [balance, setBalance] = useState(0);
   const canvasRef = useRef(null);
-
-  useEffect(() => {
-    if (user) {
-      const userRef = doc(db, "portfolios", user.uid);
-      const unsubscribe = onSnapshot(userRef, (docSnapshot) => {
-        if (docSnapshot.exists()) {
-          const data = docSnapshot.data();
-          const currentBalance = data["Current Cash Balance"] || 0;
-          setBalance(currentBalance);
-        }
-      });
-
-      return () => unsubscribe(); // Unsubscribe from the listener when the component unmounts
-    }
-  }, [user]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -43,7 +22,7 @@ function Graph({ user }) {
   }, []);
 
   useEffect(() => {
-    if (!containerWidth) return;
+    if (!containerWidth || !user_portfolio.length) return;
 
     if (chartInstance) {
       chartInstance.destroy();
@@ -52,67 +31,49 @@ function Graph({ user }) {
     Chart.register(...registerables); // Register necessary components
 
     const ctx = canvasRef.current.getContext('2d');
+
+    // Aggregate data for bar chart
+    const labels = user_portfolio.map(stock => stock.ticker);
+    const data = user_portfolio.map(stock => stock.numShares * stock.avgSharePrice);
+
     const newChartInstance = new Chart(ctx, {
-      type: 'line',
+      type: 'bar',
       data: {
-        labels: applStockData.date,
+        labels: labels,
         datasets: [{
-          label: 'Close',
-          data: applStockData.close,
-          backgroundColor: 'purple',
-          borderColor: 'rgba(50, 50, 200, 1)',
+          label: 'Total Value',
+          data: data,
+          backgroundColor: 'rgba(54, 162, 235, 0.6)', // Blue color for bars
+          borderColor: 'rgba(54, 162, 235, 1)',
           borderWidth: 1
-        },
-        {
-          label: 'Open',
-          data: applStockData.open,
-          borderColor: 'rgba(50, 50, 200, 1)',
-        },
-        {
-          label: 'High',
-          data: applStockData.high,
-          backgroundColor: 'green',
-          borderColor: 'rgba(50, 50, 200, 1)',
-        },
-        {
-          label: 'Low',
-          data: applStockData.low,
-          backgroundColor: 'yellow',
-          borderColor: 'rgba(50, 50, 200, 1)',
         }]
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        color: 'white',
-        backgroundColor: '#9BD0F5',
         scales: {
           x: {
             title: {
               display: true,
-              text: 'Date'
-            },
-            type: 'time', // Set x-axis scale type to time
-            time: {
-              unit: 'day' // Define time unit
+              text: 'Ticker'
             }
           },
           y: {
             title: {
               display: true,
-              text: 'Value'
-            }
+              text: 'Total Value'
+            },
+            beginAtZero: true
           }
         }
       }
     });
 
     setChartInstance(newChartInstance);
-  }, [containerWidth]);
+  }, [containerWidth, user_portfolio]);
 
   return (
-    <div className='linegraph'>
-      {/* <p>Balance: {balance}</p>  */}
+    <div className='bargraph'>
       <canvas ref={canvasRef} className='chartStyle'></canvas>
     </div>
   );
