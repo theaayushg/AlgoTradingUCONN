@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Chart, registerables } from 'chart.js';
+import '../styles/Graph.css'
 
 function Graph({ user_portfolio }) {
   const [chartInstance, setChartInstance] = useState(null);

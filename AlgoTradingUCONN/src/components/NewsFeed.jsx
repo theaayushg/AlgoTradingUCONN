@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../styles/NewsFeed.css";
 import Graph from "./Graph";
 import TimeLine from "./TimeLine";
+import StockGraphs from "./StockGraphs";
 
 
 function NewsFeed({ user_portfolio }) {
@@ -42,6 +43,7 @@ function NewsFeed({ user_portfolio }) {
           </div>  
           <div className="newsfeed__chart">
             <Graph user_portfolio={user_portfolio}/>
+            <StockGraphs />
             <TimeLine />
           </div>
         </div>
