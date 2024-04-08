@@ -17,8 +17,9 @@ Steps to run
 3. run these commands
         npm install d3
         npm install
-
-4. run web app by running command:
+        npm install three
+   
+5. run web app by running command:
         npm run dev
 
-5. open http://localhost:5173/ in browser to view
+6. open http://localhost:5173/ in browser to view
