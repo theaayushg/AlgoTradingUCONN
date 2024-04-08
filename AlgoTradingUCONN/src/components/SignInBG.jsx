@@ -1,72 +1,89 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
+import "../styles/SignInBG.css";
+import cloud from '../assets/cloud.png';
 
-const ThreeScene = () => {
+const SignInBG = () => {
+  const containerRef = useRef(null);
+
   useEffect(() => {
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ canvas: document.querySelector('#bg') });
-    renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    camera.position.setZ(5);
+    let scene, camera, renderer;
+    let nebulaParticles = [];
 
-    const clouds = [];
+    const init = () => {
+      scene = new THREE.Scene();
+      camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+      renderer = new THREE.WebGLRenderer({ antialias: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setClearColor(0x00bbff); 
+      containerRef.current.appendChild(renderer.domElement);
 
-    const addCloud = () => {
-      const cloudSize = Math.random() * 2 + 1; // Random cloud size
-      const cloudGeometry = new THREE.BoxGeometry(cloudSize, cloudSize / 2, cloudSize); // Box geometry for cloud
-      const cloudMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, opacity: 0.8, transparent: true });
-      const cloud = new THREE.Mesh(cloudGeometry, cloudMaterial);
+      // Create Nebula
+      const nebulaGeometry = new THREE.BufferGeometry();
+      const vertices = [];
 
-      // Randomize cloud position
-      cloud.position.set(
-        Math.random() * 100 - 50,
-        Math.random() * 20 + 10,
-        Math.random() * 100 - 50
-      );
+      for (let i = 0; i < 1000; i++) { // Limit number of particles to 1000
+        const x = Math.random() * 2000 - 1000;
+        const y = Math.random() * 2000 - 1000;
+        const z = Math.random() * 2000 - 1000;
+        vertices.push(x, y, z);
+      }
 
-      // Add cloud to scene
-      scene.add(cloud);
-      clouds.push(cloud);
+      nebulaGeometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+
+      const smokeTexture = new THREE.TextureLoader().load(cloud);
+
+      const nebulaMaterial = new THREE.PointsMaterial({
+        size: Math.random() * 10 + 500, // Vary size of particles
+        map: smokeTexture,
+        transparent: true,
+        opacity: 0.5, // Adjust opacity for a subtle effect
+        depthWrite: false, // Disable writing to depth buffer to prevent clipping
+        blending: THREE.NormalBlending // Use Normal blending for a subtle hue effect
+      });      
+
+      const nebula = new THREE.Points(nebulaGeometry, nebulaMaterial);
+      scene.add(nebula);
+      nebulaParticles.push(nebula);
+
+      // Create spotlight in the middle
+      const spotLight = new THREE.SpotLight(0xffffff,10);
+      spotLight.position.set(0, 0, 0);
+      scene.add(spotLight);
+
+      camera.position.z = 5;
+      animate();
     };
-
-    // Add initial clouds
-    for (let i = 0; i < 50; i++) {
-      addCloud();
-    }
 
     const animate = () => {
       requestAnimationFrame(animate);
-
-      // Move clouds
-      clouds.forEach(cloud => {
-        cloud.position.x += 0.01; // Move clouds to the right
-        if (cloud.position.x > 50) { // If cloud moves out of view
-          cloud.position.x = -50; // Move cloud to the left side
-        }
+      nebulaParticles.forEach(nebula => {
+        nebula.rotation.y += 0.0008;
       });
-
       renderer.render(scene, camera);
     };
 
-    // Add new clouds every second
-    setInterval(() => {
-      addCloud();
-    }, 1000);
+    const handleResize = () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    };
 
-    animate();
+    window.addEventListener('resize', handleResize);
 
-    // Clean up function
+    init();
+
     return () => {
-      // Clean up Three.js objects, event listeners, etc.
+      window.removeEventListener('resize', handleResize);
+      if (containerRef.current && containerRef.current.firstChild) {
+        containerRef.current.removeChild(renderer.domElement);
+      }
     };
   }, []);
 
   return (
-    <div className='bg_container'>
-      <canvas id="bg" className='background'/>
-    </div>
+    <div ref={containerRef} className='bg_container'/>
   );
 };
 
-export default ThreeScene;
+export default SignInBG;

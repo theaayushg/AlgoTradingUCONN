@@ -33,7 +33,7 @@ function Graph({ user_portfolio }) {
 
     // Aggregate data for bar chart
     const labels = user_portfolio.map(stock => stock.ticker);
-    const data = user_portfolio.map(stock => stock.numShares * stock.avgSharePrice);
+    const data = user_portfolio.map(stock => stock.numShares * stock.info.c);
 
     const newChartInstance = new Chart(ctx, {
       type: 'bar',
