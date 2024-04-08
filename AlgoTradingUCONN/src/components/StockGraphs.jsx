@@ -11,9 +11,19 @@ const DefaultGraph = ({ ticker }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`src/assets/csv/${ticker}_stock_data.csv`);
+        const response = await fetch(`./src/assets/csv/${ticker}_stock_data.csv`);
         const csvData = await response.text(); // Get CSV data as text
-        const parsedData = Papa.parse(csvData, { header: true }).data;
+        const parsedData = Papa.parse(csvData, {
+            header: true,
+            skipEmptyLines: true, // Skip empty lines
+            transform: (value, header) => {
+              // Convert 'Close' values to numbers
+              if (header === 'Close') {
+                return Number(value);
+              }
+              return value;
+            }
+          }).data;          
         const dates = parsedData.map(item => item.Date);
         const closePrices = parsedData.map(item => parseFloat(item.Close));
         console.log(closePrices);
