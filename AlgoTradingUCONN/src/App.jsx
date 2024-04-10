@@ -27,7 +27,7 @@ function App() {
     return () => {
       unsubscribe();
     };
-  }, []);
+  }, [user]);
 
   const getMyStocks = async (user) => {
     let promises = [];
