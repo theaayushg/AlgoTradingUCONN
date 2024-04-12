@@ -2,11 +2,12 @@
 .signin-page body, html {
   height: 100%;
   margin: 0;
+  z-index: 2;
   font-family: Arial, sans-serif;
 }
 
 .signin-page {
-  background: #0e0e10; /* Dark background for the whole page */
+  background: #000000; /* Dark background for the whole page */
   color: #ffffff; /* Light text color */
   display: flex;
   flex-direction: column;
@@ -20,11 +21,13 @@
   margin-bottom: 2rem;
   font-size: 2.5rem;
   color: #ffffff;
+  z-index: 2;
 }
 
 .signin-page button {
   padding: 1rem 2rem;
   font-size: 1rem;
+  z-index: 2;
   color: #0e0e10;
   background-color: #ffffff;
   border: none;

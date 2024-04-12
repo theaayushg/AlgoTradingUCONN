@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Chart, registerables } from 'chart.js';
+import '../styles/Graph.css'
 
 function Graph({ user_portfolio }) {
   const [chartInstance, setChartInstance] = useState(null);
@@ -13,7 +14,6 @@ function Graph({ user_portfolio }) {
     };
 
     handleResize();
-
     window.addEventListener('resize', handleResize);
 
     return () => {
@@ -28,13 +28,13 @@ function Graph({ user_portfolio }) {
       chartInstance.destroy();
     }
 
-    Chart.register(...registerables); // Register necessary components
+    Chart.register(...registerables);
 
     const ctx = canvasRef.current.getContext('2d');
 
     // Aggregate data for bar chart
     const labels = user_portfolio.map(stock => stock.ticker);
-    const data = user_portfolio.map(stock => stock.numShares * stock.avgSharePrice);
+    const data = user_portfolio.map(stock => stock.numShares * stock.info.c);
 
     const newChartInstance = new Chart(ctx, {
       type: 'bar',
@@ -52,13 +52,14 @@ function Graph({ user_portfolio }) {
         responsive: true,
         maintainAspectRatio: false,
         scales: {
-          x: {
+          y: {
+            beginAtZero: true,
             title: {
               display: true,
               text: 'Ticker'
             }
           },
-          y: {
+          x: {
             title: {
               display: true,
               text: 'Total Value'

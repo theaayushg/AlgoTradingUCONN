@@ -3,16 +3,15 @@
   display: inherit;
 }
 
-.linegraph {
+.bargraph {
   display: flex;
+  flex-direction: column;
   position: relative;
-  width: 100%;
-  height: auto;
   z-index: 1;
 }
 
-.canvas {
+/* .canvas {
   display: flex;
   overflow-clip-margin: inherit;
   overflow: auto;
-}
+} */

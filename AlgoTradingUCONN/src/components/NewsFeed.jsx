@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../styles/NewsFeed.css";
 import Graph from "./Graph";
 import TimeLine from "./TimeLine";
+import StockGraphs from "./StockGraphs";
 
 
 function NewsFeed({ user_portfolio }) {
@@ -41,7 +42,8 @@ function NewsFeed({ user_portfolio }) {
             <p>{PortfolioData.priceChange > 0 ? '+' : ''}${Number(PortfolioData.priceChange).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ({PortfolioData.percentageChange > 0 ? '+' : ''}{PortfolioData.percentageChange}%) All Time</p>
           </div>  
           <div className="newsfeed__chart">
-            <Graph user_portfolio={user_portfolio} setPortfolioData={setPortfolioData}/>
+            <Graph user_portfolio={user_portfolio}/>
+            <StockGraphs />
             <TimeLine />
           </div>
         </div>

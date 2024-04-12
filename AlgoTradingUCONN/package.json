@@ -18,13 +18,21 @@
     "d3": "^7.9.0",
     "date-fns": "^3.6.0",
     "firebase": "^10.9.0",
+    "firebase-cli": "^1.2.0",
+    "firebase-tools": "^13.5.2",
     "install": "^0.13.0",
     "npm": "^10.5.0",
+    "papaparse": "^5.4.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.21.3"
+    "react-router-dom": "^6.21.3",
+    "three": "^0.163.0"
   },
   "devDependencies": {
+    "@babel/cli": "^7.24.1",
+    "@babel/core": "^7.24.3",
+    "@babel/preset-env": "^7.24.3",
+    "@babel/preset-react": "^7.24.1",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@vitejs/plugin-react-swc": "^3.3.2",
