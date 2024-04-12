@@ -41,7 +41,7 @@ function Stats({ user_portfolio }) {
       setStockData(tempStockData);
     })
 
-  }, []);
+  }, [user_portfolio]);
 
   return (
     <div className="stats">

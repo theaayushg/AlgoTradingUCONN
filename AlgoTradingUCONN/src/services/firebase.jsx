@@ -50,7 +50,8 @@ const createOrUpdateUser = async (user) => {
         Name: user.displayName,
         email: user.email,
         balance: 0.00,
-        Portfolio: {}
+        Portfolio: {},
+        Orders: {},
       });
     }
   } catch (error) {
