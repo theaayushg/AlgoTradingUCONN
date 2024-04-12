@@ -50,7 +50,8 @@ const createOrUpdateUser = async (user) => {
         Name: user.displayName,
         email: user.email,
         balance: 0.00,
-        Portfolio: [], //see if this works, supposed to be a map, if not , try {}
+        Portfolio: {},
+        Orders: {},
       });
     }
   } catch (error) {

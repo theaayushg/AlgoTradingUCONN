@@ -1,15 +1,18 @@
 .header__wrapper {
-  background-color: black;
+  background-color: rgb(52, 52, 52);
   color: white;
   display: flex;
   align-items: center;
   justify-content: space-between;
   height: 64px;
-  padding-bottom: 10px;
+  /* padding-bottom: 10px; */
+  position: sticky; /*change if needed, not sure if works*/
+  padding: 20px 20px 0px 20px;
 }
 
 .header__logo img {
   margin-left: 48px;
+  padding-top: 10px;
   width: 55px;
   height: auto;
 }
