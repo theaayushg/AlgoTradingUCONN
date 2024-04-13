@@ -95,7 +95,7 @@ function App() {
               </div> : <Navigate to="/" />} 
               />
               <Route path="/add-funds" element={user ? <AddFunds user={user} balance={balance} setBalance={setBalance} /> : <Navigate to="/" />} />
-              <Route path="/account" element={user ? <Account /> : <Navigate to="/" />} />
+              <Route path="/account" element={user ? <Account userid={user.uid} /> : <Navigate to="/" />} />
             </Routes>
           </div>
         </div>

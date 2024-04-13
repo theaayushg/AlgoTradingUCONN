@@ -14,7 +14,6 @@ function AddFunds({ user, balance, setBalance }) {
       <div> 
         <a href="#" onClick={handleAddFunds}>Add $10</a> 
       </div>
-
   </div>
   );
 }
