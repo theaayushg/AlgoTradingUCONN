@@ -3,7 +3,7 @@ import '../styles/AboutUs.css'; // Make sure to create this CSS file in the same
 
 function AboutUs() {
     const teamMembers = [
-        { name: 'Aayush', role: 'CS Senior - Computational Data Analytics', description: 'Aayush.', image: '../../src/styles/aayush.PNG' },
+        { name: 'Aayush', role: 'CS Senior - Computational Data Analytics', description: 'Aayush was the Team Manager for this project and focused on the web development along with research for this project.', image: '../../src/styles/aayush.PNG' },
         { name: 'Long', role: 'CS Senior - Cyber Security', description: 'Long.', image: '../../src/styles/long.PNG' },
         { name: 'Chenghe', role: 'CS Senior - Unspecialized', description: 'Chenghe.', image: '../../src/styles/chenghe.PNG' },
         { name: 'Sunwang', role: 'CS Senior - Computational Data Analytics', description: 'Sunwang.', image: '../../src/styles/sunwang.PNG' },
