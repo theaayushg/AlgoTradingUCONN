@@ -96,12 +96,13 @@ function App() {
                 <Stats user_portfolio={main_portfolio} />
               </div> : <Navigate to="/" />} 
               />
-              <Route path="/account" element={user ? <div className="app__container">
-                <div>
-                  <Account userid={user.uid} />
-                </div>
+              <Route path="/account" element={user ? 
+              <div>
                 <div>
                   <AddFunds user={user} balance={balance} setBalance={setBalance} />
+                </div>
+                <div>
+                  <Account userid={user.uid} />
                 </div>
               </div> : <Navigate to="/" />} />
             </Routes>
