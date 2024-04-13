@@ -4,13 +4,21 @@ import { db } from './firebase';
 export const increaseBalance = async (user, currentBalance, amountToAdd, setCurrentBalance) => {
   const userRef = doc(db, 'user_test', user.uid);
 
-  try {
-    await updateDoc(userRef, {
-      balance: Number(currentBalance) + Number(amountToAdd),
-    });
+  try 
+  {
+    const newBalance = Number(currentBalance) + Number(amountToAdd);
 
-    setCurrentBalance(Number(currentBalance) + Number(amountToAdd));
-  } catch (error) {
+    if (newBalance < 0) 
+    {
+      throw new Error("Insufficient funds. Please try again.");
+    }
+
+    await updateDoc(userRef, {balance: newBalance,});
+
+    setCurrentBalance(newBalance);
+  } 
+  catch (error) 
+  {
     console.error("Error updating balance:", error);
     throw error;
   }

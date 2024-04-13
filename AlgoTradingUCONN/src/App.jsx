@@ -94,8 +94,14 @@ function App() {
                 <Stats user_portfolio={main_portfolio} />
               </div> : <Navigate to="/" />} 
               />
-              <Route path="/add-funds" element={user ? <AddFunds user={user} balance={balance} setBalance={setBalance} /> : <Navigate to="/" />} />
-              <Route path="/account" element={user ? <Account userid={user.uid} /> : <Navigate to="/" />} />
+              <Route path="/account" element={user ? <div className="app__container">
+                <div>
+                  <Account userid={user.uid} />
+                </div>
+                <div>
+                  <AddFunds user={user} balance={balance} setBalance={setBalance} />
+                </div>
+              </div> : <Navigate to="/" />} />
             </Routes>
           </div>
         </div>

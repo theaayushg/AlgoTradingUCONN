@@ -55,7 +55,7 @@ export function DisplayUserInfo({ user, balance, setBalance, onBalanceChange }) 
       <div className="user-info-left">
         <p>{user.displayName || 'No Display Name'}</p>
         <p>Balance: ${balance.toFixed(2)}</p>
-        <Logout />
+        {/* <Logout /> */}
       </div>
       
       <div className="user-info-right">

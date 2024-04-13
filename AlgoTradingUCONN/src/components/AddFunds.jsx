@@ -1,20 +1,52 @@
 import React, { useState } from "react";
 import { increaseBalance } from "../services/IncreaseBalance";
 
-function AddFunds({ user, balance, setBalance }) {
-  //const [currentBalance, setCurrentBalance] = useState(0);
+function AddFunds({ user, balance, setBalance }) 
+{
+  const [amount, setAmount] = useState(0);
+  const [error, setError] = useState(null);
 
-  const handleAddFunds = () => {
-    increaseBalance(user, balance, 10, setBalance);
-  }
+  const handleAmountChange = (event) => 
+  {
+    setAmount(parseFloat(event.target.value));
+  };
+
+  const handleDeposit = async () => 
+  {
+    try 
+    {
+      await increaseBalance(user, balance, amount, setBalance);
+      setError(null);
+    } 
+    catch (error) 
+    {
+      setError("Error: " + error.message);
+    }
+  };
+
+  const handleWithdraw = async () => 
+  {
+    try 
+    {
+
+      await increaseBalance(user, balance, -amount, setBalance);
+      setError(null);
+    } 
+    catch (error) 
+    {
+      setError("Error: " + error.message);
+    }
+  };
 
   return (
-  <div>
-      <div>Add Funds Page Content</div>
-      <div> 
-        <a href="#" onClick={handleAddFunds}>Add $10</a> 
+    <div>
+      {error && <div>{error}</div>}
+      <div>
+        <input type="number" value={amount} onChange={handleAmountChange} />
+        <button onClick={handleDeposit}>Deposit</button>
+        <button onClick={handleWithdraw}>Withdraw</button>
       </div>
-  </div>
+    </div>
   );
 }
 
