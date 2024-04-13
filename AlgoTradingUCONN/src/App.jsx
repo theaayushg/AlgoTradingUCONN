@@ -4,6 +4,7 @@ import auth from './services/firebase';
 import Header from './components/Header';
 import Portfolio from './components/Portfolio';
 import AddFunds from './components/AddFunds';
+import AboutUs from './components/AboutUs';
 import Account from './components/Account';
 import Graph from './components/Graph';
 import NewsFeed from './components/NewsFeed';
@@ -87,6 +88,7 @@ function App() {
           {/* Body */}
           <div className="app__body">
             <Routes>
+              <Route path="/AboutUs" element={<AboutUs />} />
               <Route path="/" element={user ? <Navigate to="/portfolio" /> : <SignInPage />} />
   
               <Route path="/portfolio" element={user ? <div className="app__container">

@@ -17,7 +17,7 @@
     "chartjs-adapter-date-fns": "^3.0.0",
     "d3": "^7.9.0",
     "date-fns": "^3.6.0",
-    "firebase": "^10.9.0",
+    "firebase": "^10.11.0",
     "firebase-cli": "^1.2.0",
     "firebase-tools": "^13.5.2",
     "install": "^0.13.0",

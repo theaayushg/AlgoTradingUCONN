@@ -1,0 +1,43 @@
+.about-us {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  padding: 20px;
+}
+
+.member {
+  flex-basis: 30%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  margin: 10px;
+  text-align: center;
+  background-color: #f9f9f9; /* Light background for the card */
+  border-radius: 4px; /* Slightly rounded corners for the card */
+}
+
+.member img {
+  max-width: 100%; /* Image can be smaller than the container */
+  height: auto; /* Maintain aspect ratio */
+  border-bottom: 1px solid #eee; /* A subtle separator */
+}
+
+.member-info {
+  padding: 15px;
+}
+
+.member h3 {
+  color: #333;
+  font-size: 1.25em; /* Slightly larger font size */
+  margin: 10px 0; /* Spacing around the name */
+}
+
+.member p {
+  color: #555; /* Lighter text color */
+  font-size: 1em; /* Standard font size */
+  line-height: 1.5; /* More breathable lines */
+  margin-bottom: 5px; /* Spacing after each paragraph */
+}
+
+.member .role {
+  color: #444; /* Slightly darker for the role to stand out */
+  font-weight: 600; /* Semi-bold for the role */
+}

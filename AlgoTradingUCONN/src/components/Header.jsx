@@ -24,8 +24,8 @@ function Header({ user, balance, setBalance }) {
         <h1 className="header__title"> AlgoTradingUCONN</h1>
       {/* menuitems */}
       <div className="header__menuItems"> 
-        <Link to="/portfolio">MachLearn</Link>
-        <Link to="/add-funds">Invest</Link>
+        <Link to="/AboutUs">AboutUs</Link>
+        <Link to="/Add-funds">Invest</Link>
         <Link to="/account">Account Management</Link>
         {/* <a href="#">Portfolio</a>  
         <a href="#" onClick={handleAddFunds}>Add $10</a>
