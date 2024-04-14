@@ -28,7 +28,6 @@ function AddFunds({ user, balance, setBalance })
   {
     try 
     {
-
       await increaseBalance(user, balance, -amount, setBalance);
       setError(null);
     } 

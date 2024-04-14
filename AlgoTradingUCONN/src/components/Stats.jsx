@@ -18,35 +18,8 @@ export const getStockData = async (stock) => {
     });
 };
 
-function Stats({ user_portfolio }) {
-
-  const [stockData, setStockData] = useState([])
-  // const [showDropdown, setShowDropdown] = useState(false);
-
-
-  useEffect(()=>{
-    const stocksList = ['AAPL', 'MSFT', 'JNJ', 'PG', 'KO', 'XOM', 'WMT', 'IBM', 'GE', 'F', 'GOOGL', 'AMZN', 'META', 'TSLA', 'NFLX', 'INTC', 'AMD', 'NVDA', 'V', 'PYPL'];
-    
-    let tempStockData = []
-    let promises = [];
-    stocksList.map((stock) => {
-      promises.push(
-        getStockData(stock)
-        .then((res) => {
-          tempStockData.push({
-            name: stock,
-            ...res.data
-          });
-        })
-      )
-    });
-
-    Promise.all(promises).then(() => {
-      setStockData(tempStockData);
-    })
-
-  }, [user_portfolio]);
-
+function Stats({ stockData, user_portfolio }) {
+  
   return (
     <div className="stats">
       <div className="stats__container">
