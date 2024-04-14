@@ -1,39 +1,29 @@
 import React, { useState } from "react";
 import { increaseBalance } from "../services/IncreaseBalance";
+import "../styles/Invest.css";
 
-function AddFunds({ user, balance, setBalance }) 
-{
+function AddFunds({ user, balance, setBalance }) {
   const [amount, setAmount] = useState(0);
   const [error, setError] = useState(null);
 
-  const handleAmountChange = (event) => 
-  {
+  const handleAmountChange = (event) => {
     setAmount(parseFloat(event.target.value));
   };
 
-  const handleDeposit = async () => 
-  {
-    try 
-    {
+  const handleDeposit = async () => {
+    try {
       await increaseBalance(user, balance, amount, setBalance);
       setError(null);
-    } 
-    catch (error) 
-    {
+    } catch (error) {
       setError("Error: " + error.message);
     }
   };
 
-  const handleWithdraw = async () => 
-  {
-    try 
-    {
-
+  const handleWithdraw = async () => {
+    try {
       await increaseBalance(user, balance, -amount, setBalance);
       setError(null);
-    } 
-    catch (error) 
-    {
+    } catch (error) {
       setError("Error: " + error.message);
     }
   };
