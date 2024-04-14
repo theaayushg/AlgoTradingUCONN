@@ -4,6 +4,8 @@ import axios from "axios";
 import StatsRow from './StatsRow';
 // import { db } from '../services/firebase';
 // import { doc, getDoc } from "firebase/firestore";
+import moneyicon from '../assets/money-icon.svg';
+import listicon from '../assets/list-icon.svg';
 
 const TOKEN = "cnd3ll1r01qr85dtaltgcnd3ll1r01qr85dtalu0";
 const BASE_URL = "https://finnhub.io/api/v1/quote";
@@ -19,6 +21,8 @@ export const getStockData = async (stock) => {
 function Stats({ user_portfolio }) {
 
   const [stockData, setStockData] = useState([])
+  // const [showDropdown, setShowDropdown] = useState(false);
+
 
   useEffect(()=>{
     const stocksList = ['AAPL', 'MSFT', 'JNJ', 'PG', 'KO', 'XOM', 'WMT', 'IBM', 'GE', 'F', 'GOOGL', 'AMZN', 'META', 'TSLA', 'NFLX', 'INTC', 'AMD', 'NVDA', 'V', 'PYPL'];
@@ -47,7 +51,8 @@ function Stats({ user_portfolio }) {
     <div className="stats">
       <div className="stats__container">
         <div className="stats__header">
-          <p>My Stocks</p>
+          <p> <img src={moneyicon} alt="Stock Graph Icon" className="money__icon" />
+          My Stocks</p>
         </div>
         <div className="stats__content">
           <div className="stats__rows">
@@ -64,7 +69,7 @@ function Stats({ user_portfolio }) {
         </div>
         
         <div className="stats__header stats__lists">
-          <p>Listed Stocks</p>
+          <p> <img src={listicon} alt="Stock Graph Icon" className="list__icon" />Listed Stocks</p>
         </div>
         <div className="stats__content">
           <div className="stats__rows">
