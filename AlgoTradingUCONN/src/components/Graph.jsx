@@ -1,6 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Chart, registerables } from 'chart.js';
-import '../styles/Graph.css'
+import '../styles/Graph.css';
+import StockPrediction from './StockPrediction.jsx';
+import * as tf from '@tensorflow/tfjs';
+import Papa from 'papaparse'; // Import papaparse library
 
 function Graph({ user_portfolio }) {
   const [chartInstance, setChartInstance] = useState(null);
@@ -72,6 +75,9 @@ function Graph({ user_portfolio }) {
 
     setChartInstance(newChartInstance);
   }, [containerWidth, user_portfolio]);
+
+  StockPrediction("AMZN");
+  
 
   return (
     <div className='bargraph'>

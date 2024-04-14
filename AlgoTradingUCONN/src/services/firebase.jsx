@@ -3,6 +3,7 @@ import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged} from "firebase/auth"; 
 import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
+import { getStorage, ref } from "firebase/storage"
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -25,6 +26,12 @@ const analytics = getAnalytics(app);
 // added for user authentication
 export const auth = getAuth(app);
 export const db = getFirestore(app);
+export const storage = getStorage(app);
+
+const modelRef= ref(storage,"models/AMZN's model.tflite");
+//const modelUrl = await modelRef.getDownloadURL();
+
+console.log(modelRef);
 
 
 const provider = new GoogleAuthProvider();

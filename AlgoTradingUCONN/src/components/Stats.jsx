@@ -16,7 +16,7 @@ export const getStockData = async (stock) => {
     });
 };
 
-function Stats({ user_portfolio }) {
+function Stats({ user_portfolio, setSelectedStock }) {
 
   const [stockData, setStockData] = useState([])
 
@@ -66,7 +66,7 @@ function Stats({ user_portfolio }) {
         <div className="stats__header stats__lists">
           <p>Listed Stocks</p>
         </div>
-        <div className="stats__content">
+        <div className="stats__content" onClick={() => setSelectedStock(stock.name)}>
           <div className="stats__rows">
             {stockData.map((stock) => (
               <StatsRow
@@ -74,6 +74,7 @@ function Stats({ user_portfolio }) {
                 name={stock.name}
                 openPrice={stock.o}
                 price={stock.c}
+                onClick={() => setSelectedStock(stock.name)} 
               />
             ))}
           </div>

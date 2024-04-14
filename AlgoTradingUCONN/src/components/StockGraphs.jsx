@@ -1,32 +1,30 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Chart, registerables } from 'chart.js';
 import Papa from 'papaparse'; // Library for parsing CSV data
 import "../styles/StockGraphs.css"
 
-const tickers = ['AAPL', 'MSFT', 'JNJ', 'PG', 'KO', 'XOM', 'WMT', 'IBM', 'GE', 'F', 'GOOGL', 'AMZN', 'META', 'TSLA', 'NFLX', 'INTC', 'AMD', 'NVDA', 'V', 'PYPL'];
-
-const DefaultGraph = ({ ticker }) => {
+const DefaultGraph = ({ selectedStock }) => {
   const chartRef = useRef(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`./src/assets/csv/${ticker}_stock_data.csv`);
+        // Construct URL based on the selected stock
+        const response = await fetch(`./src/assets/csv/${selectedStock}_stock_data.csv`);
         const csvData = await response.text(); // Get CSV data as text
         const parsedData = Papa.parse(csvData, {
-            header: true,
-            skipEmptyLines: true, // Skip empty lines
-            transform: (value, header) => {
-              // Convert 'Close' values to numbers
-              if (header === 'Close') {
-                return Number(value);
-              }
-              return value;
+          header: true,
+          skipEmptyLines: true, // Skip empty lines
+          transform: (value, header) => {
+            // Convert 'Close' values to numbers
+            if (header === 'Close') {
+              return Number(value);
             }
-          }).data;          
+            return value;
+          }
+        }).data;
         const dates = parsedData.map(item => item.Date);
         const closePrices = parsedData.map(item => parseFloat(item.Close));
-        console.log(closePrices);
 
         if (chartRef.current) {
           chartRef.current.data.labels = dates;
@@ -61,7 +59,7 @@ const DefaultGraph = ({ ticker }) => {
         chartRef.current = null;
       }
     };
-  }, [ticker]);
+  }, [selectedStock]);
 
   return (
     <div className="graph-container">
@@ -70,26 +68,15 @@ const DefaultGraph = ({ ticker }) => {
   );
 };
 
-const StockGraphs = () => {
-  const [selectedTicker, setSelectedTicker] = useState(tickers[0]);
-
-  const handleTickerChange = (event) => {
-    setSelectedTicker(event.target.value);
-  };
-
+const StockGraphs = ({ selectedStock }) => {
   return (
     <div className="StockGraph-container">
       <h1>Stock Graphs</h1>
-      <select value={selectedTicker} onChange={handleTickerChange}>
-        {tickers.map(ticker => (
-          <option key={ticker} value={ticker}>{ticker}</option>
-        ))}
-      </select>
       <div className='StockGraph-graph'>
-        <DefaultGraph ticker={selectedTicker} />
+        <DefaultGraph selectedStock={selectedStock} />
       </div>
     </div>
   );
 };
 
-export default StockGraphs
+export default StockGraphs;

@@ -18,6 +18,7 @@ function App() {
   const [user, setUser] = useState(null);
   const [balance, setBalance] = useState(0);
   const [main_portfolio, setPortfolio] = useState([]);
+  const [selectedStock, setSelectedStock] = useState('AAPL'); // Set default selected stock
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -77,6 +78,7 @@ function App() {
     console.log(main_portfolio);
   }, [main_portfolio]);
 
+
     return (
       <Router>
         <div className="app">
@@ -90,8 +92,8 @@ function App() {
               <Route path="/" element={user ? <Navigate to="/portfolio" /> : <SignInPage />} />
   
               <Route path="/portfolio" element={user ? <div className="app__container">
-                <NewsFeed user_portfolio={main_portfolio} />
-                <Stats user_portfolio={main_portfolio} />
+                <NewsFeed user_portfolio={main_portfolio} selectedStock={selectedStock} />
+                <Stats user_portfolio={main_portfolio} setSelectedStock={setSelectedStock}/>
               </div> : <Navigate to="/" />} 
               />
               <Route path="/add-funds" element={user ? <AddFunds user={user} balance={balance} setBalance={setBalance} /> : <Navigate to="/" />} />
