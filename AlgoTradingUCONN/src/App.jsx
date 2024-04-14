@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import auth from './services/firebase';
 import Header from './components/Header';
 import Portfolio from './components/Portfolio';
+import Invest from './components/Invest';
 import AddFunds from './components/AddFunds';
 import AboutUs from './components/AboutUs';
 import Account from './components/Account';
@@ -96,16 +97,24 @@ function App() {
                 <Stats user_portfolio={main_portfolio} />
               </div> : <Navigate to="/" />} 
               />
+
+              <Route path="Invest" element={user ? 
+                <div className="app__container">
+                  <Invest />
+                </div>
+                : <Navigate to="/" />}
+              />
+
               <Route path="/account" element={user ? 
-              <div>
-                <div>
-                  <AddFunds user={user} balance={balance} setBalance={setBalance} />
-                </div>
-                <div>
-                  <Account userid={user.uid} />
-                </div>
-              </div> : <Navigate to="/" />} />
-            </Routes>
+                <div className='app__container'>
+                  <div>
+                    <AddFunds user={user} balance={balance} setBalance={setBalance} />
+                  </div>
+                  <div>
+                    <Account userid={user.uid} />
+                  </div>
+                </div> : <Navigate to="/" />} />
+              </Routes>
           </div>
         </div>
       </Router>

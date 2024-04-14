@@ -29,8 +29,9 @@
 
 .stats__rows {
   height: auto;
-  max-height: 200px;
-  /* overflow: scroll; */
+  /* max-height: 200px; */
+  max-height: fit-content;
+  overflow: scroll;
 }
 
 .stats__lists {

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Logo from '../assets/Connecticut_Huskies_logo.svg';
 import { DisplayUserInfo } from './DisplayUserInfo';
-import { increaseBalance } from '../services/IncreaseBalance';
 import '../styles/Header.css';
 
 function Header({ user, balance, setBalance }) {
@@ -25,11 +24,8 @@ function Header({ user, balance, setBalance }) {
       {/* menuitems */}
       <div className="header__menuItems"> 
         <Link to="/AboutUs">AboutUs</Link>
-        <Link to="/Add-funds">Invest</Link>
+        <Link to="/Invest">Invest</Link>
         <Link to="/account">Account Management</Link>
-        {/* <a href="#">Portfolio</a>  
-        <a href="#" onClick={handleAddFunds}>Add $10</a>
-        <a href="#">Account</a> */}
       </div>
       <div className="header_userInfo">
         < DisplayUserInfo user={user} onBalanceChange={handleBalanceChange} balance={balance} setBalance={setBalance} />
