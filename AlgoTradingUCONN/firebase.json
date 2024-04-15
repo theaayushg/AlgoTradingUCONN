@@ -6,6 +6,22 @@
       "**/.*",
       "**/node_modules/**"
     ],
-    "predeploy": ["npm run build"]
+    "headers": [
+      {
+        "source": "*",
+        "headers": [
+          {
+            "key": "Access-Control-Allow-Origin",
+            "value": "*"
+          }
+        ]
+      }
+    ],
+    "predeploy": [
+      "npm run build"
+    ]
+  },
+  "storage": {
+    "rules": "storage.rules"
   }
 }

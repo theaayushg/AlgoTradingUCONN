@@ -1,10 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Chart, registerables } from 'chart.js';
-import '../styles/Graph.css'
+import StockPrediction from './StockPrediction.jsx';
+import { ChromePicker } from 'react-color';
+import "../styles/Graph.css"
 
 function Graph({ user_portfolio }) {
   const [chartInstance, setChartInstance] = useState(null);
   const [containerWidth, setContainerWidth] = useState(0);
+  const [backgroundColor, setBackgroundColor] = useState({ r: 140, g: 167, b: 167, a: 1 });
+  const [barColor, setBarColor] = useState({ r: 54, g: 162, b: 235, a: 1 });
+  const [textColor, setTextColor] = useState({ r: 0, g: 0, b: 0, a: 1 });
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -43,8 +48,8 @@ function Graph({ user_portfolio }) {
         datasets: [{
           label: 'Total Value',
           data: data,
-          backgroundColor: 'rgba(54, 162, 235, 0.6)', // Blue color for bars
-          borderColor: 'rgba(54, 162, 235, 1)',
+          backgroundColor: `rgba(${barColor.r}, ${barColor.g}, ${barColor.b}, ${barColor.a})`,
+          borderColor: `rgba(${barColor.r}, ${barColor.g}, ${barColor.b}, ${barColor.a})`,
           borderWidth: 1
         }]
       },
@@ -56,26 +61,70 @@ function Graph({ user_portfolio }) {
             beginAtZero: true,
             title: {
               display: true,
-              text: 'Ticker'
+              text: 'Total value',
+              color: `rgba(${textColor.r}, ${textColor.g}, ${textColor.b}, ${textColor.a})`
+            },
+            ticks: {
+              color: `rgba(${textColor.r}, ${textColor.g}, ${textColor.b}, ${textColor.a})`
             }
           },
           x: {
             title: {
               display: true,
-              text: 'Total Value'
+              text: 'Ticker',
+              color: `rgba(${textColor.r}, ${textColor.g}, ${textColor.b}, ${textColor.a})`
             },
-            beginAtZero: true
+            beginAtZero: true,
+            ticks: {
+              color: `rgba(${textColor.r}, ${textColor.g}, ${textColor.b}, ${textColor.a})`
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            labels: {
+              font: {
+                color: `rgba(${textColor.r}, ${textColor.g}, ${textColor.b}, ${textColor.a})`
+              }
+            }
           }
         }
       }
     });
 
+    // Set background color of the canvas
+    ctx.canvas.style.backgroundColor = `rgba(${backgroundColor.r}, ${backgroundColor.g}, ${backgroundColor.b}, ${backgroundColor.a})`;
+
     setChartInstance(newChartInstance);
-  }, [containerWidth, user_portfolio]);
+  }, [containerWidth, user_portfolio, barColor, textColor, backgroundColor]);
+
+  StockPrediction("AMZN");
+
+  const handleBackgroundColorChange = (color) => {
+    setBackgroundColor(color.rgb);
+  };
+
+  const handleBarColorChange = (color) => {
+    setBarColor(color.rgb);
+  };
+
+  const handleTextColorChange = (color) => {
+    setTextColor(color.rgb);
+  };
 
   return (
-    <div className='bargraph'>
-      <canvas ref={canvasRef} className='chartStyle'></canvas>
+    <div>
+      <div className='bargraph'>
+        <canvas ref={canvasRef}></canvas>
+      </div>
+      <div className='customs'>
+        <label>Background Color:</label>
+        <ChromePicker color={backgroundColor} onChange={handleBackgroundColorChange} />
+        <label>Bar Color:</label>
+        <ChromePicker color={barColor} onChange={handleBarColorChange} />
+        <label>Text Color:</label>
+        <ChromePicker color={textColor} onChange={handleTextColorChange} />
+      </div>
     </div>
   );
 }
