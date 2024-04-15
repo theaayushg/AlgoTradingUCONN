@@ -5,7 +5,7 @@ import TimeLine from "./TimeLine";
 import StockGraphs from "./StockGraphs";
 
 
-function NewsFeed({ user_portfolio }) {
+function NewsFeed({ user_portfolio, selectedStock }) {
   const [PortfolioData, setPortfolioData] = useState({price: 0, priceChange: 0, percentageChange: 0 });
 
   const calc_PPrice = () => {
@@ -43,7 +43,7 @@ function NewsFeed({ user_portfolio }) {
           </div>  
           <div className="newsfeed__chart">
             <Graph user_portfolio={user_portfolio}/>
-            <StockGraphs />
+            <StockGraphs selectedStock={selectedStock} />
             <TimeLine />
           </div>
         </div>

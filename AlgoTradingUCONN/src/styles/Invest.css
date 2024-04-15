@@ -1,0 +1,24 @@
+
+.transaction-box {
+    border: 1px solid #ddd;
+    border-radius: 10px; /* Gives the curved box effect */
+    padding: 10px;
+    margin: 10px 0;
+    background-color: #f9f9f9;
+    list-style-type: none;
+  }
+  
+  .transaction-buy {
+    border-color: #4CAF50; /* Green for buy transactions */
+    color: #2E8B57;
+  }
+  
+  .transaction-sell {
+    border-color: #2196F3;; /* Red for sell transactions */
+    color: #1A76D2;
+  }
+  
+  .transaction-list {
+    padding-left: 0;
+  }
+  

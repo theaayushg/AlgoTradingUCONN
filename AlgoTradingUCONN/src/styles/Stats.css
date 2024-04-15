@@ -29,6 +29,7 @@
 
 .stats__rows {
   height: auto;
+<<<<<<< HEAD
   max-height: 800px;
   overflow-y: scroll;
   /* overflow-x: hidden; */
@@ -37,6 +38,11 @@
   padding-right: 30px; /* Increase/decrease this value for cross-browser compatibility */
   box-sizing: content-box;
   /* width: 100px; */
+=======
+  /* max-height: 200px; */
+  max-height: fit-content;
+  overflow: scroll;
+>>>>>>> 557173a4bc671e5ca9a1b3059f40f4415630e03c
 }
 
 .stats__lists {

@@ -18,35 +18,8 @@ export const getStockData = async (stock) => {
     });
 };
 
-function Stats({ user_portfolio }) {
-
-  const [stockData, setStockData] = useState([])
-  // const [showDropdown, setShowDropdown] = useState(false);
-
-
-  useEffect(()=>{
-    const stocksList = ['AAPL', 'MSFT', 'JNJ', 'PG', 'KO', 'XOM', 'WMT', 'IBM', 'GE', 'F', 'GOOGL', 'AMZN', 'META', 'TSLA', 'NFLX', 'INTC', 'AMD', 'NVDA', 'V', 'PYPL'];
-    
-    let tempStockData = []
-    let promises = [];
-    stocksList.map((stock) => {
-      promises.push(
-        getStockData(stock)
-        .then((res) => {
-          tempStockData.push({
-            name: stock,
-            ...res.data
-          });
-        })
-      )
-    });
-
-    Promise.all(promises).then(() => {
-      setStockData(tempStockData);
-    })
-
-  }, [user_portfolio]);
-
+function Stats({ stockData, user_portfolio }) {
+  
   return (
     <div className="stats">
       <div className="stats__container">
@@ -71,7 +44,7 @@ function Stats({ user_portfolio }) {
         <div className="stats__header stats__lists">
           <p> <img src={listicon} alt="Stock Graph Icon" className="list__icon" />Listed Stocks</p>
         </div>
-        <div className="stats__content">
+        <div className="stats__content" onClick={() => setSelectedStock(stock.name)}>
           <div className="stats__rows">
             {stockData.map((stock) => (
               <StatsRow
@@ -79,6 +52,7 @@ function Stats({ user_portfolio }) {
                 name={stock.name}
                 openPrice={stock.o}
                 price={stock.c}
+                onClick={() => setSelectedStock(stock.name)} 
               />
             ))}
           </div>
