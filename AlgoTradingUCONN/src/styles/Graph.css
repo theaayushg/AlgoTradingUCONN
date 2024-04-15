@@ -7,15 +7,18 @@
 .bargraph {
   display: flex;
   position: relative;
+  flex-direction: column;
+  height: 100%;
   z-index: 1;
 }
 
 
-.customs{
-  display: flex; /* Added to display children in a row */
+/* .customs{
+  display: flex; 
   position: relative;
   z-index: 1;
-}
+}  */
+
 /* .canvas {
   display: flex;
   overflow-clip-margin: inherit;
