@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { increaseBalance } from "../services/IncreaseBalance";
-import "../styles/Invest.css";
 
 function AddFunds({ user, balance, setBalance }) {
   const [amount, setAmount] = useState(0);
@@ -19,10 +18,8 @@ function AddFunds({ user, balance, setBalance }) {
     }
   };
 
-  const handleWithdraw = async () => 
-  {
-    try 
-    {
+  const handleWithdraw = async () => {
+    try {
       await increaseBalance(user, balance, -amount, setBalance);
       setError(null);
     } catch (error) {
