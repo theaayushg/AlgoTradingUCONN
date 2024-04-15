@@ -3,7 +3,7 @@ import { db } from "./firebase";
 
 export const sellStock = async (userId, stockTicker, numShares) => {
   const userRef = doc(db, "user_test", userId);
-
+  
   try {
     const userDoc = await getDoc(userRef);
 
