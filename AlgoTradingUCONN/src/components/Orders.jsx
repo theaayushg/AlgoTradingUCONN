@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { getDoc, doc } from 'firebase/firestore';
 import { db } from "../services/firebase";
+import '../Styles/Invest.css';
+
 
 const useFetchTransactions = (userId) => {
     const [transactions, setTransactions] = useState([]);
@@ -20,7 +22,6 @@ const useFetchTransactions = (userId) => {
                     return;
                 }
 
-                // The Orders field is expected to be an object with order IDs as keys
                 const orders = docSnap.data().Orders;
                 if (!orders) {
                     console.log(`No transactions found for user ${userId}`);
@@ -54,13 +55,14 @@ export const TransactionList = ({ userId }) => {
     return (
       <div>
         <h2>Transaction History</h2>
-        <ul>
+        <ul classname="transaction-list">
           {transactions.length > 0 ? (
             transactions.map((transaction) => (
-              <li key={transaction.id}>
+              <li key={transaction.id} 
+              className={`transaction-box ${transaction.orderType === 'BUY' ? 'transaction-buy' : 'transaction-sell'}`}>
                 <strong>{transaction.stockTicker}</strong> -{" "}
-                {transaction.orderType} at ${transaction.stockData.BuyPrice} for
-                 {transaction.stockData.Shares} shares
+                {transaction.orderType} at ${transaction.orderType === 'BUY' ? transaction.stockData.BuyPrice : transaction.stockData.SellPrice}{" "}
+                for{' '} {transaction.stockData.Shares} shares
               </li>
             ))
           ) : (
