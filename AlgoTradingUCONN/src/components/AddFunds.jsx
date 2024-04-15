@@ -19,8 +19,10 @@ function AddFunds({ user, balance, setBalance }) {
     }
   };
 
-  const handleWithdraw = async () => {
-    try {
+  const handleWithdraw = async () => 
+  {
+    try 
+    {
       await increaseBalance(user, balance, -amount, setBalance);
       setError(null);
     } catch (error) {

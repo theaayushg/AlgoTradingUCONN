@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Chart, registerables } from 'chart.js';
 import Papa from 'papaparse'; // Library for parsing CSV data
 import "../styles/StockGraphs.css"
+import stockgraphicon from '../assets/stock-chart.svg';
 
 const tickers = ['AAPL', 'MSFT', 'JNJ', 'PG', 'KO', 'XOM', 'WMT', 'IBM', 'GE', 'F', 'GOOGL', 'AMZN', 'META', 'TSLA', 'NFLX', 'INTC', 'AMD', 'NVDA', 'V', 'PYPL'];
 
@@ -79,16 +80,19 @@ const StockGraphs = () => {
 
   return (
     <div className="StockGraph-container">
-      <h1>Stock Graphs</h1>
-      <select value={selectedTicker} onChange={handleTickerChange}>
-        {tickers.map(ticker => (
-          <option key={ticker} value={ticker}>{ticker}</option>
-        ))}
-      </select>
-      <div className='StockGraph-graph'>
-        <DefaultGraph ticker={selectedTicker} />
-      </div>
-    </div>
+  <h1>
+    <img src={stockgraphicon} alt="Stock Graph Icon" className="stock__logo" />Stock Graphs
+  </h1>
+  <select value={selectedTicker} onChange={handleTickerChange}>
+    {tickers.map(ticker => (
+      <option key={ticker} value={ticker}>{ticker}</option>
+    ))}
+  </select>
+  <div className='StockGraph-graph'>
+    <DefaultGraph ticker={selectedTicker} />
+  </div>
+</div>
+
   );
 };
 

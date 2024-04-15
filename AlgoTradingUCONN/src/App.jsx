@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import auth from './services/firebase';
 import Header from './components/Header';
 import Portfolio from './components/Portfolio';
+import Invest from './components/Invest';
 import AddFunds from './components/AddFunds';
 import AboutUs from './components/AboutUs';
 import Account from './components/Account';
@@ -19,6 +20,7 @@ function App() {
   const [user, setUser] = useState(null);
   const [balance, setBalance] = useState(0);
   const [main_portfolio, setPortfolio] = useState([]);
+  const [stockData, setStockData] = useState([]);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -29,6 +31,35 @@ function App() {
       unsubscribe();
     };
   }, [user]);
+
+  useEffect(() => {
+    if (user) {
+      getMyStocks(user);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    const stocksList = ['AAPL', 'MSFT', 'JNJ', 'PG', 'KO', 'XOM', 'WMT', 'IBM', 'GE', 'F', 'GOOGL', 'AMZN', 'META', 'TSLA', 'NFLX', 'INTC', 'AMD', 'NVDA', 'V', 'PYPL'];
+
+    let tempStockData = []
+    let promises = [];
+    stocksList.map((stock) => {
+      promises.push(
+        getStockData(stock)
+          .then((res) => {
+            tempStockData.push({
+              name: stock,
+              ...res.data
+            });
+          })
+      )
+    });
+
+    Promise.all(promises).then(() => {
+      setStockData(tempStockData);
+    })
+
+  }, []);
 
   const getMyStocks = async (user) => {
     let promises = [];
@@ -68,15 +99,9 @@ function App() {
     }
   };
 
-  useEffect(() => {
-    if(user) {
-      getMyStocks(user);
-    }
-  }, [user]);
-
-  useEffect(() => {
-    console.log(main_portfolio);
-  }, [main_portfolio]);
+  // useEffect(() => {
+  //   console.log(main_portfolio);
+  // }, [main_portfolio]);
 
     return (
       <Router>
@@ -93,19 +118,27 @@ function App() {
   
               <Route path="/portfolio" element={user ? <div className="app__container">
                 <NewsFeed user_portfolio={main_portfolio} />
-                <Stats user_portfolio={main_portfolio} />
+                <Stats stockData={stockData} user_portfolio={main_portfolio} />
               </div> : <Navigate to="/" />} 
               />
+
+              <Route path="Invest" element={user ? 
+                <div className="app__container">
+                  <Invest user={user} stockData={stockData} user_portfolio={main_portfolio} balance={balance} setBalance={setBalance}/>
+                </div>
+                : <Navigate to="/" />}
+              />
+
               <Route path="/account" element={user ? 
-              <div>
-                <div>
-                  <AddFunds user={user} balance={balance} setBalance={setBalance} />
-                </div>
-                <div>
-                  <Account userid={user.uid} />
-                </div>
-              </div> : <Navigate to="/" />} />
-            </Routes>
+                <div className='app__container'>
+                  <div>
+                    <AddFunds user={user} balance={balance} setBalance={setBalance} />
+                  </div>
+                  <div>
+                    <Account userid={user.uid} />
+                  </div>
+                </div> : <Navigate to="/" />} />
+              </Routes>
           </div>
         </div>
       </Router>

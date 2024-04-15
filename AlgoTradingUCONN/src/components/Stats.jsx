@@ -4,6 +4,8 @@ import axios from "axios";
 import StatsRow from './StatsRow';
 // import { db } from '../services/firebase';
 // import { doc, getDoc } from "firebase/firestore";
+import moneyicon from '../assets/money-icon.svg';
+import listicon from '../assets/list-icon.svg';
 
 const TOKEN = "cnd3ll1r01qr85dtaltgcnd3ll1r01qr85dtalu0";
 const BASE_URL = "https://finnhub.io/api/v1/quote";
@@ -16,38 +18,14 @@ export const getStockData = async (stock) => {
     });
 };
 
-function Stats({ user_portfolio }) {
-
-  const [stockData, setStockData] = useState([])
-
-  useEffect(()=>{
-    const stocksList = ['AAPL', 'MSFT', 'JNJ', 'PG', 'KO', 'XOM', 'WMT', 'IBM', 'GE', 'F', 'GOOGL', 'AMZN', 'META', 'TSLA', 'NFLX', 'INTC', 'AMD', 'NVDA', 'V', 'PYPL'];
-    
-    let tempStockData = []
-    let promises = [];
-    stocksList.map((stock) => {
-      promises.push(
-        getStockData(stock)
-        .then((res) => {
-          tempStockData.push({
-            name: stock,
-            ...res.data
-          });
-        })
-      )
-    });
-
-    Promise.all(promises).then(() => {
-      setStockData(tempStockData);
-    })
-
-  }, [user_portfolio]);
-
+function Stats({ stockData, user_portfolio }) {
+  
   return (
     <div className="stats">
       <div className="stats__container">
         <div className="stats__header">
-          <p>My Stocks</p>
+          <p> <img src={moneyicon} alt="Stock Graph Icon" className="money__icon" />
+          My Stocks</p>
         </div>
         <div className="stats__content">
           <div className="stats__rows">
@@ -64,7 +42,7 @@ function Stats({ user_portfolio }) {
         </div>
         
         <div className="stats__header stats__lists">
-          <p>Listed Stocks</p>
+          <p> <img src={listicon} alt="Stock Graph Icon" className="list__icon" />Listed Stocks</p>
         </div>
         <div className="stats__content">
           <div className="stats__rows">
