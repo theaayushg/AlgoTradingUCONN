@@ -44,8 +44,8 @@ function Graph({ user_portfolio }) {
         datasets: [{
           label: 'Total Value',
           data: data,
-          backgroundColor: 'rgba(54, 162, 235, 0.8)', // Original bar color
-          borderColor: 'rgba(54, 162, 235, 1)', // Original border color
+          backgroundColor: 'rgba(75, 192, 192, 1)', // Blue bars
+          borderColor: 'rgba(54, 162, 235, 1)', // Blue border color
           borderWidth: 1
         }]
       },
@@ -58,21 +58,17 @@ function Graph({ user_portfolio }) {
             title: {
               display: true,
               text: 'Total value',
-              color: 'rgba(0, 0, 0, 1)' // Original text color
             },
             ticks: {
-              color: 'rgba(0, 0, 0, 1)' // Original text color
             }
           },
           x: {
             title: {
               display: true,
               text: 'Ticker',
-              color: 'rgba(0, 0, 0, 1)' // Original text color
             },
             beginAtZero: true,
             ticks: {
-              color: 'rgba(0, 0, 0, 1)' // Original text color
             }
           }
         },
@@ -80,7 +76,6 @@ function Graph({ user_portfolio }) {
           legend: {
             labels: {
               font: {
-                color: 'rgba(0, 0, 0, 1)' // Original text color
               }
             }
           }
@@ -88,13 +83,11 @@ function Graph({ user_portfolio }) {
       }
     });
 
-    // Set background color of the canvas
-    ctx.canvas.style.backgroundColor = 'rgba(140, 167, 167, 1)'; // Original background color
+    // Set background color of the canvas to black
+    ctx.canvas.style.backgroundColor = 'black';
 
     setChartInstance(newChartInstance);
   }, [containerWidth, user_portfolio]);
-
-  StockPrediction("AMZN");
 
   return (
     <div>
