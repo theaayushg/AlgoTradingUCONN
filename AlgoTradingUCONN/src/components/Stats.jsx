@@ -43,6 +43,10 @@ function Stats({ user_portfolio, setSelectedStock }) {
 
   }, []);
 
+  const handleSelectionChange = (selected) => {
+    setTextColor(color.rgb);
+  };
+
   return (
     <div className="stats">
       <div className="stats__container">
