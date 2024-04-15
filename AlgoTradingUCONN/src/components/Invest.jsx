@@ -42,7 +42,7 @@ function Invest({ user, stockData, user_portfolio, balance, setBalance }) {
       const cur_stockObj = stockData.find(item => item.name === selectedStock);
       if(cur_stockObj){
         const cost = cur_stockObj.c * Number(numShares);
-        await sellStock(user.userId, selectedStock.ticker, Number(numShares));
+        await sellStock(user.uid, selectedStock, Number(numShares));
         await increaseBalance(user, balance, cost, setBalance);
       }
       else{
