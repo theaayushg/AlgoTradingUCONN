@@ -62,17 +62,17 @@ function Account({ userid })
 
   return (
     <div>
-      <div>
+      <div className='app__container'>
         <input type="text" placeholder="Enter New Address" value={address} onChange={(e) => setAddress(e.target.value)} />
         <button onClick={handleChangeAddress}>Change Address</button>
       </div>
 
-      <div>
+      <div className='app__container'>
         <input type="text" placeholder="Enter New Phone Number" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
         <button onClick={handleChangePhoneNumber}>Change Phone Number</button>
       </div>
 
-      <div>
+      <div className='app__container'>
         <Logout />
       </div>
     </div>

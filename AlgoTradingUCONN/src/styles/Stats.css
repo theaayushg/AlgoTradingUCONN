@@ -27,24 +27,16 @@
   position: sticky;
 }
 
-.stats__rows {
-  height: auto;
-<<<<<<< HEAD
-  max-height: 800px;
+.stats__rows{
   overflow-y: scroll;
-  /* overflow-x: hidden; */
-  width: 100%;
-  height: 100%;
-  padding-right: 30px; /* Increase/decrease this value for cross-browser compatibility */
-  box-sizing: content-box;
-  /* width: 100px; */
-=======
-  /* max-height: 200px; */
-  max-height: fit-content;
-  overflow: scroll;
->>>>>>> 557173a4bc671e5ca9a1b3059f40f4415630e03c
+  scrollbar-width: none; 
+  -ms-overflow-style: none;  
+  max-height: 600px;
 }
-
+.stats__rows::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+} 
 .stats__lists {
   border-top: 1px solid #42494D;
 }
