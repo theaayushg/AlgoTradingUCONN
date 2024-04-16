@@ -44,15 +44,14 @@ function Stats({ stockData, user_portfolio }) {
         <div className="stats__header stats__lists">
           <p> <img src={listicon} alt="Stock Graph Icon" className="list__icon" />Listed Stocks</p>
         </div>
-        <div className="stats__content" onClick={() => setSelectedStock(stock.name)}>
+        <div className="stats__content">
           <div className="stats__rows">
             {stockData.map((stock) => (
               <StatsRow
                 key={stock.name}
                 name={stock.name}
                 openPrice={stock.o}
-                price={stock.c}
-                onClick={() => setSelectedStock(stock.name)} 
+                price={stock.c} 
               />
             ))}
           </div>

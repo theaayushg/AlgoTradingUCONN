@@ -29,11 +29,14 @@ function AddFunds({ user, balance, setBalance }) {
 
   return (
     <div>
-      {error && <div>{error}</div>}
-      <div>
+      <div className='app__container'>
         <input type="number" value={amount} onChange={handleAmountChange} />
         <button onClick={handleDeposit}>Deposit</button>
         <button onClick={handleWithdraw}>Withdraw</button>
+      </div>
+      
+      <div className='app__container'>
+        {error && <div>{error}</div>}
       </div>
     </div>
   );
