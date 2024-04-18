@@ -157,7 +157,7 @@ const StockGraphs = ({selectStock}) => {
 
   return (
     <div className="StockGraph-container">
-      <h1>Stock Graphs</h1>
+      <h1>{selectStock}'s Graph</h1>
       <div className='StockGraph-graph'>
         <DefaultGraph selectStock={selectStock} />
       </div>
