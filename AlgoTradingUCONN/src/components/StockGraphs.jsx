@@ -86,7 +86,11 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Chart, registerables } from 'chart.js';
 import Papa from 'papaparse'; // Library for parsing CSV data
 import "../styles/StockGraphs.css"
+import { doc, getDoc } from "firebase/firestore";
+import {db} from "../services/firebase"
 import stockgraphicon from '../assets/stock-chart.svg';
+
+
 
 const DefaultGraph = ({ selectStock }) => {
   const chartRef = useRef(null);
@@ -154,6 +158,51 @@ const DefaultGraph = ({ selectStock }) => {
 };
 
 const StockGraphs = ({selectStock}) => {
+  const [predict,setPredict]= useState([]);
+  useEffect(() => {
+    if (selectStock) {
+      getPredictions();
+    }
+  }, [selectStock]);
+
+  const getPredictions = async () => {
+    let promises = [];
+    let tempData = [];
+
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Adding 1 because January is 0
+    const day = String(currentDate.getDate()).padStart(2, '0');
+
+    const formattedDate = `${year}-${month}-${day}`;
+
+    const userRef = doc(db, 'Prediction', "thAPOPICgraAsrixe2kK");
+    const userDoc = await getDoc(userRef);
+
+    if (userDoc && userDoc.data()[formattedDate]) {
+      const predictions = userDoc.data()[formattedDate];
+      Object.keys(predictions).forEach(ticker => {
+        const cur_predictions = predictions[ticker];
+        promises.push(
+          (res) => {
+            tempData.push({
+              ticker: ticker,
+              prediction: cur_predictions[ticker],
+              info: res.data,
+            });
+          });
+        });
+
+      Promise.all(promises)
+        .then(() => {
+          setPredict(tempData);
+        })
+        .catch(error => {
+          console.error('Error fetching stock data:', error);
+        });
+    }
+  };
+  console.log(predict);
 
   return (
     <div className="StockGraph-container">
