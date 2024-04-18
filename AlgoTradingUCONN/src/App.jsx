@@ -21,7 +21,7 @@ function App() {
   const [balance, setBalance] = useState(0);
   const [main_portfolio, setPortfolio] = useState([]);
   const [stockData, setStockData] = useState([]);
-  const [selectStock,setSelectStock]=useState("APPL");
+  const [selectStock,setSelectStock]=useState("AAPL");
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
