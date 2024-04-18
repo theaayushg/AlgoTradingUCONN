@@ -16,6 +16,8 @@ import { doc, getDoc } from "firebase/firestore";
 import { getStockData } from "./components/Stats";
 import './App.css';
 
+//current bug, user has nothing in portfolio, everything breaks.
+
 function App() {
   const [user, setUser] = useState(null);
   const [balance, setBalance] = useState(0);
@@ -125,7 +127,7 @@ function App() {
 
               <Route path="Invest" element={user ? 
                 <div className="app__container">
-                  <Invest user={user} stockData={stockData} user_portfolio={main_portfolio} balance={balance} setBalance={setBalance}/>
+                  <Invest user={user} stockData={stockData} user_portfolio={main_portfolio} setPortfolio={setPortfolio} balance={balance} setBalance={setBalance}/>
                 </div>
                 : <Navigate to="/" />}
               />

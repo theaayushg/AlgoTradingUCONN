@@ -21,4 +21,8 @@
   .transaction-list {
     padding-left: 0;
   }
-  
+
+  .active {
+    color: #53daf2;
+  }
+
