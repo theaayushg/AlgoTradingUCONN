@@ -1,12 +1,13 @@
 import React from 'react'
 import "../styles/StatsRow.css"
 import StockSVG from "../assets/stock.svg"
-import stocknegative from "../assets/stocknegative.svg"
+import stocknegative from "../assets/stock-red.svg"
 
 function StatsRow(props) {
 
   const percentage = ((props.price - props.openPrice) / props.openPrice) * 100;
   const stockImage = percentage < 0 ? stocknegative : StockSVG;
+  const percentageColor = percentage < 0 ? "red" : "green";
 
   return (
     <button className="row" onClick={() => props.setSelectStock(props.name)}>
@@ -23,7 +24,7 @@ function StatsRow(props) {
       </div>
       <div className="row__numbers">
         <p className="row__price">${props.price.toFixed(2)}</p>
-        <p className="row__percentage">{Number(percentage).toFixed(2)}%</p>
+        <p className="row__percentage" style={{ color: percentageColor }}>{Number(percentage).toFixed(2)}%</p>
       </div>
     </button>
   )
