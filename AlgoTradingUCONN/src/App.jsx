@@ -21,6 +21,7 @@ function App() {
   const [balance, setBalance] = useState(0);
   const [main_portfolio, setPortfolio] = useState([]);
   const [stockData, setStockData] = useState([]);
+  const [selectStock,setSelectStock]=useState("APPL");
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -117,8 +118,8 @@ function App() {
               <Route path="/" element={user ? <Navigate to="/portfolio" /> : <SignInPage />} />
   
               <Route path="/portfolio" element={user ? <div className="app__container">
-                <NewsFeed user_portfolio={main_portfolio} />
-                <Stats stockData={stockData} user_portfolio={main_portfolio} />
+                <NewsFeed user_portfolio={main_portfolio} selectStock={selectStock}/>
+                <Stats stockData={stockData} user_portfolio={main_portfolio} setSelectStock={setSelectStock}/>
               </div> : <Navigate to="/" />} 
               />
 

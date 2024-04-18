@@ -4,8 +4,15 @@ import Graph from "./Graph";
 import TimeLine from "./TimeLine";
 import StockGraphs from "./StockGraphs";
 
+function GraphOrStock({ selectStock, user_portfolio }) {
+  if (selectStock == "portfolio") {
+    return <Graph user_portfolio={user_portfolio} />;
+  } else {
+    return <StockGraphs selectStock={selectStock} />;
+  }
+}
 
-function NewsFeed({ user_portfolio, selectedStock }) {
+function NewsFeed({ user_portfolio, selectStock }) {
   const [PortfolioData, setPortfolioData] = useState({price: 0, priceChange: 0, percentageChange: 0 });
 
   const calc_PPrice = () => {
@@ -42,8 +49,7 @@ function NewsFeed({ user_portfolio, selectedStock }) {
             <p>{PortfolioData.priceChange > 0 ? '+' : ''}${Number(PortfolioData.priceChange).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ({PortfolioData.percentageChange > 0 ? '+' : ''}{PortfolioData.percentageChange}%) All Time</p>
           </div>  
           <div className="newsfeed__chart">
-            <Graph user_portfolio={user_portfolio}/>
-            <StockGraphs selectedStock={selectedStock} />
+            <GraphOrStock user_portfolio={user_portfolio} selectStock={selectStock}/>
             <TimeLine />
           </div>
         </div>

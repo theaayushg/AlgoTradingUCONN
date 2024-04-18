@@ -18,15 +18,15 @@ export const getStockData = async (stock) => {
     });
 };
 
-function Stats({ stockData, user_portfolio }) {
+function Stats({ stockData, user_portfolio, setSelectStock }) {
   
   return (
     <div className="stats">
       <div className="stats__container">
-        <div className="stats__header">
+        <button className="stats__header" onClick={() => setSelectStock("portfolio")}>
           <p> <img src={moneyicon} alt="Stock Graph Icon" className="money__icon" />
           My Stocks</p>
-        </div>
+        </button>
         <div className="stats__content">
           <div className="stats__rows">
            {user_portfolio.map((stock) => (
@@ -52,6 +52,7 @@ function Stats({ stockData, user_portfolio }) {
                 name={stock.name}
                 openPrice={stock.o}
                 price={stock.c} 
+                setSelectStock={setSelectStock}
               />
             ))}
           </div>

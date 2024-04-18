@@ -88,14 +88,14 @@ import Papa from 'papaparse'; // Library for parsing CSV data
 import "../styles/StockGraphs.css"
 import stockgraphicon from '../assets/stock-chart.svg';
 
-const DefaultGraph = ({ selectedStock }) => {
+const DefaultGraph = ({ selectStock }) => {
   const chartRef = useRef(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         // Construct URL based on the selected stock
-        const response = await fetch(`./src/assets/csv/${selectedStock}_stock_data.csv`);
+        const response = await fetch(`./src/assets/csv/${selectStock}_stock_data.csv`);
         const csvData = await response.text(); // Get CSV data as text
         const parsedData = Papa.parse(csvData, {
           header: true,
@@ -144,7 +144,7 @@ const DefaultGraph = ({ selectedStock }) => {
         chartRef.current = null;
       }
     };
-  }, [selectedStock]);
+  }, [selectStock]);
 
   return (
     <div className="graph-container">
@@ -153,29 +153,13 @@ const DefaultGraph = ({ selectedStock }) => {
   );
 };
 
-const StockGraphs = () => {
-  const [selectedStock, setSelectedStock] = useState('');
-  
-  const handleStockChange = (event) => {
-    setSelectedStock(event.target.value);
-  };
-
-  const stocksList = ['AAPL', 'MSFT', 'JNJ', 'PG', 'KO', 'XOM', 'WMT', 'IBM', 'GE', 'F', 'GOOGL', 'AMZN', 'META', 'TSLA', 'NFLX', 'INTC', 'AMD', 'NVDA', 'V', 'PYPL'];
+const StockGraphs = ({selectStock}) => {
 
   return (
     <div className="StockGraph-container">
       <h1>Stock Graphs</h1>
-      <div>
-        <label htmlFor="stock-select">Select a stock:</label>
-        <select id="stock-select" value={selectedStock} onChange={handleStockChange}>
-          <option value="">Select...</option>
-          {stocksList.map(stock => (
-            <option key={stock} value={stock}>{stock}</option>
-          ))}
-        </select>
-      </div>
       <div className='StockGraph-graph'>
-        <DefaultGraph selectedStock={selectedStock} />
+        <DefaultGraph selectStock={selectStock} />
       </div>
     </div>
   );
