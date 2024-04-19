@@ -22,14 +22,13 @@ def get_data(company):
     combined_data = pd.concat(datas)
     
     # Save data to CSV file with company ticker as filename
-    filename = f"/csv/{company}_stock_data.csv"
+    filename = f"./csv/{company}_stock_data.csv"
     combined_data.to_csv(filename)
     print(f"Saved data to {filename}")
     
     return combined_data
 
 
-tickerlist=['AAPL', 'MSFT', 'JNJ', 'PG', 'KO', 'XOM', 'WMT', 'IBM', 'GE', 'F', 'GOOGL', 'AMZN', 'META', 'TSLA', 'NFLX', 'INTC', 'AMD', 'NVDA', 'V', 'PYPL']
-for(ticker in tickerlist):
-  get_data(ticker)
-
+tickerlist = ['AAPL', 'MSFT', 'JNJ', 'PG', 'KO', 'XOM', 'WMT', 'IBM', 'GE', 'F', 'GOOGL', 'AMZN', 'META', 'TSLA', 'NFLX', 'INTC', 'AMD', 'NVDA', 'V', 'PYPL']
+for ticker in tickerlist:
+    get_data(ticker)
