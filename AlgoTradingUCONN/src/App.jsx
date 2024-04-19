@@ -18,7 +18,6 @@ import './App.css';
 import news from "./components/News";
 import ReactDOM from 'react-dom';
 import stocksList from './components/stocksList';
-//current bug, user has nothing in portfolio, everything breaks.
 
 function App() {
   const [user, setUser] = useState(null);
