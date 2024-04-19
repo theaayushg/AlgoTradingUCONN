@@ -3,7 +3,7 @@ import pandas as pd
 import yfinance as yf
 
 def get_data(company):
-    end = date.today() - timedelta(days=1)
+    end = date.today()
     print(f"date: {end}")
     stack = []
     counter = 0
@@ -14,7 +14,7 @@ def get_data(company):
         if not stock_data.empty:
             stack.append(stock_data)
             counter += 1
-        if counter == 9:
+        if counter == 10:  # Fetch data for 10 days (including today)
             break
         end = end - timedelta(days=1)
     while len(stack) != 0:
