@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import Logout from './Logout';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../services/firebase';
+import '../styles/Account.css'; // Import your CSS file for styling
 
-function Account({ userid, setUser, setPortfolio }) 
-{
+function Account({ userid, setUser, setPortfolio }) {
   const [address, setAddress] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
+  const [dateOfBirth, setDateOfBirth] = useState('');
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => 
   {
@@ -15,17 +17,22 @@ function Account({ userid, setUser, setPortfolio })
       const userRef = doc(db, "user_test", userid);
       try 
       {
+        setLoading(true);
         const docSnap = await getDoc(userRef);
-        if (docSnap.exists()) 
-        {
+        if (docSnap.exists()) {
           const userData = docSnap.data();
           setAddress(userData.address || '');
           setPhoneNumber(userData.phone_number || ''); 
+          setDateOfBirth(userData.date_of_birth || '');
         }
       } 
       catch (error) 
       {
         console.error("Error fetching user data:", error);
+      } 
+      finally 
+      {
+        setLoading(false);
       }
     };
 
@@ -38,11 +45,16 @@ function Account({ userid, setUser, setPortfolio })
 
     try 
     {
-      await updateDoc(userRef, {address: address});
+      setLoading(true);
+      await updateDoc(userRef, { address: address });
     } 
     catch (error) 
     {
       console.error("Error updating address:", error);
+    } 
+    finally 
+    {
+      setLoading(false);
     }
   }
 
@@ -52,27 +64,75 @@ function Account({ userid, setUser, setPortfolio })
 
     try 
     {
-      await updateDoc(userRef, {phone_number: phoneNumber});
+      setLoading(true);
+      await updateDoc(userRef, { phone_number: phoneNumber });
     } 
     catch (error) 
     {
       console.error("Error updating phone number:", error);
+    } 
+    finally 
+    {
+      setLoading(false);
+    }
+  }
+
+  const handleChangeDateOfBirth = async () => 
+  {
+    const userRef = doc(db, "user_test", userid);
+
+    try 
+    {
+      setLoading(true);
+      await updateDoc(userRef, { date_of_birth: dateOfBirth });
+    } 
+    catch (error) 
+    {
+      console.error("Error updating date of birth:", error);
+    } 
+    finally 
+    {
+      setLoading(false);
     }
   }
 
   return (
-    <div>
-      <div className='app__container'>
-        <input type="text" placeholder="Enter New Address" value={address} onChange={(e) => setAddress(e.target.value)} />
-        <button onClick={handleChangeAddress}>Change Address</button>
+    <div className="account-container">
+      <div className="account__header account__lists"><p>Personal Information</p></div>
+
+      <div className='account-input-container'>
+        <input 
+          type="text" 
+          placeholder="Enter New Address" 
+          value={address} 
+          onChange={(e) => setAddress(e.target.value)} 
+          disabled={loading} 
+        />
+        <button onClick={() => handleChange('address', address)} disabled={loading}>Change Address</button>
       </div>
 
-      <div className='app__container'>
-        <input type="text" placeholder="Enter New Phone Number" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
-        <button onClick={handleChangePhoneNumber}>Change Phone Number</button>
+      <div className='account-input-container'>
+        <input 
+          type="text" 
+          placeholder="Enter New Phone Number" 
+          value={phoneNumber} 
+          onChange={(e) => setPhoneNumber(e.target.value)} 
+          disabled={loading} 
+        />
+        <button onClick={() => handleChange('phone_number', phoneNumber)} disabled={loading}>Change Phone Number</button>
       </div>
 
-      <div className='app__container'>
+      <div className='account-input-container'>
+        <input 
+          type="date" 
+          value={dateOfBirth} 
+          onChange={(e) => setDateOfBirth(e.target.value)} 
+          disabled={loading} 
+        />
+        <button onClick={() => handleChange('date_of_birth', dateOfBirth)} disabled={loading}>Change Date of Birth</button>
+      </div>
+
+      <div className='logout-container'>
         <Logout setUser={setUser} setPortfolio={setPortfolio} />
       </div>
     </div>
