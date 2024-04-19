@@ -157,8 +157,9 @@ const DefaultGraph = ({ selectStock }) => {
   );
 };
 
+
 const StockGraphs = ({selectStock}) => {
-  const [predict,setPredict]= useState([]);
+  const [predict,setPredict]= useState();
   useEffect(() => {
     if (selectStock) {
       getPredictions();
@@ -166,47 +167,42 @@ const StockGraphs = ({selectStock}) => {
   }, [selectStock]);
 
   const getPredictions = async () => {
-    let promises = [];
-    let tempData = [];
-
-    const currentDate = new Date();
-    const year = currentDate.getFullYear();
-    const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Adding 1 because January is 0
-    const day = String(currentDate.getDate()).padStart(2, '0');
-
-    const formattedDate = `${year}-${month}-${day}`;
-
-    const userRef = doc(db, 'Prediction', "thAPOPICgraAsrixe2kK");
-    const userDoc = await getDoc(userRef);
-
-    if (userDoc && userDoc.data()[formattedDate]) {
-      const predictions = userDoc.data()[formattedDate];
-      Object.keys(predictions).forEach(ticker => {
-        const cur_predictions = predictions[ticker];
-        promises.push(
-          (res) => {
-            tempData.push({
-              ticker: ticker,
-              prediction: cur_predictions[ticker],
-              info: res.data,
-            });
-          });
-        });
-
-      Promise.all(promises)
-        .then(() => {
-          setPredict(tempData);
-        })
-        .catch(error => {
-          console.error('Error fetching stock data:', error);
-        });
+    try {
+      const currentDate = new Date();
+      const year = currentDate.getFullYear();
+      const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+      const day = String(currentDate.getDate()).padStart(2, '0');
+      const formattedDate = `${year}-${month}-${day-1}`;
+  
+      const userRef = doc(db, 'Prediction', "thAPOPICgraAsrixe2kK");
+      const userDoc = await getDoc(userRef);
+  
+      if (userDoc.exists()) {
+        const predictions = userDoc.data();
+        if (predictions[formattedDate]) {
+          // Extract the prediction value for the selected stock ticker
+          const predictmap= predictions[formattedDate];
+          const predictionValue = predictmap[selectStock];
+          setPredict(predictionValue);
+        } else {
+          setPredict();
+          console.log(`No prediction found for ${selectStock}`);
+        }
+      } else {
+        setPredict();
+        console.log('Prediction document does not exist');
+      }
+    } catch (error) {
+      console.error('Error fetching predictions:', error);
     }
   };
+  
   console.log(predict);
 
   return (
     <div className="StockGraph-container">
       <h1>{selectStock}'s Graph</h1>
+      <h3>Tomorrow's prediction is {predict}</h3>
       <div className='StockGraph-graph'>
         <DefaultGraph selectStock={selectStock} />
       </div>
