@@ -47,11 +47,12 @@
 }
 .money__icon{
   margin-left: 5px;
-  margin-right: 10px;
+  margin-right: 20px;
   margin-top: 1px;
   border-bottom: 1px solid #42494D;
   width: 30px;
   height:30px;
+  vertical-align: middle;
 }
 .list__icon{
   margin-left: 5px;
@@ -60,4 +61,5 @@
   width: 30px;
   height:30px;
   border-bottom: 1px solid #42494D;
+  vertical-align: middle;
 }

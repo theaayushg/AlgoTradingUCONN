@@ -2,7 +2,7 @@ from datetime import date,timedelta
 import pandas as pd
 import yfinance as yf
 import numpy as np
-import pandas_ta
+# import pandas_ta
 
 def get_data(company):
   end = date.today()-timedelta(days=1)
@@ -22,3 +22,18 @@ def get_data(company):
   while len(stack) != 0:
     datas.append(stack.pop())
   return pd.concat(datas)
+
+def download_stock_data(tickers):
+    start_date = date.today() - timedelta(days=9)
+    end_date = date.today()
+
+    # Loop through each ticker and download the data
+    for ticker in tickers:
+        data = yf.download(ticker, start=start_date, end=end_date)
+        filename = f"{ticker}_data.csv"
+        data.to_csv(filename)
+        print(f"Data for {ticker} saved to {filename}")
+
+companies = ['AAPL']
+
+download_stock_data(companies)

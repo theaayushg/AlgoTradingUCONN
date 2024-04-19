@@ -14,7 +14,9 @@ import { db } from './services/firebase';
 import { doc, getDoc } from "firebase/firestore";
 import { getStockData } from "./components/Stats";
 import './App.css';
-
+import news from "./components/News";
+import ReactDOM from 'react-dom';
+import stocksList from './components/stocksList';
 //current bug, user has nothing in portfolio, everything breaks.
 
 function App() {
@@ -41,7 +43,6 @@ function App() {
   }, [user]);
 
   useEffect(() => {
-    const stocksList = ['AAPL', 'MSFT', 'JNJ', 'PG', 'KO', 'XOM', 'WMT', 'IBM', 'GE', 'F', 'GOOGL', 'AMZN', 'META', 'TSLA', 'NFLX', 'INTC', 'AMD', 'NVDA', 'V', 'PYPL'];
 
     let tempStockData = []
     let promises = [];

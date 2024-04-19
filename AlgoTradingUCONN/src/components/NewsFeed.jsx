@@ -3,6 +3,7 @@ import "../styles/NewsFeed.css";
 import Graph from "./Graph";
 import TimeLine from "./TimeLine";
 import StockGraphs from "./StockGraphs";
+import News from "./News.jsx";
 
 function GraphOrStock({ selectStock, user_portfolio, PortfolioData }) {
   if (selectStock == "portfolio") {
@@ -47,6 +48,7 @@ function NewsFeed({ user_portfolio, selectStock }) {
           <div className="newsfeed__chart">
             <GraphOrStock user_portfolio={user_portfolio} selectStock={selectStock} PortfolioData={PortfolioData}/>
             <TimeLine />
+            <News selectStock={selectStock} />
           </div>
         </div>
       </div>
