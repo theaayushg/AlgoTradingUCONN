@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import 'chartjs-adapter-date-fns';
 import { Chart, registerables } from 'chart.js';
 import Papa from 'papaparse'; // Library for parsing CSV data
 import "../styles/StockGraphs.css"
@@ -6,7 +7,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "../services/firebase";
 import stockgraphicon from '../assets/stock-chart.svg';
 
-const DefaultGraph = ({ selectStock, stockData, predict }) => {
+const DefaultGraph = ({ selectStock, stockData, predict ,predictDisplay}) => {
   const chartRef = useRef(null);
   const [selectedStockClosePrice, setSelectedStockClosePrice] = useState(0);
 
@@ -20,82 +21,110 @@ const DefaultGraph = ({ selectStock, stockData, predict }) => {
   }, [selectStock, stockData]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Construct URL based on the selected stock
-        const response = await fetch(`./src/assets/csv/${selectStock}_stock_data.csv`);
-        const csvData = await response.text(); // Get CSV data as text
-        const parsedData = Papa.parse(csvData, {
-          header: true,
-          skipEmptyLines: true, // Skip empty lines
-          transform: (value, header) => {
-            // Convert 'Close' values to numbers
-            if (header === 'Close') {
-              return Number(value);
-            }
-            return value;
+  const fetchData = async () => {
+    try {
+      // Construct URL based on the selected stock
+      const response = await fetch(`./src/assets/csv/${selectStock}_stock_data.csv`);
+      const csvData = await response.text(); // Get CSV data as text
+      const parsedData = Papa.parse(csvData, {
+        header: true,
+        skipEmptyLines: true, // Skip empty lines
+        transform: (value, header) => {
+          // Convert 'Close' values to numbers
+          if (header === 'Close') {
+            return Number(value);
           }
-        }).data;
-
-        // Extracting data from the prediction
-        const dates = parsedData.map(item => item.Date);
-        const closePrices = parsedData.map(item => parseFloat(item.Close));
-
-        // Prepare label array
-        const labels = [...dates];
-        // Add current date label
-        labels.push(new Date().toISOString().split('T')[0]);
-        // Add predicted date label if prediction is available
-        if (predict) {
-          const tomorrow = new Date();
-          tomorrow.setDate(tomorrow.getDate() + 1);
-          labels.push(tomorrow.toISOString().split('T')[0]);
+          return value;
         }
+      }).data;
 
-        if (chartRef.current) {
-          chartRef.current.data.labels = labels;
-          chartRef.current.data.datasets[0].data = [...closePrices, selectedStockClosePrice, predict];
-          chartRef.current.update();
-        } else {
-          Chart.register(...registerables);
-          const ctx = document.getElementById('chart').getContext('2d');
-          chartRef.current = new Chart(ctx, {
-            type: 'line',
-            data: {
-              labels: labels,
-              datasets: [{
-                label: 'Close Price',
-                data: [...closePrices, selectedStockClosePrice, predict],
-                borderColor: 'rgba(75, 192, 192, 1)',
-                tension: 0.1
-              }]
-            }
-          });
-        }
-      } catch (error) {
-        console.error('Error fetching or parsing data:', error);
+      // Extracting data from the prediction
+      const dates = parsedData.map(item => item.Date);
+      const closePrices = parsedData.map(item => parseFloat(item.Close));
+
+      // Prepare label array
+      const labels = [...dates];
+      // Add current date label
+      labels.push(new Date().toISOString().split('T')[0]);
+      // Add predicted date label if prediction is available
+      if (predictDisplay) {
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        labels.push(tomorrow.toISOString().split('T')[0]);
       }
-    };
 
-    fetchData();
-
-    return () => {
+      // Destroy previous chart instance if exists
       if (chartRef.current) {
         chartRef.current.destroy();
-        chartRef.current = null;
       }
-    };
-  }, [selectStock, stockData, predict, selectedStockClosePrice]);
+
+      Chart.register(...registerables);
+      const ctx = document.getElementById('chart').getContext('2d');
+      chartRef.current = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Close Price',
+            data: [...closePrices, selectedStockClosePrice, predict],
+            borderColor: 'rgba(75, 192, 192, 1)',
+            tension: 0.1
+          }]
+        },
+        options: {
+          plugins: {
+            title: {
+              display: true,
+              text: 'Stock Price Trend',
+              font: {
+                size: 16
+              }
+            },
+            legend: {
+              display: true,
+              position: 'bottom'
+            }
+          },
+          scales: {
+            x: {
+              type: 'time',
+              title: {
+                display: true,
+                text: 'Date'
+              }
+            },
+            y: {
+              title: {
+                display: true,
+                text: 'Close Price'
+              }
+            }
+          }
+        }
+      });
+    } catch (error) {
+      console.error('Error fetching or parsing data:', error);
+    }
+  };
+
+  fetchData();
+
+  return () => {
+    if (chartRef.current) {
+      chartRef.current.destroy();
+      chartRef.current = null;
+    }
+  };
+}, [selectStock, stockData, predict, selectedStockClosePrice, predictDisplay]);
 
   return (
     <div className="graph-container">
       <canvas id="chart" className='graph' />
-      <div>Prediction Price for {selectStock}: {predict}</div>
     </div>
   );
 };
 
-const StockGraphs = ({ selectStock, stockData }) => {
+const StockGraphs = ({ selectStock, stockData , predictDisplay}) => {
   const [predict, setPredict] = useState();
 
   useEffect(() => {
@@ -140,7 +169,7 @@ const StockGraphs = ({ selectStock, stockData }) => {
       <h1>{selectStock}'s Graph</h1>
       <h3>Tomorrow's prediction is {predict}</h3>
       <div className='StockGraph-graph'>
-        <DefaultGraph selectStock={selectStock} stockData={stockData} predict={predict} />
+        <DefaultGraph selectStock={selectStock} stockData={stockData} predict={predict} predictDisplay={predictDisplay}/>
       </div>
     </div>
   );
