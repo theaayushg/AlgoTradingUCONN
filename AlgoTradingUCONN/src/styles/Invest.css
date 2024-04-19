@@ -11,14 +11,34 @@
   .transaction-buy {
     border-color: #4CAF50; /* Green for buy transactions */
     color: #2E8B57;
+    background-color: #31363A;
+    /* padding-right: 100px; */
   }
   
   .transaction-sell {
     border-color: #2196F3;; /* Red for sell transactions */
     color: #1A76D2;
+    background-color: #31363A;
+    /* padding-right: 100px; */
   }
   
-  .transaction-list {
-    padding-left: 0;
+  .transaction__list {
+    padding-left: 0px;
+    /* background-color: #31363A; */
   }
-  
+
+  .active {
+    color: #53daf2;
+  }
+
+  .invest__page {
+    padding-left: 40px;
+  }
+
+  .trans__page {
+    padding-left: 40px;
+  }
+  .error_message{
+    display: flex;
+  }
+

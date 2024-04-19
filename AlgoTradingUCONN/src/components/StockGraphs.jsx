@@ -86,7 +86,11 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Chart, registerables } from 'chart.js';
 import Papa from 'papaparse'; // Library for parsing CSV data
 import "../styles/StockGraphs.css"
+import { doc, getDoc } from "firebase/firestore";
+import {db} from "../services/firebase"
 import stockgraphicon from '../assets/stock-chart.svg';
+
+
 
 const DefaultGraph = ({ selectStock }) => {
   const chartRef = useRef(null);
@@ -153,11 +157,52 @@ const DefaultGraph = ({ selectStock }) => {
   );
 };
 
+
 const StockGraphs = ({selectStock}) => {
+  const [predict,setPredict]= useState();
+  useEffect(() => {
+    if (selectStock) {
+      getPredictions();
+    }
+  }, [selectStock]);
+
+  const getPredictions = async () => {
+    try {
+      const currentDate = new Date();
+      const year = currentDate.getFullYear();
+      const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+      const day = String(currentDate.getDate()).padStart(2, '0');
+      const formattedDate = `${year}-${month}-${day}`;
+  
+      const userRef = doc(db, 'Prediction', "thAPOPICgraAsrixe2kK");
+      const userDoc = await getDoc(userRef);
+  
+      if (userDoc.exists()) {
+        const predictions = userDoc.data();
+        if (predictions[formattedDate]) {
+          // Extract the prediction value for the selected stock ticker
+          const predictmap= predictions[formattedDate];
+          const predictionValue = predictmap[selectStock];
+          setPredict(predictionValue);
+        } else {
+          setPredict();
+          console.log(`No prediction found for ${selectStock}`);
+        }
+      } else {
+        setPredict();
+        console.log('Prediction document does not exist');
+      }
+    } catch (error) {
+      console.error('Error fetching predictions:', error);
+    }
+  };
+  
+  console.log(predict);
 
   return (
     <div className="StockGraph-container">
       <h1>{selectStock}'s Graph</h1>
+      <h3>Tomorrow's prediction is {predict}</h3>
       <div className='StockGraph-graph'>
         <DefaultGraph selectStock={selectStock} />
       </div>

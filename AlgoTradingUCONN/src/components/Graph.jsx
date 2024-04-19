@@ -3,7 +3,7 @@ import { Chart, registerables } from 'chart.js';
 import StockPrediction from './StockPrediction.jsx';
 import "../styles/Graph.css"
 
-function Graph({ user_portfolio }) {
+function Graph({ user_portfolio, PortfolioData }) {
   const [chartInstance, setChartInstance] = useState(null);
   const [containerWidth, setContainerWidth] = useState(0);
   const canvasRef = useRef(null);
@@ -91,6 +91,10 @@ function Graph({ user_portfolio }) {
 
   return (
     <div>
+      <div className="newsfeed__portfolio">
+          <h1>${Number(PortfolioData.price).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</h1>
+          <p>{PortfolioData.priceChange > 0 ? '+' : ''}${Number(PortfolioData.priceChange).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ({PortfolioData.percentageChange > 0 ? '+' : ''}{PortfolioData.percentageChange}%) All Time</p>
+      </div>  
       <div className='bargraph'>
         <canvas ref={canvasRef}></canvas>
       </div>

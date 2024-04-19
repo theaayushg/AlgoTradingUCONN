@@ -1,14 +1,13 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged} from "firebase/auth"; 
+import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "firebase/auth"; 
 import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
 import { getStorage, ref } from "firebase/storage"
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyDfpTo6NTh41B0jx-0gov5ox7prSGQgmNA",
   authDomain: "algotradinguconn.firebaseapp.com",
@@ -53,6 +52,7 @@ const createOrUpdateUser = async (user) => {
     const docSnapshot = await getDoc(userRef);
 
     if (!docSnapshot.exists()){
+      console.log("creating new user document in firestore");
       await setDoc(userRef, {
         Name: user.displayName,
         email: user.email,

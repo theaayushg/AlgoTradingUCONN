@@ -56,7 +56,7 @@ export const TransactionList = ({ userId }) => {
     const transactions = useFetchTransactions(userId);
   
     return (
-      <div>
+      <div className="trans__page">
         <h2>Transaction History</h2>
         <ul className="transaction-list">
           {transactions.length > 0 ? (
