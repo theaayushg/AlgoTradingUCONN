@@ -91,7 +91,7 @@ const DefaultGraph = ({ selectStock, stockData, predict }) => {
   return (
     <div className="graph-container">
       <canvas id="chart" className='graph' />
-      <div>Close Price for {selectStock}: {selectedStockClosePrice}</div>
+      <div>Prediction Price for {selectStock}: {predict}</div>
     </div>
   );
 };
