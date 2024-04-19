@@ -177,7 +177,8 @@ const StockGraphs = ({selectStock}) => {
   
       const userRef = doc(db, 'Prediction', formattedDate);
       const userDoc = await getDoc(userRef);
-      const console.log(userDoc);
+      console.log(formattedDate);
+      console.log(userDoc);
   
       if (userDoc.exists()) {
         const predictions = userDoc.data();
