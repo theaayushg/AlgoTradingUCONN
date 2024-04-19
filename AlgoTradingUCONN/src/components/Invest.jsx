@@ -4,6 +4,7 @@ import { addTransaction } from "../services/AddTransaction";
 import { sellStock } from "../services/SellStock";
 import { increaseBalance } from "../services/IncreaseBalance";
 import { TransactionList } from "./Orders";
+import { Timestamp } from 'firebase/firestore';
 
 //user portfolio not loading bug
 //portfolio not loading
@@ -29,11 +30,11 @@ function Invest({ user, stockData, user_portfolio, balance, setBalance }) {
         };
         await increaseBalance(user, balance, -cost, setBalance);
         await addToPortfolio(user.uid, selectedStock, cur_stockData);
-        await addTransaction(user.uid, selectedStock, cur_stockData, "BUY");
+        await addTransaction(user.uid, selectedStock, cur_stockData, "BUY", Timestamp.now());
       } else {
         console.error(`Stock with ticker ${selectedStock} not found.`);
       }
-    } catch (error) {
+    }catch (error) {
       console.error("Error buying stock:", error.message);
     }
   };
@@ -52,7 +53,7 @@ function Invest({ user, stockData, user_portfolio, balance, setBalance }) {
         const cost = cur_stockObj.c * Number(numShares);
         await sellStock(user.uid, selectedStock, Number(numShares));
         await increaseBalance(user, balance, cost, setBalance);
-        await addTransaction(user.uid, selectedStock, sold_stockData, "SELL");
+        await addTransaction(user.uid, selectedStock, sold_stockData, "SELL", Timestamp.now());
       } else {
         console.error(`Stock with ticker ${selectedStock} not found.`);
       }

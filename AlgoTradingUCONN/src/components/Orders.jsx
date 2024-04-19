@@ -31,8 +31,10 @@ const useFetchTransactions = (userId) => {
                         id,
                         orderType: order[0], // "BUY" or "SELL"
                         stockTicker: order[1], // "IBM", etc.
-                        stockData: order[2], // { BuyPrice, Shares, etc. }
-                    }));
+                        stockData: order[2], // Includes BuyPrice, Shares, etc.
+                        timeStamp: timeStamp?.toDate()
+                    })).sort((a, b) => a.timeStamp - b.timeStamp); // Sort transactions by date
+
                     setTransactions(loadedTransactions);
                     console.log("Fetched Transactions:", loadedTransactions);
                 }
@@ -49,13 +51,14 @@ const useFetchTransactions = (userId) => {
 
 export default useFetchTransactions;
 
+
 export const TransactionList = ({ userId }) => {
     const transactions = useFetchTransactions(userId);
   
     return (
       <div>
         <h2>Transaction History</h2>
-        <ul classname="transaction-list">
+        <ul className="transaction-list">
           {transactions.length > 0 ? (
             transactions.map((transaction) => (
               <li key={transaction.id} 
