@@ -53,9 +53,9 @@ export const TransactionList = ({ userId }) => {
     const transactions = useFetchTransactions(userId);
   
     return (
-      <div>
+      <div className="trans__page">
         <h2>Transaction History</h2>
-        <ul classname="transaction-list">
+        <ul className="transaction__list">
           {transactions.length > 0 ? (
             transactions.map((transaction) => (
               <li key={transaction.id} 
