@@ -69,6 +69,36 @@ const DefaultGraph = ({ selectStock, stockData, predict }) => {
                 borderColor: 'rgba(75, 192, 192, 1)',
                 tension: 0.1
               }]
+            },
+            options: {
+              plugins: {
+                title: {
+                  display: true,
+                  text: 'Stock Price Trend',
+                  font: {
+                    size: 16
+                  }
+                },
+                legend: {
+                  display: true,
+                  position: 'bottom'
+                }
+              },
+              scales: {
+                x: {
+                  type: 'time',
+                  title: {
+                    display: true,
+                    text: 'Date'
+                  }
+                },
+                y: {
+                  title: {
+                    display: true,
+                    text: 'Close Price'
+                  }
+                }
+              }
             }
           });
         }
