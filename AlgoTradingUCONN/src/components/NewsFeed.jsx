@@ -4,9 +4,9 @@ import Graph from "./Graph";
 import TimeLine from "./TimeLine";
 import StockGraphs from "./StockGraphs";
 
-function GraphOrStock({ selectStock, user_portfolio }) {
+function GraphOrStock({ selectStock, user_portfolio, PortfolioData }) {
   if (selectStock == "portfolio") {
-    return <Graph user_portfolio={user_portfolio} />;
+    return <Graph user_portfolio={user_portfolio} PortfolioData={PortfolioData}/>;
   } else {
     return <StockGraphs selectStock={selectStock} />;
   }
@@ -44,12 +44,8 @@ function NewsFeed({ user_portfolio, selectStock }) {
     <div className="newsfeed">
       <div className="newsfeed__container">
         <div className="newsfeed__chartSection">
-          <div className="newsfeed__portfolio">
-            <h1>${Number(PortfolioData.price).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</h1>
-            <p>{PortfolioData.priceChange > 0 ? '+' : ''}${Number(PortfolioData.priceChange).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ({PortfolioData.percentageChange > 0 ? '+' : ''}{PortfolioData.percentageChange}%) All Time</p>
-          </div>  
           <div className="newsfeed__chart">
-            <GraphOrStock user_portfolio={user_portfolio} selectStock={selectStock}/>
+            <GraphOrStock user_portfolio={user_portfolio} selectStock={selectStock} PortfolioData={PortfolioData}/>
             <TimeLine />
           </div>
         </div>
