@@ -174,15 +174,14 @@ const StockGraphs = ({selectStock}) => {
       const day = String(currentDate.getDate()).padStart(2, '0');
       const formattedDate = `${year}-${month}-${day}`;
   
-      const userRef = doc(db, 'Prediction', "thAPOPICgraAsrixe2kK");
+      const userRef = doc(db, 'Prediction', "formattedDate");
       const userDoc = await getDoc(userRef);
   
       if (userDoc.exists()) {
         const predictions = userDoc.data();
-        if (predictions[formattedDate]) {
+        if (predictions[selectStock]) {
           // Extract the prediction value for the selected stock ticker
-          const predictmap= predictions[formattedDate];
-          const predictionValue = predictmap[selectStock];
+          const predictionValue = predictions[selectStock];
           setPredict(predictionValue);
         } else {
           setPredict();
