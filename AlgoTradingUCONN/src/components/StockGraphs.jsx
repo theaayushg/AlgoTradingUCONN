@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { registerPlugin } from 'chart.js';
 import 'chartjs-adapter-date-fns';
 import { Chart, registerables } from 'chart.js';
 import Papa from 'papaparse'; // Library for parsing CSV data
