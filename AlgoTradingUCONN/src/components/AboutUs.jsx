@@ -5,10 +5,10 @@ function AboutUs() {
     const teamMembers = [
         { name: 'Aayush', role: 'CS Senior - Computational Data Analytics', description: 'Aayush was the Team Manager for this project and focused on the web development along with research for this project.', image: '../../src/styles/aayush.PNG' },
         { name: 'Long', role: 'CS Senior - Cyber Security', description: 'Long.', image: '../../src/styles/long.PNG' },
-        { name: 'Chenghe', role: 'CS Senior - Unspecialized', description: 'Chenghe.', image: '../../src/styles/chenghe.PNG' },
-        { name: 'Ishan', role: 'CS Senior - Software Design Development', description: 'Ishan.', image: '../../src/styles/ishan.PNG' },
+        { name: 'Chenghe', role: 'CS Senior - Unspecialized', description: 'Chenghe is an undergraduate computer science student from Xian, China. Chenghe focused on data collection and various web development tasks.', image: '../../src/styles/chenghe.PNG' },
+        { name: 'Ishan', role: 'CS Senior - Software Design Development', description: 'Ishan was in charge of leading the frontend for this project as well as connecting the UI to the backend.', image: '../../src/styles/ishan.PNG' },
         { name: 'Sunwang', role: 'CS Senior - Computational Data Analytics', description: 'Sunwang.', image: '../../src/styles/sunwang.PNG' },
-        { name: 'Ron', role: 'CS Senior - Unspecialized', description: 'Ron.', image: '../../src/styles/ron.PNG' },
+        { name: 'Ron', role: 'CS Senior - Unspecialized', description: 'Ron was in charge of the data visualizations within the front end focusing on graphs and overall design for the website.', image: '../../src/styles/ron.PNG' },
         { name: 'Siddharth', role: 'CS Senior - Computational Data Analytics', description: 'Siddharth', image: '../../src/styles/Siddharth.jpg' }
     ];
 
