@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { increaseBalance } from "../services/IncreaseBalance";
+import "../styles/addFunds.css";
 
 function AddFunds({ user, balance, setBalance }) {
   const [amount, setAmount] = useState(0);
@@ -28,15 +29,13 @@ function AddFunds({ user, balance, setBalance }) {
   };
 
   return (
-    <div>
-      <div className='app__container'>
-        <input type="number" value={amount} onChange={handleAmountChange} />
-        <button onClick={handleDeposit}>Deposit</button>
-        <button onClick={handleWithdraw}>Withdraw</button>
-      </div>
-      
-      <div className='app__container'>
-        {error && <div>{error}</div>}
+    <div className='addfunds__container'>
+        <div className="stats__header stats__lists"><p>Balance</p></div>
+      <div className='error-message'>{error && <span>{error}</span>}</div>
+      <div className='addfunds-input-container'>
+        <input type="number" value={amount} onChange={handleAmountChange} placeholder="Enter amount" />
+        <button className="deposit-button" onClick={handleDeposit}>Deposit</button>
+        <button className="withdraw-button" onClick={handleWithdraw}>Withdraw</button>
       </div>
     </div>
   );

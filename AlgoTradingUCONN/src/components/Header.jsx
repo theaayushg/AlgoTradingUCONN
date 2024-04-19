@@ -24,6 +24,7 @@ function Header({ user, balance, setBalance }) {
       {/* menuitems */}
       <div className="header__menuItems"> 
         <Link to="/AboutUs">AboutUs</Link>
+        <Link to="/Learn">Learn</Link>
         <Link to="/Invest">Invest</Link>
         <Link to="/account">Account Management</Link>
       </div>

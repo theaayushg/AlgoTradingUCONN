@@ -8,13 +8,16 @@ import AboutUs from './components/AboutUs';
 import Account from './components/Account';
 import Graph from './components/Graph';
 import NewsFeed from './components/NewsFeed';
+import Learn from './components/Learn';
 import Stats from './components/Stats';
 import SignInPage from './components/SignInPage';
 import { db } from './services/firebase';
 import { doc, getDoc } from "firebase/firestore";
 import { getStockData } from "./components/Stats";
 import './App.css';
-
+import news from "./components/News";
+import ReactDOM from 'react-dom';
+import stocksList from './components/stocksList';
 //current bug, user has nothing in portfolio, everything breaks.
 
 function App() {
@@ -41,7 +44,6 @@ function App() {
   }, [user]);
 
   useEffect(() => {
-    const stocksList = ['AAPL', 'MSFT', 'JNJ', 'PG', 'KO', 'XOM', 'WMT', 'IBM', 'GE', 'F', 'GOOGL', 'AMZN', 'META', 'TSLA', 'NFLX', 'INTC', 'AMD', 'NVDA', 'V', 'PYPL'];
 
     let tempStockData = []
     let promises = [];
@@ -112,14 +114,15 @@ function App() {
           <div className="app__body">
             <Routes>
               <Route path="/AboutUs" element={<AboutUs />} />
+
               <Route path="/" element={user ? <Navigate to="/portfolio" /> : <SignInPage />} />
   
               <Route path="/portfolio" element={user ? <div className="app__container">
-                <NewsFeed user_portfolio={main_portfolio} selectStock={selectStock}/>
+                <NewsFeed user_portfolio={main_portfolio} selectStock={selectStock} stockData={stockData}/>
                 <Stats stockData={stockData} user_portfolio={main_portfolio} setSelectStock={setSelectStock}/>
               </div> : <Navigate to="/" />} 
               />
-
+              <Route path="/Learn" element={<Learn />} />
               <Route path="Invest" element={user ? 
                 <div className="app__container">
                   <Invest user={user} stockData={stockData} user_portfolio={main_portfolio} setPortfolio={setPortfolio} balance={balance} setBalance={setBalance}/>
