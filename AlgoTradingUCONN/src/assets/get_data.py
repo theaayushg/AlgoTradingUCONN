@@ -30,6 +30,6 @@ def get_data(company):
 
 
 tickerlist=['AAPL', 'MSFT', 'JNJ', 'PG', 'KO', 'XOM', 'WMT', 'IBM', 'GE', 'F', 'GOOGL', 'AMZN', 'META', 'TSLA', 'NFLX', 'INTC', 'AMD', 'NVDA', 'V', 'PYPL']
-for(ticker : tickerlist):
+for(ticker in tickerlist):
   get_data(ticker)
 
