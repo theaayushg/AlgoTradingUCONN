@@ -174,7 +174,7 @@ const StockGraphs = ({selectStock}) => {
       const day = String(currentDate.getDate()).padStart(2, '0');
       const formattedDate = `${year}-${month}-${day+1}`;
   
-      const userRef = doc(db, 'Prediction', "formattedDate");
+      const userRef = doc(db, 'Prediction', formattedDate);
       const userDoc = await getDoc(userRef);
   
       if (userDoc.exists()) {
