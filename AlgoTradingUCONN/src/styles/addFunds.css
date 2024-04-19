@@ -1,0 +1,70 @@
+.addfunds__container {
+  max-width: 400px;
+  padding: 30px;
+  background-color: #1E2023;
+  border-radius: 5px;
+  border: 1px solid #42494D;
+  color: white;
+}
+
+.addfunds-input-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.addfunds__header {
+
+  display: flex;
+  font-size: 16px;
+  font-weight: bolder;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #42494D;
+  padding: 10px 20px 10px 20px;
+  font-weight: 500;
+  position: sticky;
+}
+
+.addfunds__header p {
+  font-weight: bolder;
+  font-size: large;
+}
+
+.addfunds__lists {
+  border-top: 2px solid #42494D;
+}
+
+input[type="number"] {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-right: 10px;
+  background-color: #1E2023; 
+  color: white; 
+}
+
+.deposit-button,
+.withdraw-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.deposit-button {
+  background-color: #4caf50;
+  color: white;
+}
+
+.withdraw-button {
+  background-color: #f44336; 
+  color: white;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}

@@ -9,7 +9,7 @@ function AboutUs() {
         { name: 'Ishan', role: 'CS Senior - Software Design Development', description: 'Ishan was in charge of leading the frontend for this project as well as connecting the UI to the backend.', image: '../../src/styles/ishan.PNG' },
         { name: 'Sunwang', role: 'CS Senior - Computational Data Analytics', description: 'Sunwang.', image: '../../src/styles/sunwang.PNG' },
         { name: 'Ron', role: 'CS Senior - Unspecialized', description: 'Ron was in charge of the data visualizations within the front end focusing on graphs and overall design for the website.', image: '../../src/styles/ron.PNG' },
-        { name: 'Siddharth', role: 'CS Senior - Computational Data Analytics', description: 'Siddharth', image: '../../src/styles/Siddharth.jpg' }
+        { name: 'Siddharth', role: 'CS Senior - Computational Data Analytics', description: 'Siddharth', image: '../../src/styles/Siddharth.jpg' },
     ];
 
     return (
