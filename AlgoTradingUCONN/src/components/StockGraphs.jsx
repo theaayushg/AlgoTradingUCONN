@@ -11,6 +11,9 @@ const DefaultGraph = ({ selectStock, stockData, predict ,predictDisplay}) => {
   const chartRef = useRef(null);
   const [selectedStockClosePrice, setSelectedStockClosePrice] = useState(0);
 
+  useEffect(() =>{
+    
+  }),[selectStock,predictDisplay];
   useEffect(() => {
     // Find the selected stock data in stockData
     const selectedStock = stockData.find(stock => stock.name === selectStock);
@@ -42,6 +45,12 @@ const DefaultGraph = ({ selectStock, stockData, predict ,predictDisplay}) => {
       const dates = parsedData.map(item => item.Date);
       const closePrices = parsedData.map(item => parseFloat(item.Close));
 
+      let graphColor = 'rgba(75, 192, 192, 1)'; // Default color
+
+      if (closePrices[closePrices.length - 1] > selectedStockClosePrice) {
+        graphColor = 'rgba(192, 75, 75, 1)'; // Red color for upward trend
+      }
+
       // Prepare label array
       const labels = [...dates];
       // Add current date label
@@ -67,7 +76,8 @@ const DefaultGraph = ({ selectStock, stockData, predict ,predictDisplay}) => {
           datasets: [{
             label: 'Close Price',
             data: [...closePrices, selectedStockClosePrice, predict],
-            borderColor: 'rgba(75, 192, 192, 1)',
+            borderColor: graphColor,
+            backgroundcolor: graphColor,
             tension: 0.1
           }]
         },
