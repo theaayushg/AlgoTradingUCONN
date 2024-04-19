@@ -4,6 +4,7 @@ import { addTransaction } from "../services/AddTransaction";
 import { sellStock } from "../services/SellStock";
 import { increaseBalance } from "../services/IncreaseBalance";
 import { TransactionList } from "./Orders";
+import { Timestamp } from "firebase/firestore"
 import ErrorMessage from "../services/ErrorMessage";
 import "../styles/Invest.css"
 
@@ -32,7 +33,7 @@ function Invest({ user, stockData, user_portfolio, setPortfolio, balance, setBal
           };
           await increaseBalance(user, balance, -cost, setBalance);
           await addToPortfolio(user.uid, selectedStock, cur_stockData, user_portfolio, setPortfolio);
-          await addTransaction(user.uid, selectedStock, cur_stockData, "BUY");
+          await addTransaction(user.uid, selectedStock, cur_stockData, "BUY", Timestamp.now());
           setSuccessMessage(`Successfully bought ${numShares} shares of ${selectedStock}`);
         } else {
           console.error(`Stock with ticker ${selectedStock} not found.`);
@@ -62,7 +63,7 @@ function Invest({ user, stockData, user_portfolio, setPortfolio, balance, setBal
           const cost = cur_stockObj.c * Number(numShares);
           await sellStock(user.uid, selectedStock, Number(numShares), user_portfolio, setPortfolio);
           await increaseBalance(user, balance, cost, setBalance);
-          await addTransaction(user.uid, selectedStock, sold_stockData, "SELL");
+          await addTransaction(user.uid, selectedStock, sold_stockData, "SELL", Timestamp.now());
           setSuccessMessage(`Successfully Sold ${numShares} shares of ${selectedStock}`);
         } else {
           console.error(`Stock with ticker ${selectedStock} not found.`);

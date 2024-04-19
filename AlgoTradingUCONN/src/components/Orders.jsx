@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { getDoc, doc } from 'firebase/firestore';
 import { db } from "../services/firebase";
 import '../styles/Invest.css';
+import historyicon from "../assets/transaction-history.svg";
+import OrderRow from './OrderRow';
 
 
 const useFetchTransactions = (userId) => {
@@ -32,8 +34,8 @@ const useFetchTransactions = (userId) => {
                         orderType: order[0], // "BUY" or "SELL"
                         stockTicker: order[1], // "IBM", etc.
                         stockData: order[2], // Includes BuyPrice, Shares, etc.
-                        timeStamp: timeStamp?.toDate()
-                    })).sort((a, b) => a.timeStamp - b.timeStamp); // Sort transactions by date
+                        timeStamp: order[3].timeStamp ? order[3].timeStamp.toDate() : new Date()
+                    })).sort((a, b) => b.timeStamp - a.timeStamp);
 
                     setTransactions(loadedTransactions);
                     console.log("Fetched Transactions:", loadedTransactions);
@@ -56,23 +58,23 @@ export const TransactionList = ({ userId }) => {
     const transactions = useFetchTransactions(userId);
   
     return (
-      <div className="trans__page">
-        <h2>Transaction History</h2>
-        <ul className="transaction-list">
-          {transactions.length > 0 ? (
-            transactions.map((transaction) => (
-              <li key={transaction.id} 
-              className={`transaction-box ${transaction.orderType === 'BUY' ? 'transaction-buy' : 'transaction-sell'}`}>
-                <strong>{transaction.stockTicker}</strong> -{" "}
-                {transaction.orderType} at ${transaction.orderType === 'BUY' ? transaction.stockData.BuyPrice : transaction.stockData.SellPrice}{" "}
-                for{' '} {transaction.stockData.Shares} shares
-              </li>
-            ))
-          ) : (
-            <li>No transactions found.</li>
-          )}
-        </ul>
-      </div>
+        <div className="transactions">
+        <div className="trans__container">
+            <div className="trans__header">
+                <p><img src={historyicon} alt="Transaction History Icon" className="history__icon" />
+                Transaction History</p>
+            </div>
+            <ul className="trans__rows">
+            {transactions.length > 0 ? (
+                transactions.map((transaction) => (
+                    <OrderRow key={transaction.id} order={transaction} />
+                ))
+            ) : (
+                <li>No transactions found.</li>
+            )}
+            </ul>
+        </div>
+    </div>
     );
   };
   

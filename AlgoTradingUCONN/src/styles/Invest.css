@@ -1,12 +1,105 @@
+.transactions{
+  display: flex;
+  margin: 0 auto;
+  flex-direction: column;
+  align-items: center; /* Center align the child elements */
+  /*justify-content: center; /* Center vertically in case it's needed */
+  padding: 0px 0px 30px 0px;
+  color: white;
+  width: max-content;
+}
 
-.transaction-box {
-    border: 1px solid #ddd;
-    border-radius: 10px; /* Gives the curved box effect */
-    padding: 10px;
-    margin: 10px 0;
-    background-color: #f9f9f9;
-    list-style-type: none;
-  }
+.trans__container {
+  display: flex;
+  align-items: center;
+  max-width: 100%;
+  margin: auto; /* This will center the box if it has a max-width */
+  flex-direction: column;
+  flex: 1;
+  background-color: #1E2023;
+  border-radius: 5px;
+  border: 1px solid #42494D;
+  overflow-y: auto; /* Keeps vertical scrolling if needed */
+  overflow-x: hidden;
+}
+
+.trans__header {
+  display: flex;
+  font-size: 16px;
+  font-weight: bold;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #42494D;
+  padding: 10px 20px 10px 20px;
+  font-weight: 500;
+  position: sticky;
+}
+
+.history__icon{
+  margin-left: 5px;
+  margin-right: 10px;
+  margin-top: 1px;
+  border-bottom: 1px solid #42494D;
+  width: 30px;
+  height:30px;
+}
+
+.trans__rows{
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;  
+  max-height: 600px;
+}
+.trans__rows::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+} 
+
+/* Invest.css updates for Orders */
+.row {
+  display:flex;
+  justify-content: space-between;
+  height: 100px;
+  width: 100%;
+  align-items: center;
+  padding: 0 50px;
+}
+
+.row:hover {
+  background-color: #31363A;
+}
+
+.row__intro h1 {
+  font-size: 16px;
+  font-weight: bold;
+  padding-bottom: 2px;
+  text-align: left;
+}
+
+.row__intro p {
+  font-size: 8px;
+}
+
+.row__numbers {
+  text-align: right;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.row__chart {
+  padding: 0 10px;
+}
+
+.row__price {
+  padding-bottom: 4px;
+}
+
+.row__percentage {
+  color: #5AC53B;
+}
+
+/* Additional styles as necessary based on the specific content of Orders.jsx */
+
   
   .transaction-buy {
     border-color: #4CAF50; /* Green for buy transactions */
