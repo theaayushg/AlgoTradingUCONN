@@ -115,7 +115,7 @@ function App() {
               <Route path="/" element={user ? <Navigate to="/portfolio" /> : <SignInPage />} />
   
               <Route path="/portfolio" element={user ? <div className="app__container">
-                <NewsFeed user_portfolio={main_portfolio} selectStock={selectStock}/>
+                <NewsFeed user_portfolio={main_portfolio} selectStock={selectStock} stockData={stockData}/>
                 <Stats stockData={stockData} user_portfolio={main_portfolio} setSelectStock={setSelectStock}/>
               </div> : <Navigate to="/" />} 
               />
