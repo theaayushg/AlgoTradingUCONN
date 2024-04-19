@@ -115,7 +115,7 @@ const DefaultGraph = ({ selectStock, stockData, predict ,predictDisplay}) => {
       chartRef.current = null;
     }
   };
-}, [selectStock, stockData, predict, selectedStockClosePrice]);
+}, [selectStock, stockData, predict, selectedStockClosePrice, predictDisplay]);
 
   return (
     <div className="graph-container">
