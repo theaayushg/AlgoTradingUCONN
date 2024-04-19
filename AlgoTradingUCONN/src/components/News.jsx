@@ -3,6 +3,7 @@ import axios from "axios";
 import "../styles/news.css";
 import stocksList from './stocksList';
 import newsicon from "../assets/newspaper.svg"
+import NewsRow from './NewsRow';
 
 const TOKEN = "cnd3ll1r01qr85dtaltgcnd3ll1r01qr85dtalu0";
 const BASE_URL = "https://finnhub.io/api/v1/news";
@@ -25,6 +26,7 @@ const News = ({ selectStock}) => {
             try {
                 // let allNews = [];
                 const companyNews = await fetchNewsForCompany(selectStock);
+                console.log(companyNews);
                 // allNews.push(...companyNews);
                 setNews(companyNews);
                 setfoundNews(companyNews.length > 0);
@@ -48,11 +50,7 @@ const News = ({ selectStock}) => {
                         {selectStock}'s News
                     </p>
                     {news.map((article, index) => (
-                        <div key={index}>
-                            <h3>{article.headline}</h3>
-                            <p>{article.summary}</p>
-                            <a href={article.url} target="_blank" rel="noopener noreferrer">Read More</a>
-                        </div>
+                        <NewsRow key={index} article={article} />
                     ))}
                 </div>
             ) : (
