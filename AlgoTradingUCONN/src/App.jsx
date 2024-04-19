@@ -8,6 +8,7 @@ import AboutUs from './components/AboutUs';
 import Account from './components/Account';
 import Graph from './components/Graph';
 import NewsFeed from './components/NewsFeed';
+import Learn from './components/Learn';
 import Stats from './components/Stats';
 import SignInPage from './components/SignInPage';
 import { db } from './services/firebase';
@@ -113,6 +114,7 @@ function App() {
           <div className="app__body">
             <Routes>
               <Route path="/AboutUs" element={<AboutUs />} />
+
               <Route path="/" element={user ? <Navigate to="/portfolio" /> : <SignInPage />} />
   
               <Route path="/portfolio" element={user ? <div className="app__container">
@@ -120,7 +122,7 @@ function App() {
                 <Stats stockData={stockData} user_portfolio={main_portfolio} setSelectStock={setSelectStock}/>
               </div> : <Navigate to="/" />} 
               />
-
+              <Route path="/Learn" element={<Learn />} />
               <Route path="Invest" element={user ? 
                 <div className="app__container">
                   <Invest user={user} stockData={stockData} user_portfolio={main_portfolio} setPortfolio={setPortfolio} balance={balance} setBalance={setBalance}/>
