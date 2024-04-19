@@ -20,63 +20,63 @@ const DefaultGraph = ({ selectStock, stockData, predict }) => {
   }, [selectStock, stockData]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Construct URL based on the selected stock
-        const response = await fetch(`./src/assets/csv/${selectStock}_stock_data.csv`);
-        const csvData = await response.text(); // Get CSV data as text
-        const parsedData = Papa.parse(csvData, {
-          header: true,
-          skipEmptyLines: true, // Skip empty lines
-          transform: (value, header) => {
-            // Convert 'Close' values to numbers
-            if (header === 'Close') {
-              return Number(value);
-            }
-            return value;
+  const fetchData = async () => {
+    try {
+      // Construct URL based on the selected stock
+      const response = await fetch(`./src/assets/csv/${selectStock}_stock_data.csv`);
+      const csvData = await response.text(); // Get CSV data as text
+      const parsedData = Papa.parse(csvData, {
+        header: true,
+        skipEmptyLines: true, // Skip empty lines
+        transform: (value, header) => {
+          // Convert 'Close' values to numbers
+          if (header === 'Close') {
+            return Number(value);
           }
-        }).data;
-
-        // Extracting data from the prediction
-        const predictionPrice = predict && predict[selectStock] ? predict[selectStock] : null;
-
-        const dates = parsedData.map(item => item.Date);
-        const closePrices = parsedData.map(item => parseFloat(item.Close));
-
-        if (chartRef.current) {
-          chartRef.current.data.labels = [...dates, predictionPrice ? 'Predicted Date' : ''];
-          chartRef.current.data.datasets[0].data = [...closePrices, predictionPrice];
-          chartRef.current.update();
-        } else {
-          Chart.register(...registerables);
-          const ctx = document.getElementById('chart').getContext('2d');
-          chartRef.current = new Chart(ctx, {
-            type: 'line',
-            data: {
-              labels: [...dates, predictionPrice ? 'Predicted Date' : ''],
-              datasets: [{
-                label: 'Close Price',
-                data: [...closePrices, predictionPrice],
-                borderColor: 'rgba(75, 192, 192, 1)',
-                tension: 0.1
-              }]
-            }
-          });
+          return value;
         }
-      } catch (error) {
-        console.error('Error fetching or parsing data:', error);
-      }
-    };
+      }).data;
 
-    fetchData();
+      // Extracting data from the prediction
+      const predictionPrice = predict && predict[selectStock] ? predict[selectStock] : null;
 
-    return () => {
+      const dates = parsedData.map(item => item.Date);
+      const closePrices = parsedData.map(item => parseFloat(item.Close));
+
       if (chartRef.current) {
-        chartRef.current.destroy();
-        chartRef.current = null;
+        chartRef.current.data.labels = [...dates, predictionPrice ? 'Predicted Date' : ''];
+        chartRef.current.data.datasets[0].data = [...closePrices, selectedStockClosePrice, predictionPrice];
+        chartRef.current.update();
+      } else {
+        Chart.register(...registerables);
+        const ctx = document.getElementById('chart').getContext('2d');
+        chartRef.current = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: [...dates, 'Current Date', predictionPrice ? 'Predicted Date' : ''],
+            datasets: [{
+              label: 'Close Price',
+              data: [...closePrices, selectedStockClosePrice, predictionPrice],
+              borderColor: 'rgba(75, 192, 192, 1)',
+              tension: 0.1
+            }]
+          }
+        });
       }
-    };
-  }, [selectStock, stockData, predict]);
+    } catch (error) {
+      console.error('Error fetching or parsing data:', error);
+    }
+  };
+
+  fetchData();
+
+  return () => {
+    if (chartRef.current) {
+      chartRef.current.destroy();
+      chartRef.current = null;
+    }
+  };
+}, [selectStock, stockData, predict, selectedStockClosePrice]);
 
   return (
     <div className="graph-container">
