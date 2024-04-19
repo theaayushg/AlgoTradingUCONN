@@ -43,8 +43,19 @@ const DefaultGraph = ({ selectStock, stockData, predict }) => {
       const dates = parsedData.map(item => item.Date);
       const closePrices = parsedData.map(item => parseFloat(item.Close));
 
+      // Prepare label array
+      const labels = [...dates];
+      // Add current date label
+      labels.push(new Date().toISOString().split('T')[0]);
+      // Add predicted date label if prediction is available
+      if (predictionPrice) {
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        labels.push(tomorrow.toISOString().split('T')[0]);
+      }
+
       if (chartRef.current) {
-        chartRef.current.data.labels = [...dates, predictionPrice ? 'Predicted Date' : ''];
+        chartRef.current.data.labels = labels;
         chartRef.current.data.datasets[0].data = [...closePrices, selectedStockClosePrice, predictionPrice];
         chartRef.current.update();
       } else {
@@ -53,7 +64,7 @@ const DefaultGraph = ({ selectStock, stockData, predict }) => {
         chartRef.current = new Chart(ctx, {
           type: 'line',
           data: {
-            labels: [...dates, 'Current Date', predictionPrice ? 'Predicted Date' : ''],
+            labels: labels,
             datasets: [{
               label: 'Close Price',
               data: [...closePrices, selectedStockClosePrice, predictionPrice],
