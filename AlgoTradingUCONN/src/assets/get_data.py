@@ -14,7 +14,7 @@ def get_data(company):
         if not stock_data.empty:
             stack.append(stock_data)
             counter += 1
-        if counter == 21:
+        if counter == 9:
             break
         end = end - timedelta(days=1)
     while len(stack) != 0:
