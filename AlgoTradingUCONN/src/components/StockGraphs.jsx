@@ -79,7 +79,7 @@ const DefaultGraph = ({ selectStock, stockData, predict }) => {
         chartRef.current = null;
       }
     };
-  }, [selectStock, user_portfolio, predict]);
+  }, [selectStock, stockData, predict]);
 
   return (
     <div className="graph-container">
