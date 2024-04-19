@@ -3,7 +3,7 @@ import { Chart, registerables } from 'chart.js';
 import StockPrediction from './StockPrediction.jsx';
 import "../styles/Graph.css"
 
-function Graph({ user_portfolio, PortfolioData }) {
+function Graph({ user_portfolio, PortfolioData, selectedStock }) {
   const [chartInstance, setChartInstance] = useState(null);
   const [containerWidth, setContainerWidth] = useState(0);
   const canvasRef = useRef(null);
@@ -33,9 +33,12 @@ function Graph({ user_portfolio, PortfolioData }) {
 
     const ctx = canvasRef.current.getContext('2d');
 
-    // Aggregate data for bar chart
     const labels = user_portfolio.map(stock => stock.ticker);
     const data = user_portfolio.map(stock => stock.numShares * stock.info.c);
+
+    const backgroundColors = labels.map((ticker) => {
+      return ticker === selectedStock ? 'rgba(255, 99, 132, 0.7)' : 'rgba(75, 192, 192, 1)';
+    });
 
     const newChartInstance = new Chart(ctx, {
       type: 'bar',
@@ -44,7 +47,7 @@ function Graph({ user_portfolio, PortfolioData }) {
         datasets: [{
           label: 'Total Value',
           data: data,
-          backgroundColor: 'rgba(75, 192, 192, 1)', // Blue bars
+          backgroundColor: backgroundColors,
           borderColor: 'rgba(54, 162, 235, 1)', // Blue border color
           borderWidth: 1
         }]
@@ -59,8 +62,6 @@ function Graph({ user_portfolio, PortfolioData }) {
               display: true,
               text: 'Total value',
             },
-            ticks: {
-            }
           },
           x: {
             title: {
@@ -68,8 +69,6 @@ function Graph({ user_portfolio, PortfolioData }) {
               text: 'Ticker',
             },
             beginAtZero: true,
-            ticks: {
-            }
           }
         },
         plugins: {
@@ -83,11 +82,10 @@ function Graph({ user_portfolio, PortfolioData }) {
       }
     });
 
-    // Set background color of the canvas to black
     ctx.canvas.style.backgroundColor = 'black';
 
     setChartInstance(newChartInstance);
-  }, [containerWidth, user_portfolio]);
+  }, [containerWidth, user_portfolio, selectedStock]);
 
   return (
     <div>
