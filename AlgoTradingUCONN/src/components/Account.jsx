@@ -3,7 +3,7 @@ import Logout from './Logout';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../services/firebase';
 
-function Account({ userid }) 
+function Account({ userid, setUser, setPortfolio }) 
 {
   const [address, setAddress] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -73,7 +73,7 @@ function Account({ userid })
       </div>
 
       <div className='app__container'>
-        <Logout />
+        <Logout setUser={setUser} setPortfolio={setPortfolio} />
       </div>
     </div>
   );

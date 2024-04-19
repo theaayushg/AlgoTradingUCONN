@@ -55,7 +55,7 @@ export const TransactionList = ({ userId }) => {
     return (
       <div>
         <h2>Transaction History</h2>
-        <ul classname="transaction-list">
+        <ul className="transaction-list">
           {transactions.length > 0 ? (
             transactions.map((transaction) => (
               <li key={transaction.id} 
