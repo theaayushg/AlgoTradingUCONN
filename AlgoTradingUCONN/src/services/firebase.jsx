@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged} from "firebase/auth"; 
+import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "firebase/auth"; 
 import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
 import { getStorage, ref } from "firebase/storage"
 // TODO: Add SDKs for Firebase products that you want to use
@@ -52,12 +52,13 @@ const createOrUpdateUser = async (user) => {
     const docSnapshot = await getDoc(userRef);
 
     if (!docSnapshot.exists()){
+      console.log("creating new user document in firestore");
       await setDoc(userRef, {
         Name: user.displayName,
         email: user.email,
         balance: 0.00,
-        address: None,
-        phone_number: None,
+        address: "",
+        phone_number: "",
         Portfolio: {},
         Orders: {},
       });

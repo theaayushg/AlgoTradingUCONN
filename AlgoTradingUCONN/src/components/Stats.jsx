@@ -29,6 +29,9 @@ function Stats({ stockData, user_portfolio, setSelectStock }) {
         </button>
         <div className="stats__content">
           <div className="stats__rows">
+           {user_portfolio.length === 0 && 
+            <div>You own no stocks, go to Invest page to buy some!</div>
+           }
            {user_portfolio.map((stock) => (
             <StatsRow
               key={stock.ticker}

@@ -3,9 +3,18 @@ import { auth } from '../services/firebase'
 import { useNavigate } from 'react-router-dom';
 import "../styles/Logout.css"
 
-const Logout = () => {
+
+
+const Logout = ({ setUser, setPortfolio }) => {
+
+  const logOutUser = () => {
+    auth.signOut();
+    //setUser(null);
+    setPortfolio([]);
+  };
+
   return (
-      <button className="button__signout" onClick={() => auth.signOut()}>Sign out</button>
+      <button className="button__signout" onClick={() => logOutUser()}>Sign out</button>
   )
 }
 

@@ -7,9 +7,6 @@ import { TransactionList } from "./Orders";
 import ErrorMessage from "../services/ErrorMessage";
 import "../styles/Invest.css"
 
-//user portfolio not loading bug
-//portfolio not loading
-
 function Invest({ user, stockData, user_portfolio, setPortfolio, balance, setBalance }) {
   const [selectedStock, setSelectedStock] = useState("");
   const [numShares, setNumShares] = useState(0);
