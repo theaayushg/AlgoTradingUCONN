@@ -57,9 +57,6 @@ const DefaultGraph = ({ selectStock, stockData, predict ,predictDisplay}) => {
       if (chartRef.current) {
         chartRef.current.destroy();
       }
-      if(predictDisplay){
-        predictValue=predict;
-      }
 
       Chart.register(...registerables);
       const ctx = document.getElementById('chart').getContext('2d');
@@ -69,7 +66,7 @@ const DefaultGraph = ({ selectStock, stockData, predict ,predictDisplay}) => {
           labels: labels,
           datasets: [{
             label: 'Close Price',
-            data: [...closePrices, selectedStockClosePrice, predictValue],
+            data: [...closePrices, selectedStockClosePrice, predict],
             borderColor: 'rgba(75, 192, 192, 1)',
             tension: 0.1
           }]
