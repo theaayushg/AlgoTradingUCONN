@@ -55,11 +55,7 @@ export const TransactionList = ({ userId }) => {
     return (
       <div className="trans__page">
         <h2>Transaction History</h2>
-<<<<<<< HEAD
         <ul className="transaction__list">
-=======
-        <ul className="transaction-list">
->>>>>>> 0c45315343825e5c3b96fabdf055978a9737c673
           {transactions.length > 0 ? (
             transactions.map((transaction) => (
               <li key={transaction.id} 
