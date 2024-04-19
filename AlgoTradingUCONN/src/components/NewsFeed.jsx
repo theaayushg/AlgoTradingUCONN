@@ -12,7 +12,7 @@ function GraphOrStock({ selectStock, user_portfolio, PortfolioData ,stockData}) 
   }
 }
 
-function NewsFeed({ user_portfolio, selectStock }) {
+function NewsFeed({ user_portfolio, selectStock, stockData }) {
   const [PortfolioData, setPortfolioData] = useState({price: 0, priceChange: 0, percentageChange: 0 });
 
   const calc_PPrice = () => {
