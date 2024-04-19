@@ -6,7 +6,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "../services/firebase";
 import stockgraphicon from '../assets/stock-chart.svg';
 
-const DefaultGraph = ({ selectStock, user_portfolio, predict }) => {
+const DefaultGraph = ({ selectStock, stockData, predict }) => {
   const chartRef = useRef(null);
 
   useEffect(() => {
@@ -43,7 +43,7 @@ const DefaultGraph = ({ selectStock, user_portfolio, predict }) => {
 
         const dates = parsedData.map(item => item.Date);
         const closePrices = parsedData.map(item => parseFloat(item.Close));
-        const userPortfolioPrice = user_portfolio ? user_portfolio[selectStock] : null;
+        const userPortfolioPrice = stockData.find(item => item.name === selectStock)?.c;
         const predictionPrice = predict && predict[selectStock] ? predict[selectStock] : null;
 
         if (chartRef.current) {
@@ -88,7 +88,7 @@ const DefaultGraph = ({ selectStock, user_portfolio, predict }) => {
   );
 };
 
-const StockGraphs = ({ selectStock, user_portfolio }) => {
+const StockGraphs = ({ selectStock, stockData }) => {
   const [predict, setPredict] = useState();
 
   useEffect(() => {
@@ -131,9 +131,9 @@ const StockGraphs = ({ selectStock, user_portfolio }) => {
   return (
     <div className="StockGraph-container">
       <h1>{selectStock}'s Graph</h1>
-      <h3>Tomorrow's prediction is {predict && predict[selectStock]}</h3>
+      <h3>Tomorrow's prediction is {predict}</h3>
       <div className='StockGraph-graph'>
-        <DefaultGraph selectStock={selectStock} user_portfolio={user_portfolio} predict={predict} />
+        <DefaultGraph selectStock={selectStock} stockData={stockData} predict={predict} />
       </div>
     </div>
   );
