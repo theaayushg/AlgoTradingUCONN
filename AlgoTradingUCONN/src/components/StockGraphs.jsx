@@ -7,7 +7,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "../services/firebase";
 import stockgraphicon from '../assets/stock-chart.svg';
 
-const DefaultGraph = ({ selectStock, stockData, predict }) => {
+const DefaultGraph = ({ selectStock, stockData, predict ,predictDisplay}) => {
   const chartRef = useRef(null);
   const [selectedStockClosePrice, setSelectedStockClosePrice] = useState(0);
 
@@ -47,7 +47,7 @@ const DefaultGraph = ({ selectStock, stockData, predict }) => {
       // Add current date label
       labels.push(new Date().toISOString().split('T')[0]);
       // Add predicted date label if prediction is available
-      if (predict) {
+      if (predictDisplay) {
         const tomorrow = new Date();
         tomorrow.setDate(tomorrow.getDate() + 1);
         labels.push(tomorrow.toISOString().split('T')[0]);
@@ -56,6 +56,9 @@ const DefaultGraph = ({ selectStock, stockData, predict }) => {
       // Destroy previous chart instance if exists
       if (chartRef.current) {
         chartRef.current.destroy();
+      }
+      if(predictDisplay){
+        predictValue=predict;
       }
 
       Chart.register(...registerables);
@@ -66,7 +69,7 @@ const DefaultGraph = ({ selectStock, stockData, predict }) => {
           labels: labels,
           datasets: [{
             label: 'Close Price',
-            data: [...closePrices, selectedStockClosePrice, predict],
+            data: [...closePrices, selectedStockClosePrice, predictValue],
             borderColor: 'rgba(75, 192, 192, 1)',
             tension: 0.1
           }]
@@ -124,7 +127,7 @@ const DefaultGraph = ({ selectStock, stockData, predict }) => {
   );
 };
 
-const StockGraphs = ({ selectStock, stockData }) => {
+const StockGraphs = ({ selectStock, stockData , predictDisplay}) => {
   const [predict, setPredict] = useState();
 
   useEffect(() => {
@@ -169,7 +172,7 @@ const StockGraphs = ({ selectStock, stockData }) => {
       <h1>{selectStock}'s Graph</h1>
       <h3>Tomorrow's prediction is {predict}</h3>
       <div className='StockGraph-graph'>
-        <DefaultGraph selectStock={selectStock} stockData={stockData} predict={predict} />
+        <DefaultGraph selectStock={selectStock} stockData={stockData} predict={predict} predictDisplay={predictDisplay}/>
       </div>
     </div>
   );
