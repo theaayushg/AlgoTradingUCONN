@@ -4,11 +4,11 @@ import Graph from "./Graph";
 import TimeLine from "./TimeLine";
 import StockGraphs from "./StockGraphs";
 
-function GraphOrStock({ selectStock, user_portfolio, PortfolioData }) {
+function GraphOrStock({ selectStock, user_portfolio, PortfolioData ,stockData}) {
   if (selectStock == "portfolio") {
     return <Graph user_portfolio={user_portfolio} PortfolioData={PortfolioData}/>;
   } else {
-    return <StockGraphs selectStock={selectStock} />;
+    return <StockGraphs selectStock={selectStock} stockData={stockData} />;
   }
 }
 
@@ -45,7 +45,7 @@ function NewsFeed({ user_portfolio, selectStock }) {
       <div className="newsfeed__container">
         <div className="newsfeed__chartSection">
           <div className="newsfeed__chart">
-            <GraphOrStock user_portfolio={user_portfolio} selectStock={selectStock} PortfolioData={PortfolioData}/>
+            <GraphOrStock user_portfolio={user_portfolio} selectStock={selectStock} PortfolioData={PortfolioData} stockData={stockData}/>
             <TimeLine />
           </div>
         </div>
