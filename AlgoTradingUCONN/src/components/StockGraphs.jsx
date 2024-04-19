@@ -169,14 +169,14 @@ const StockGraphs = ({selectStock}) => {
   const getPredictions = async () => {
     try {
       const currentDate = new Date();
+      currentDate.setDate(currentDate.getDate() + 1);
       const year = currentDate.getFullYear();
       const month = String(currentDate.getMonth() + 1).padStart(2, '0');
       const day = String(currentDate.getDate()).padStart(2, '0');
-      const formattedDate = `${year}-${month}-${day+1}`;
+      const formattedDate = `${year}-${month}-${day}`;
   
       const userRef = doc(db, 'Prediction', formattedDate);
       const userDoc = await getDoc(userRef);
-      const console.log(userDoc);
   
       if (userDoc.exists()) {
         const predictions = userDoc.data();
