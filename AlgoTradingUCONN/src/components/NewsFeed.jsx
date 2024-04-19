@@ -15,7 +15,7 @@ function GraphOrStock({ selectStock, user_portfolio, PortfolioData ,stockData, p
 
 function NewsFeed({ user_portfolio, selectStock, stockData }) {
   const [PortfolioData, setPortfolioData] = useState({price: 0, priceChange: 0, percentageChange: 0 });
-  const [predictDisplay,setPredictDisplay]=useState(true);
+  const [predictDisplay,setPredictDisplay]=useState(false);
 
   const calc_PPrice = () => {
     let total_worth = 0;
