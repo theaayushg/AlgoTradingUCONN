@@ -5,15 +5,15 @@ import TimeLine from "./TimeLine";
 import StockGraphs from "./StockGraphs";
 import News from "./News.jsx";
 
-function GraphOrStock({ selectStock, user_portfolio, PortfolioData ,stockData, predictDisplay}) {
+function GraphOrStock({ selectStock, user_portfolio, PortfolioData ,stockData, predictDisplay, portfolioStock}) {
   if (selectStock == "portfolio") {
-    return <Graph user_portfolio={user_portfolio} PortfolioData={PortfolioData} selectStock={selectStock}/>;
+    return <Graph user_portfolio={user_portfolio} PortfolioData={PortfolioData} portfolioStock={portfolioStock}/>;
   } else {
     return <StockGraphs selectStock={selectStock} stockData={stockData} predictDisplay={predictDisplay}/>;
   }
 }
 
-function NewsFeed({ user_portfolio, selectStock, stockData }) {
+function NewsFeed({ user_portfolio, selectStock, stockData, portfolioStock }) {
   const [PortfolioData, setPortfolioData] = useState({price: 0, priceChange: 0, percentageChange: 0 });
   const [predictDisplay,setPredictDisplay]=useState(false);
 
@@ -47,7 +47,7 @@ function NewsFeed({ user_portfolio, selectStock, stockData }) {
       <div className="newsfeed__container">
         <div className="newsfeed__chartSection">
           <div className="newsfeed__chart">
-            <GraphOrStock user_portfolio={user_portfolio} selectStock={selectStock} PortfolioData={PortfolioData} stockData={stockData} predictDisplay={predictDisplay}/>
+            <GraphOrStock user_portfolio={user_portfolio} selectStock={selectStock} PortfolioData={PortfolioData} stockData={stockData} predictDisplay={predictDisplay, portfolioStock={portfolioStock}}/>
             <TimeLine setPredictDisplay={setPredictDisplay}/>
             <News selectStock={selectStock} />
           </div>
