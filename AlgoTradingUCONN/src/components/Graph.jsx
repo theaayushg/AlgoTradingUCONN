@@ -85,7 +85,7 @@ function Graph({ user_portfolio, PortfolioData, portfolioStock }) {
     ctx.canvas.style.backgroundColor = 'black';
 
     setChartInstance(newChartInstance);
-  }, [containerWidth, user_portfolio, selectStock]);
+  }, [containerWidth, user_portfolio, portfolioStock]);
 
   return (
     <div>
