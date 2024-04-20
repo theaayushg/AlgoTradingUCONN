@@ -7,7 +7,7 @@ import News from "./News.jsx";
 
 function GraphOrStock({ selectStock, user_portfolio, PortfolioData ,stockData, predictDisplay}) {
   if (selectStock == "portfolio") {
-    return <Graph user_portfolio={user_portfolio} PortfolioData={PortfolioData}/>;
+    return <Graph user_portfolio={user_portfolio} PortfolioData={PortfolioData} selectStock={selectStock}/>;
   } else {
     return <StockGraphs selectStock={selectStock} stockData={stockData} predictDisplay={predictDisplay}/>;
   }
