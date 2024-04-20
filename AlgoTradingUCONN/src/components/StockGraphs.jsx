@@ -5,15 +5,16 @@ import Papa from 'papaparse'; // Library for parsing CSV data
 import "../styles/StockGraphs.css"
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../services/firebase";
+import { format, addDays } from 'date-fns'; // Import format and addDays from date-fns
 import stockgraphicon from '../assets/stock-chart.svg';
 
-const DefaultGraph = ({ selectStock, stockData, predict ,predictDisplay}) => {
+const DefaultGraph = ({ selectStock, stockData, predict, predictDisplay }) => {
   const chartRef = useRef(null);
   const [selectedStockClosePrice, setSelectedStockClosePrice] = useState(0);
 
-  useEffect(() =>{
-    
-  }),[selectStock,predictDisplay];
+  useEffect(() => {
+
+  }), [selectStock, predictDisplay];
   useEffect(() => {
     // Find the selected stock data in stockData
     const selectedStock = stockData.find(stock => stock.name === selectStock);
@@ -24,108 +25,107 @@ const DefaultGraph = ({ selectStock, stockData, predict ,predictDisplay}) => {
   }, [selectStock, stockData]);
 
   useEffect(() => {
-  const fetchData = async () => {
-    try {
-      // Construct URL based on the selected stock
-      const response = await fetch(`./src/assets/csv/${selectStock}_stock_data.csv`);
-      const csvData = await response.text(); // Get CSV data as text
-      const parsedData = Papa.parse(csvData, {
-        header: true,
-        skipEmptyLines: true, // Skip empty lines
-        transform: (value, header) => {
-          // Convert 'Close' values to numbers
-          if (header === 'Close') {
-            return Number(value);
+    const fetchData = async () => {
+      try {
+        // Construct URL based on the selected stock
+        const response = await fetch(`./src/assets/csv/${selectStock}_stock_data.csv`);
+        const csvData = await response.text(); // Get CSV data as text
+        const parsedData = Papa.parse(csvData, {
+          header: true,
+          skipEmptyLines: true, // Skip empty lines
+          transform: (value, header) => {
+            // Convert 'Close' values to numbers
+            if (header === 'Close') {
+              return Number(value);
+            }
+            return value;
           }
-          return value;
+        }).data;
+
+        // Extracting data from the prediction
+        const dates = parsedData.map(item => item.Date);
+        const closePrices = parsedData.map(item => parseFloat(item.Close));
+
+        let graphColor = 'rgba(75, 192, 192, 1)'; // Default color
+
+        if (closePrices[closePrices.length - 1] > selectedStockClosePrice) {
+          graphColor = 'rgba(192, 75, 75, 1)'; // Red color for upward trend
         }
-      }).data;
 
-      // Extracting data from the prediction
-      const dates = parsedData.map(item => item.Date);
-      const closePrices = parsedData.map(item => parseFloat(item.Close));
+        // Prepare label array
+        const labels = [...dates];
+        // Add current date label
+        labels.push(format(new Date(), 'yyyy-MM-dd')); // Today's date
+        // Add predicted date label if prediction is available
+        if (predictDisplay && predict) {
+          const tomorrow = addDays(new Date(), 1); // Tomorrow's date
+          labels.push(format(tomorrow, 'yyyy-MM-dd'));
+        }
 
-      let graphColor = 'rgba(75, 192, 192, 1)'; // Default color
+        // Destroy previous chart instance if exists
+        if (chartRef.current) {
+          chartRef.current.destroy();
+        }
 
-      if (closePrices[closePrices.length - 1] > selectedStockClosePrice) {
-        graphColor = 'rgba(192, 75, 75, 1)'; // Red color for upward trend
+        Chart.register(...registerables);
+        const ctx = document.getElementById('chart').getContext('2d');
+        chartRef.current = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'Close Price',
+              data: [...closePrices, selectedStockClosePrice, predict],
+              borderColor: graphColor,
+              backgroundcolor: graphColor,
+              tension: 0.1
+            }]
+          },
+          options: {
+            plugins: {
+              title: {
+                display: true,
+                text: 'Stock Price Trend',
+                font: {
+                  size: 16
+                }
+              },
+              legend: {
+                display: true,
+                position: 'bottom'
+              }
+            },
+            scales: {
+              x: {
+                type: 'time',
+                title: {
+                  display: true,
+                  text: 'Date'
+                }
+              },
+              y: {
+                title: {
+                  display: true,
+                  text: 'Close Price'
+                }
+              }
+            }
+          }
+        });
+      } catch (error) {
+        console.error('Error fetching or parsing data:', error);
       }
+    };
 
-      // Prepare label array
-      const labels = [...dates];
-      // Add current date label
-      labels.push(new Date().toISOString().split('T')[0]);
-      // Add predicted date label if prediction is available
-      if (predictDisplay && predict) {
-        const tomorrow = new Date();
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        labels.push(tomorrow.toISOString().split('T')[0]);
-      }
+    fetchData();
 
-      // Destroy previous chart instance if exists
+    return () => {
       if (chartRef.current) {
         chartRef.current.destroy();
+        chartRef.current = null;
       }
-
-      Chart.register(...registerables);
-      const ctx = document.getElementById('chart').getContext('2d');
-      chartRef.current = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: labels,
-          datasets: [{
-            label: 'Close Price',
-            data: [...closePrices, selectedStockClosePrice, predict],
-            borderColor: graphColor,
-            backgroundcolor: graphColor,
-            tension: 0.1
-          }]
-        },
-        options: {
-          plugins: {
-            title: {
-              display: true,
-              text: 'Stock Price Trend',
-              font: {
-                size: 16
-              }
-            },
-            legend: {
-              display: true,
-              position: 'bottom'
-            }
-          },
-          scales: {
-            x: {
-              type: 'time',
-              title: {
-                display: true,
-                text: 'Date'
-              }
-            },
-            y: {
-              title: {
-                display: true,
-                text: 'Close Price'
-              }
-            }
-          }
-        }
-      });
-    } catch (error) {
-      console.error('Error fetching or parsing data:', error);
-    }
-  };
-
-  fetchData();
-
-  return () => {
-    if (chartRef.current) {
-      chartRef.current.destroy();
-      chartRef.current = null;
-    }
-  };
-}, [selectStock, stockData, predict, selectedStockClosePrice, predictDisplay]);
+    };
+  }, [selectStock, stockData, predict, selectedStockClosePrice, predictDisplay]);
 
   return (
     <div className="graph-container">
@@ -134,7 +134,7 @@ const DefaultGraph = ({ selectStock, stockData, predict ,predictDisplay}) => {
   );
 };
 
-const StockGraphs = ({ selectStock, stockData , predictDisplay}) => {
+const StockGraphs = ({ selectStock, stockData, predictDisplay }) => {
   const [predict, setPredict] = useState();
 
   useEffect(() => {
@@ -146,10 +146,10 @@ const StockGraphs = ({ selectStock, stockData , predictDisplay}) => {
   const getPredictions = async () => {
     try {
       const currentDate = new Date();
-      currentDate.setDate(currentDate.getDate() + 1);
-      const year = currentDate.getFullYear();
-      const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-      const day = String(currentDate.getDate()).padStart(2, '0');
+      const tomorrow = addDays(currentDate, 1); // Tomorrow's date
+      const year = tomorrow.getFullYear();
+      const month = String(tomorrow.getMonth() + 1).padStart(2, '0');
+      const day = String(tomorrow.getDate()).padStart(2, '0');
       const formattedDate = `${year}-${month}-${day}`;
 
       const userRef = doc(db, 'Prediction', formattedDate);
@@ -179,7 +179,7 @@ const StockGraphs = ({ selectStock, stockData , predictDisplay}) => {
       <h1>{selectStock}'s Graph</h1>
       <h3>Tomorrow's prediction is {predict}</h3>
       <div className='StockGraph-graph'>
-        <DefaultGraph selectStock={selectStock} stockData={stockData} predict={predict} predictDisplay={predictDisplay}/>
+        <DefaultGraph selectStock={selectStock} stockData={stockData} predict={predict} predictDisplay={predictDisplay} />
       </div>
     </div>
   );
