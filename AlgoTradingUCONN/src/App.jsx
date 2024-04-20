@@ -26,6 +26,7 @@ function App() {
   const [main_portfolio, setPortfolio] = useState([]);
   const [stockData, setStockData] = useState([]);
   const [selectStock,setSelectStock]=useState("AAPL");
+  const [portfolioStock,setPortfolioStock]=useState("");
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -119,7 +120,7 @@ function App() {
   
               <Route path="/portfolio" element={user ? <div className="app__container">
                 <NewsFeed user_portfolio={main_portfolio} selectStock={selectStock} stockData={stockData}/>
-                <Stats stockData={stockData} user_portfolio={main_portfolio} setSelectStock={setSelectStock}/>
+                <Stats stockData={stockData} user_portfolio={main_portfolio} setSelectStock={setSelectStock} setPortfolioStock={setPortfolioStock}/>
               </div> : <Navigate to="/" />} 
               />
               <Route path="/Learn" element={<Learn />} />
