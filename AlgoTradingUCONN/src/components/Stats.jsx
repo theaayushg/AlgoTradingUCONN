@@ -18,7 +18,7 @@ export const getStockData = async (stock) => {
     });
 };
 
-function Stats({ stockData, user_portfolio, setSelectStock }) {
+function Stats({ stockData, user_portfolio, setSelectStock, setPortfolioStock }) {
   
   return (
     <div className="stats">
@@ -39,7 +39,7 @@ function Stats({ stockData, user_portfolio, setSelectStock }) {
               openPrice={stock.info.o}
               volume={stock.numShares}
               price={stock.info.c}
-              setSelectStock={setSelectStock}
+              setSelectStock={setPortfolioStock}
             />
            ))}
           </div>
