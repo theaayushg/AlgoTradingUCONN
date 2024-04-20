@@ -3,7 +3,7 @@ import { Chart, registerables } from 'chart.js';
 import StockPrediction from './StockPrediction.jsx';
 import "../styles/Graph.css"
 
-function Graph({ user_portfolio, PortfolioData, selectStock }) {
+function Graph({ user_portfolio, PortfolioData, portfolioStock }) {
   const [chartInstance, setChartInstance] = useState(null);
   const [containerWidth, setContainerWidth] = useState(0);
   const canvasRef = useRef(null);
@@ -37,7 +37,7 @@ function Graph({ user_portfolio, PortfolioData, selectStock }) {
     const data = user_portfolio.map(stock => stock.numShares * stock.info.c);
 
     const backgroundColors = labels.map((ticker) => {
-      return ticker === selectStock ? 'rgba(255, 99, 132, 0.7)' : 'rgba(75, 192, 192, 1)';
+      return ticker === portfolioStock ? 'rgba(255, 99, 132, 0.7)' : 'rgba(75, 192, 192, 1)';
     });
 
     const newChartInstance = new Chart(ctx, {
