@@ -1,5 +1,6 @@
 .learn-container {
-  max-width: 1000px;
+  width: 100%;                /* Use the full width of the viewport */
+  min-height: 100vh;          /* Minimum height to occupy the full viewport height */
   margin: 50px auto;
   padding: 20px;
 }
