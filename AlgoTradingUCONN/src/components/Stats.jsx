@@ -39,6 +39,7 @@ function Stats({ stockData, user_portfolio, setSelectStock }) {
               openPrice={stock.info.o}
               volume={stock.numShares}
               price={stock.info.c}
+              setSelectStock={setSelectStock}
             />
            ))}
           </div>
