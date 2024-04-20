@@ -43,20 +43,23 @@ const DefaultGraph = ({ selectStock, stockData, predict, predictDisplay }) => {
         const dates = parsedData.map(item => item.Date);
         const closePrices = parsedData.map(item => parseFloat(item.Close));
 
-        let graphColor = 'rgba(75, 192, 192, 1)'; // Default color
-
-        if (closePrices[closePrices.length - 1] > selectedStockClosePrice) {
-          graphColor = 'rgba(192, 75, 75, 1)'; // Red color for upward trend
-        }
-
         // Prepare label array
         const labels = [...dates];
         // Add current date label
-        labels.push(format(new Date(), 'yyyy-MM-dd')); // Today's date
-        // Add predicted date label if prediction is available
-        if (predictDisplay && predict) {
-          const tomorrow = addDays(new Date(), 1); // Tomorrow's date
+        const today = new Date();
+        labels.push(format(today, 'yyyy-MM-dd')); // Today's date
+        // Add tomorrow's date label if predictDisplay is true
+        if (predictDisplay) {
+          const tomorrow = addDays(today, 1); // Tomorrow's date
           labels.push(format(tomorrow, 'yyyy-MM-dd'));
+        }
+
+        // Prepare data array for prediction line
+        const predictionData = Array(labels.length - 1).fill(null); // Fill array with null for existing dates
+        if (predictDisplay && predict) {
+          predictionData.push(predict); // Push prediction for the last date
+        } else {
+          predictionData.push(null); // Push null if no prediction available
         }
 
         // Destroy previous chart instance if exists
@@ -70,13 +73,22 @@ const DefaultGraph = ({ selectStock, stockData, predict, predictDisplay }) => {
           type: 'line',
           data: {
             labels: labels,
-            datasets: [{
-              label: 'Close Price',
-              data: [...closePrices, selectedStockClosePrice, predict],
-              borderColor: graphColor,
-              backgroundcolor: graphColor,
-              tension: 0.1
-            }]
+            datasets: [
+              {
+                label: 'Close Price',
+                data: [...closePrices, selectedStockClosePrice],
+                borderColor: 'rgba(75, 192, 192, 1)', // Close price line color
+                backgroundcolor: 'rgba(75, 192, 192, 1)',
+                tension: 0.1
+              },
+              {
+                label: 'Prediction',
+                data: predictionData,
+                borderColor: 'rgba(255, 99, 132, 1)', // Prediction line color
+                backgroundcolor: 'rgba(255, 99, 132, 1)',
+                tension: 0.1
+              }
+            ]
           },
           options: {
             plugins: {
@@ -141,35 +153,34 @@ const StockGraphs = ({ selectStock, stockData, predictDisplay }) => {
   }, [selectStock]);
 
   const getPredictions = async () => {
-    try {
-      const currentDate = new Date();
-      const tomorrow = addDays(currentDate, 1); // Tomorrow's date
-      const year = tomorrow.getFullYear();
-      const month = String(tomorrow.getMonth() + 1).padStart(2, '0');
-      const day = String(tomorrow.getDate()).padStart(2, '0');
-      const formattedDate = `${year}-${month}-${day}`;
-
-      const userRef = doc(db, 'Prediction', formattedDate);
-      const userDoc = await getDoc(userRef);
-
-      if (userDoc.exists()) {
-        const predictions = userDoc.data();
-        if (predictions[selectStock]) {
-          // Extract the prediction value for the selected stock ticker
-          const predictionValue = predictions[selectStock];
-          setPredict(predictionValue);
+      try {
+        const tomorrow = addDays(new Date(), 1); // Tomorrow's date
+        const year = tomorrow.getFullYear();
+        const month = String(tomorrow.getMonth() + 1).padStart(2, '0');
+        const day = String(tomorrow.getDate()).padStart(2, '0');
+        const formattedDate = `${year}-${month}-${day}`;
+    
+        const userRef = doc(db, 'Prediction', formattedDate);
+        const userDoc = await getDoc(userRef);
+    
+        if (userDoc.exists()) {
+          const predictions = userDoc.data();
+          if (predictions[selectStock]) {
+            // Extract the prediction value for the selected stock ticker
+            const predictionValue = predictions[selectStock];
+            setPredict(predictionValue);
+          } else {
+            setPredict();
+            console.log(`No prediction found for ${selectStock}`);
+          }
         } else {
           setPredict();
-          console.log(`No prediction found for ${selectStock}`);
+          console.log('Prediction document does not exist');
         }
-      } else {
-        setPredict();
-        console.log('Prediction document does not exist');
+      } catch (error) {
+        console.error('Error fetching predictions:', error);
       }
-    } catch (error) {
-      console.error('Error fetching predictions:', error);
-    }
-  };
+    };
 
   return (
     <div className="StockGraph-container">
