@@ -2,8 +2,7 @@
   display: flex;
   margin: 0 auto;
   flex-direction: column;
-  align-items: center; /* Center align the child elements */
-  /*justify-content: center; /* Center vertically in case it's needed */
+  align-items: center;
   padding: 0px 0px 30px 0px;
   color: white;
   width: max-content;
@@ -13,13 +12,14 @@
   display: flex;
   align-items: center;
   max-width: 100%;
-  margin: auto; /* This will center the box if it has a max-width */
+  max-height: 100%;
+  margin: auto;
   flex-direction: column;
   flex: 1;
   background-color: #1E2023;
   border-radius: 5px;
   border: 1px solid #42494D;
-  overflow-y: auto; /* Keeps vertical scrolling if needed */
+  overflow-y: auto;
   overflow-x: hidden;
 }
 
@@ -30,108 +30,77 @@
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid #42494D;
-  padding: 10px 20px 10px 20px;
-  font-weight: 500;
+  padding: 10px 20px;
   position: sticky;
+  width: 100%; /* Ensure the header matches the width of the container */
 }
 
-.history__icon{
-  margin-left: 5px;
-  margin-right: 10px;
-  margin-top: 1px;
+.history__icon {
+  margin: 5px 10px 1px 5px;
   border-bottom: 1px solid #42494D;
   width: 30px;
-  height:30px;
+  height: 30px;
 }
 
-.trans__rows{
+.trans__rows {
   overflow-y: auto;
   scrollbar-width: none;
-  -ms-overflow-style: none;  
-  max-height: 600px;
+  -ms-overflow-style: none;
+  max-height: 100%;
+  max-width: 100%;
 }
 .trans__rows::-webkit-scrollbar {
   width: 0;
   height: 0;
-} 
+}
 
-/* Invest.css updates for Orders */
 .row {
-  display:flex;
+  display: flex;
+  position: relative;
+  left: -1cm; /* hard coded*/
   justify-content: space-between;
-  height: 100px;
-  width: 100%;
-  align-items: center;
-  padding: 0 50px;
+  align-items: left;
+  width: 60%; /* Adjusted from 400% to full width of its parent */
+  height: 60%;
+  padding: 0 100px; /* Reduced padding for better fit */
 }
 
 .row:hover {
   background-color: #31363A;
 }
 
-.row__intro h1 {
-  font-size: 16px;
-  font-weight: bold;
-  padding-bottom: 2px;
+.row__intro h1, .row__intro p {
+  font-size: 8px; 
   text-align: left;
 }
 
-.row__intro p {
-  font-size: 8px;
-}
-
 .row__numbers {
-  text-align: right;
-  font-size: 12px;
-  font-weight: 500;
+  text-align:left;
+  font-size: 8px; /* Uniform font size for numbers */
+  width: 40%;
 }
 
 .row__chart {
   padding: 0 10px;
 }
 
-.row__price {
+.row__price, .row__percentage {
   padding-bottom: 4px;
 }
 
-.row__percentage {
-  color: #5AC53B;
+.transaction-buy, .transaction-sell {
+  color: #2E8B57; /* Standardized text color */
+  background-color: #31363A;
 }
 
-/* Additional styles as necessary based on the specific content of Orders.jsx */
+.active {
+  color: #53daf2;
+}
 
-  
-  .transaction-buy {
-    border-color: #4CAF50; /* Green for buy transactions */
-    color: #2E8B57;
-    background-color: #31363A;
-    /* padding-right: 100px; */
-  }
-  
-  .transaction-sell {
-    border-color: #2196F3;; /* Red for sell transactions */
-    color: #1A76D2;
-    background-color: #31363A;
-    /* padding-right: 100px; */
-  }
-  
-  .transaction__list {
-    padding-left: 0px;
-    /* background-color: #31363A; */
-  }
+.invest__page, .trans__page {
+  padding-left: 40px;
+}
 
-  .active {
-    color: #53daf2;
-  }
-
-  .invest__page {
-    padding-left: 40px;
-  }
-
-  .trans__page {
-    padding-left: 40px;
-  }
-  .error_message{
-    display: flex;
-  }
-
+.error_message {
+  display: flex;
+}

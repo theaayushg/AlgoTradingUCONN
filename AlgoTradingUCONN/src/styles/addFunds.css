@@ -1,5 +1,6 @@
 .addfunds__container {
-  max-width: 400px;
+  max-width: none;
+
   padding: 30px;
   background-color: #1E2023;
   border-radius: 5px;
