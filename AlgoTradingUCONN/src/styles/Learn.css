@@ -1,8 +1,12 @@
 .learn-container {
-  width: 100%;                /* Use the full width of the viewport */
+  min-width: 99vw;            /* Use the full width of the viewport */
   min-height: 100vh;          /* Minimum height to occupy the full viewport height */
-  margin: 50px auto;
+  margin: auto;          /* Center horizontally with auto margins */
   padding: 20px;
+  display: flex;              /* Use flexbox layout */
+  flex-direction: column;     /* Arrange children in a column */
+  justify-content: center;    /* Center content vertically */
+  align-items: center;        /* Center content horizontally */
 }
 
 .learn-container h1 {
