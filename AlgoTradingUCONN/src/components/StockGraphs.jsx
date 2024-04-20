@@ -1,40 +1,24 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'chartjs-adapter-date-fns';
 import { Chart, registerables } from 'chart.js';
 import Papa from 'papaparse'; // Library for parsing CSV data
-import "../styles/StockGraphs.css"
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../services/firebase";
-import { format, addDays } from 'date-fns'; // Import format and addDays from date-fns
-import stockgraphicon from '../assets/stock-chart.svg';
+import { format, addDays } from 'date-fns';
 
 const DefaultGraph = ({ selectStock, stockData, predict, predictDisplay }) => {
   const chartRef = useRef(null);
   const [selectedStockClosePrice, setSelectedStockClosePrice] = useState(0);
 
   useEffect(() => {
-
-  }), [selectStock, predictDisplay];
-  useEffect(() => {
-    // Find the selected stock data in stockData
-    const selectedStock = stockData.find(stock => stock.name === selectStock);
-
-    if (selectedStock) {
-      setSelectedStockClosePrice(selectedStock.c); // Extract the close price for the selected stock
-    }
-  }, [selectStock, stockData]);
-
-  useEffect(() => {
     const fetchData = async () => {
       try {
-        // Construct URL based on the selected stock
         const response = await fetch(`./src/assets/csv/${selectStock}_stock_data.csv`);
-        const csvData = await response.text(); // Get CSV data as text
+        const csvData = await response.text();
         const parsedData = Papa.parse(csvData, {
           header: true,
-          skipEmptyLines: true, // Skip empty lines
+          skipEmptyLines: true,
           transform: (value, header) => {
-            // Convert 'Close' values to numbers
             if (header === 'Close') {
               return Number(value);
             }
@@ -42,27 +26,23 @@ const DefaultGraph = ({ selectStock, stockData, predict, predictDisplay }) => {
           }
         }).data;
 
-        // Extracting data from the prediction
         const dates = parsedData.map(item => item.Date);
         const closePrices = parsedData.map(item => parseFloat(item.Close));
 
-        let graphColor = 'rgba(75, 192, 192, 1)'; // Default color
+        let graphColor = 'rgba(75, 192, 192, 1)';
 
         if (closePrices[closePrices.length - 1] > selectedStockClosePrice) {
-          graphColor = 'rgba(192, 75, 75, 1)'; // Red color for upward trend
+          graphColor = 'rgba(192, 75, 75, 1)';
         }
 
-        // Prepare label array
         const labels = [...dates];
-        // Add current date label
-        labels.push(format(new Date(), 'yyyy-MM-dd')); // Today's date
-        // Add predicted date label if prediction is available
+        labels.push(format(new Date(), 'yyyy-MM-dd'));
+
         if (predictDisplay && predict) {
-          const tomorrow = addDays(new Date(), 1); // Tomorrow's date
+          const tomorrow = addDays(new Date(), 1);
           labels.push(format(tomorrow, 'yyyy-MM-dd'));
         }
 
-        // Destroy previous chart instance if exists
         if (chartRef.current) {
           chartRef.current.destroy();
         }
@@ -146,7 +126,7 @@ const StockGraphs = ({ selectStock, stockData, predictDisplay }) => {
   const getPredictions = async () => {
     try {
       const currentDate = new Date();
-      const tomorrow = addDays(currentDate, 1); // Tomorrow's date
+      const tomorrow = addDays(currentDate, 1);
       const year = tomorrow.getFullYear();
       const month = String(tomorrow.getMonth() + 1).padStart(2, '0');
       const day = String(tomorrow.getDate()).padStart(2, '0');
@@ -158,7 +138,6 @@ const StockGraphs = ({ selectStock, stockData, predictDisplay }) => {
       if (userDoc.exists()) {
         const predictions = userDoc.data();
         if (predictions[selectStock]) {
-          // Extract the prediction value for the selected stock ticker
           const predictionValue = predictions[selectStock];
           setPredict(predictionValue);
         } else {
@@ -177,7 +156,7 @@ const StockGraphs = ({ selectStock, stockData, predictDisplay }) => {
   return (
     <div className="StockGraph-container">
       <h1>{selectStock}'s Graph</h1>
-      <h3>Tomorrow's prediction is {predict}</h3>
+      {predictDisplay && predict && <h3>Tomorrow's prediction is {predict}</h3>}
       <div className='StockGraph-graph'>
         <DefaultGraph selectStock={selectStock} stockData={stockData} predict={predict} predictDisplay={predictDisplay} />
       </div>
