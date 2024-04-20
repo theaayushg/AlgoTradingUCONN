@@ -1,6 +1,5 @@
 .account-container {
   width: 100%;                /* Use the full width of the viewport */
-  min-height: 100vh;          /* Minimum height to occupy the full viewport height */
   padding: 30px 20px;         /* Adjusted padding for better screen utilization */
   background-color: #1E2023;
   border-radius: 5px;           /* Optional: remove border-radius for full-width use */

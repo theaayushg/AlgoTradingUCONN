@@ -15,7 +15,7 @@ class NewsRow extends Component {
         return (
             <div className="news__article">
                 <h3>{article.headline}</h3>
-                <h3 className="news__source">Source: {article.source}</h3>
+                <h4 className="news__source">Source: {article.source}</h4>
                 <a href={article.url} target="_blank" rel="noopener noreferrer" className="news-summary-link">
                     <p>{truncatedSummary}</p>
                 </a>

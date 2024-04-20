@@ -108,7 +108,7 @@ function Account({ userid, setUser, setPortfolio }) {
           onChange={(e) => setAddress(e.target.value)} 
           disabled={loading} 
         />
-        <button onClick={() => handleChange('address', address)} disabled={loading}>Change Address</button>
+        <button onClick={() => handleChangeAddress('address', address)} disabled={loading}>Change Address</button>
       </div>
 
       <div className='account-input-container'>
@@ -119,7 +119,7 @@ function Account({ userid, setUser, setPortfolio }) {
           onChange={(e) => setPhoneNumber(e.target.value)} 
           disabled={loading} 
         />
-        <button onClick={() => handleChange('phone_number', phoneNumber)} disabled={loading}>Change Phone Number</button>
+        <button onClick={() => handleChangePhoneNumber('phone_number', phoneNumber)} disabled={loading}>Change Phone Number</button>
       </div>
 
       <div className='account-input-container'>
@@ -129,7 +129,7 @@ function Account({ userid, setUser, setPortfolio }) {
           onChange={(e) => setDateOfBirth(e.target.value)} 
           disabled={loading} 
         />
-        <button onClick={() => handleChange('date_of_birth', dateOfBirth)} disabled={loading}>Change Date of Birth</button>
+        <button onClick={() => handleChangeDateOfBirth('date_of_birth', dateOfBirth)} disabled={loading}>Change Date of Birth</button>
       </div>
 
       <div className='logout-container'>
