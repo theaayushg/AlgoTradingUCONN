@@ -124,7 +124,7 @@ function App() {
               />
               <Route path="/Learn" element={<Learn />} />
               <Route path="Invest" element={user ? 
-                <div className="app__container">
+                <div className="app__account__container">
                   <Invest user={user} stockData={stockData} user_portfolio={main_portfolio} setPortfolio={setPortfolio} balance={balance} setBalance={setBalance}/>
                 </div>
                 : <Navigate to="/" />}
@@ -132,10 +132,10 @@ function App() {
 
               <Route path="/account" element={user ? 
                 <div>
-                  <div>
+                  <div className='app__container'>
                     <AddFunds user={user} balance={balance} setBalance={setBalance} />
                   </div>
-                  <div>
+                  <div className='app__account__container'>
                     <Account userid={user.uid} setUser={setUser} setPortfolio={setPortfolio} />
                   </div>
                 </div> : <Navigate to="/" />} />
