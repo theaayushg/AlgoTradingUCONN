@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../styles/Learn.css';
 
 function Learn() {
+    const [curResource, setResource] = useState("Algorithmic Trading");
+
     const resources = [
         // Algorithmic Trading
         { title: 'What is Algorithmic Trading?', link: 'https://www.investopedia.com/terms/a/algorithmictrading.asp', category: 'Algorithmic Trading' },
@@ -35,21 +37,49 @@ function Learn() {
 
     const categories = [...new Set(resources.map(resource => resource.category))];
 
+    const handleActionChange = (e) => {
+        setResource(e)
+    }
+
     return (
         <div className="learn-container">
-            <h1>Learn About Algorithmic Trading</h1>
-            {categories.map(category => (
-                <div key={category} className="category-section">
-                    <h2>{category}</h2>
-                    <div className="resources">
-                        {resources.filter(resource => resource.category === category).map((resource, index) => (
-                            <div key={index} className="resource-card">
-                                <a href={resource.link} target="_blank" rel="noopener noreferrer">{resource.title}</a>
-                            </div>
-                        ))}
-                    </div>
+            <h1>Learn More</h1>
+            <div>
+                <button
+                    onClick={() => handleActionChange("Algorithmic Trading")}
+                    className={curResource === "Algorithmic Trading" ? "active" : ""}
+                >
+                Algorithmic Trading
+                </button>
+                <button
+                    onClick={() => handleActionChange("Mathematics")}
+                    className={curResource === "Mathematics" ? "active" : ""}
+                >
+                Mathematics
+                </button>
+                <button
+                    onClick={() => handleActionChange("Machine Learning")}
+                    className={curResource === "Machine Learning" ? "active" : ""}
+                >
+                Machine Learning
+                </button>
+                <button
+                    onClick={() => handleActionChange("Finance")}
+                    className={curResource === "Finance" ? "active" : ""}
+                >
+                Finance
+                </button>
+            </div>
+            <div key={curResource} className="category-section">
+                <h2>{curResource}</h2>
+                <div className="resources">
+                    {resources.filter(resource => resource.category === curResource).map((resource, index) => (
+                        <div key={index} className="resource-card">
+                            <a href={resource.link} target="_blank" rel="noopener noreferrer">{resource.title}</a>
+                        </div>
+                    ))}
                 </div>
-            ))}
+            </div>
         </div>
     );
 }

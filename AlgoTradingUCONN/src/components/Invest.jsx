@@ -17,7 +17,6 @@ function Invest({ user, stockData, user_portfolio, setPortfolio, balance, setBal
   const [successMessage, setSuccessMessage] = useState(null);
 
   const handleActionChange = (e) => {
-    //setAction(e.target.value);
     setAction(e);
   };
 
