@@ -56,7 +56,7 @@ const DefaultGraph = ({ selectStock, stockData, predict ,predictDisplay}) => {
       // Add current date label
       labels.push(new Date().toISOString().split('T')[0]);
       // Add predicted date label if prediction is available
-      if (predictDisplay) {
+      if (predictDisplay && predict) {
         const tomorrow = new Date();
         tomorrow.setDate(tomorrow.getDate() + 1);
         labels.push(tomorrow.toISOString().split('T')[0]);
