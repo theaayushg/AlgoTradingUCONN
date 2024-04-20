@@ -54,37 +54,41 @@
   height: 0;
 }
 
-.row {
+.orderrow {
   display: flex;
   position: relative;
   left: -1cm; /* hard coded*/
   justify-content: space-between;
   align-items: left;
   width: 60%; /* Adjusted from 400% to full width of its parent */
-  height: 60%;
+  height: 100%;
   padding: 0 100px; /* Reduced padding for better fit */
 }
 
-.row:hover {
+.orderrow:hover {
   background-color: #31363A;
 }
 
-.row__intro h1, .row__intro p {
-  font-size: 8px; 
+.orderrow__intro h1 {
+  font-size: 16px; 
   text-align: left;
 }
 
-.row__numbers {
+.orderrow__intro p {
+  font-size: 10px;
+}
+
+.orderrow__numbers {
   text-align:left;
-  font-size: 8px; /* Uniform font size for numbers */
+  font-size: 10px; /* Uniform font size for numbers */
   width: 40%;
 }
 
-.row__chart {
+.orderrow__chart {
   padding: 0 10px;
 }
 
-.row__price, .row__percentage {
+.orderrow__price, .row__percentage {
   padding-bottom: 4px;
 }
 
