@@ -47,7 +47,7 @@ function NewsFeed({ user_portfolio, selectStock, stockData, portfolioStock }) {
       <div className="newsfeed__container">
         <div className="newsfeed__chartSection">
           <div className="newsfeed__chart">
-            <GraphOrStock user_portfolio={user_portfolio} selectStock={selectStock} PortfolioData={PortfolioData} stockData={stockData} predictDisplay={predictDisplay, portfolioStock={portfolioStock}}/>
+            <GraphOrStock user_portfolio={user_portfolio} selectStock={selectStock} PortfolioData={PortfolioData} stockData={stockData} predictDisplay={predictDisplay} portfolioStock={portfolioStock}}/>
             <TimeLine setPredictDisplay={setPredictDisplay}/>
             <News selectStock={selectStock} />
           </div>
