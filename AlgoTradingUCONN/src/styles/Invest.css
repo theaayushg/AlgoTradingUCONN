@@ -6,6 +6,10 @@
   padding: 0px 0px 30px 0px;
   color: white;
   width: max-content;
+  max-height: 300px;
+  scrollbar-width: none; 
+  overflow-y: auto;
+  -ms-overflow-style: none;  
 }
 
 .trans__container {
