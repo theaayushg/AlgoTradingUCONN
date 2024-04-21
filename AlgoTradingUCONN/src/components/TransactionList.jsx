@@ -54,7 +54,7 @@ function TransactionList({ userId, reload }) {
                     <p><img src={historyicon} alt="Transaction History Icon" className="history__icon" />
                         Transaction History</p>
                 </div> */}
-                <ol className="trans__rows">
+                <div className="trans__rows">
                     {transactions.length > 0 ? (
                         transactions.map((transaction) => (
                             <TransactionRow key={transaction.id} order={transaction} />
@@ -62,7 +62,7 @@ function TransactionList({ userId, reload }) {
                     ) : (
                         <li>No transactions found.</li>
                     )}
-                </ol>
+                </div>
             </div>
         </div>
     );
