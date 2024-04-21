@@ -1,9 +1,8 @@
 // OrderRow.jsx
 import React from 'react';
 import '../styles/Invest.css'; 
-// import '../styles/StatsRow.css'
 
-const OrderRow = ({ order }) => {
+const TransactionRow = ({ order }) => {
     const { stockTicker, orderType, stockData, timeStamp } = order;
     const { BuyPrice, SellPrice, Shares } = stockData;
 
@@ -14,12 +13,12 @@ const OrderRow = ({ order }) => {
                 <p>{orderType} Order</p>
             </div>
             <div className="orderrow__numbers">
-                <p className="orderrow__price">Price: ${orderType === 'BUY' ? BuyPrice : SellPrice}</p>
                 <p>Shares: {Shares}</p>
+                <p className="orderrow__price">Price: ${orderType === 'BUY' ? BuyPrice : SellPrice}</p>
                 <p>Date: {timeStamp.toLocaleDateString()}</p> {/* Ensure timestamp is a Date object */}
             </div>
         </div>
     );
 };
 
-export default OrderRow;
+export default TransactionRow;

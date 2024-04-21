@@ -3,9 +3,9 @@ import { addToPortfolio } from "../services/AddToPortfolio";
 import { addTransaction } from "../services/AddTransaction";
 import { sellStock } from "../services/SellStock";
 import { increaseBalance } from "../services/IncreaseBalance";
-import { TransactionList } from "./Orders";
 import { Timestamp } from "firebase/firestore"
 import ErrorMessage from "../services/ErrorMessage";
+import TransactionList from "./TransactionList";
 import "../styles/investment.css";
 
 function Invest({ user, stockData, user_portfolio, setPortfolio, balance, setBalance }) {
@@ -14,10 +14,15 @@ function Invest({ user, stockData, user_portfolio, setPortfolio, balance, setBal
   const [action, setAction] = useState("buy");
   const [errorMessage, setErrorMessage] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
+  const [reloadTransactions, setreloadTransactions] = useState(false);
 
   const handleActionChange = (e) => {
     setAction(e);
   };
+
+  const handleReloadTransactions = () => {
+    setreloadTransactions(!reloadTransactions);
+  }
 
   const handleBuyStock = async () => {
     if(numShares > 0){
@@ -34,6 +39,7 @@ function Invest({ user, stockData, user_portfolio, setPortfolio, balance, setBal
           await addToPortfolio(user.uid, selectedStock, cur_stockData, user_portfolio, setPortfolio);
           await addTransaction(user.uid, selectedStock, cur_stockData, "BUY", Timestamp.now());
           setSuccessMessage(`Successfully bought ${numShares} shares of ${selectedStock}`);
+          handleReloadTransactions();
         } else {
           console.error(`Stock with ticker ${selectedStock} not found.`);
         }
@@ -64,6 +70,7 @@ function Invest({ user, stockData, user_portfolio, setPortfolio, balance, setBal
           await increaseBalance(user, balance, cost, setBalance);
           await addTransaction(user.uid, selectedStock, sold_stockData, "SELL", Timestamp.now());
           setSuccessMessage(`Successfully Sold ${numShares} shares of ${selectedStock}`);
+          handleReloadTransactions();
         } else {
           console.error(`Stock with ticker ${selectedStock} not found.`);
         }
@@ -156,10 +163,10 @@ function Invest({ user, stockData, user_portfolio, setPortfolio, balance, setBal
       <div className="invest-invest-container">
       <div className="investment-container">
       <div className="investment-header investment-lists">
-          <p>Order History</p>
+          <p>Transaction History</p>
         </div>
         <div className="transaction-list">
-          <TransactionList userId={user.uid}/>
+          <TransactionList userId={user.uid} reload={reloadTransactions}/>
         </div>
       </div>
       </div>
