@@ -11,6 +11,11 @@
   overflow-y: auto;
   -ms-overflow-style: none;  
 }
+.transactions::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+} 
 
 .trans__container {
   display: flex;
