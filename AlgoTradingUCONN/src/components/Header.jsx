@@ -19,7 +19,9 @@ function Header({ user, balance, setBalance }) {
         </Link>
       </div>
       {/* page title */}
-      <h1 className="header__title">AlgoTradingUCONN</h1>
+        <Link to="/">
+          <h1 className="header__title">AlgoTradingUCONN</h1>
+        </Link>
       {/* menu items */}
       <div className="header__menuItems">
         <Link to="/AboutUs">About Us</Link>
