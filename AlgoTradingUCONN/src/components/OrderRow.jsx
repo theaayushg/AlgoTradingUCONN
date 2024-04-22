@@ -1,7 +1,7 @@
 // OrderRow.jsx
 import React from 'react';
 import '../styles/Invest.css'; 
-// import '../styles/StatsRow.css'
+import '../styles/StatsRow.css'
 
 const OrderRow = ({ order }) => {
     const { stockTicker, orderType, stockData, timeStamp } = order;
