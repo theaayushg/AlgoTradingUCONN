@@ -36,7 +36,7 @@ function TransactionList({ userId, reload }) {
                     orderType: order[0], // "BUY" or "SELL"
                     stockTicker: order[1], // "IBM", etc.
                     stockData: order[2], // Includes BuyPrice, Shares, etc.
-                    timeStamp: order[3].timeStamp ? order[3].timeStamp.toDate() : new Date()
+                    timeStamp: order[3] ? order[3].toDate() : new Date()
                 })).sort((a, b) => b.timeStamp - a.timeStamp);
 
                 setTransactions(loadedTransactions);
