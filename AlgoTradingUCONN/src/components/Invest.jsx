@@ -3,11 +3,10 @@ import { addToPortfolio } from "../services/AddToPortfolio";
 import { addTransaction } from "../services/AddTransaction";
 import { sellStock } from "../services/SellStock";
 import { increaseBalance } from "../services/IncreaseBalance";
-import { TransactionList } from "./Orders";
 import { Timestamp } from "firebase/firestore"
 import ErrorMessage from "../services/ErrorMessage";
+import TransactionList from "./TransactionList";
 import "../styles/investment.css";
-import "../styles/Account.css"
 
 function Invest({ user, stockData, user_portfolio, setPortfolio, balance, setBalance }) {
   const [selectedStock, setSelectedStock] = useState("");
@@ -15,10 +14,15 @@ function Invest({ user, stockData, user_portfolio, setPortfolio, balance, setBal
   const [action, setAction] = useState("buy");
   const [errorMessage, setErrorMessage] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
+  const [reloadTransactions, setreloadTransactions] = useState(false);
 
   const handleActionChange = (e) => {
     setAction(e);
   };
+
+  const handleReloadTransactions = () => {
+    setreloadTransactions(!reloadTransactions);
+  }
 
   const handleBuyStock = async () => {
     if(numShares > 0){
@@ -35,6 +39,7 @@ function Invest({ user, stockData, user_portfolio, setPortfolio, balance, setBal
           await addToPortfolio(user.uid, selectedStock, cur_stockData, user_portfolio, setPortfolio);
           await addTransaction(user.uid, selectedStock, cur_stockData, "BUY", Timestamp.now());
           setSuccessMessage(`Successfully bought ${numShares} shares of ${selectedStock}`);
+          handleReloadTransactions();
         } else {
           console.error(`Stock with ticker ${selectedStock} not found.`);
         }
@@ -65,6 +70,7 @@ function Invest({ user, stockData, user_portfolio, setPortfolio, balance, setBal
           await increaseBalance(user, balance, cost, setBalance);
           await addTransaction(user.uid, selectedStock, sold_stockData, "SELL", Timestamp.now());
           setSuccessMessage(`Successfully Sold ${numShares} shares of ${selectedStock}`);
+          handleReloadTransactions();
         } else {
           console.error(`Stock with ticker ${selectedStock} not found.`);
         }
@@ -80,59 +86,60 @@ function Invest({ user, stockData, user_portfolio, setPortfolio, balance, setBal
 
   return (
     <div className="investment-app">
-      <div className="account-container">
-      <div className="investment-header">
-        <h2>Invest</h2>
-      </div>
-      <div className="action-buttons">
-        <button
-          onClick={() => handleActionChange("buy")}
-          className={action === "buy" ? "active" : ""}
-        >
-          Buy
-        </button>
-        <button
-          onClick={() => handleActionChange("sell")}
-          className={action === "sell" ? "active" : ""}
-        >
-          Sell
-        </button>
-      </div>
-      {action === "buy" && (
-        <div className="investment-form">
-          <select
-            value={selectedStock}
-            onChange={(e) => setSelectedStock(e.target.value)}
-          >
-            <option value="">Select a stock</option>
-            {stockData.map((stock) => (
-              <option key={stock.name} value={stock.name}>
-                {stock.name}
-              </option>
-            ))}
-          </select>
-          <input
-            type="number"
-            value={numShares}
-            onChange={(e) => setNumShares(e.target.value)}
-            placeholder="Number of shares"
-          />
-          <button onClick={handleBuyStock}>Enter</button>
+      <div className="invest-invest-container">
+      <div className="investment-container">
+        <div className="investment-header investment-lists">
+          <p>Invest</p>
         </div>
-      )}
-      {action === "sell" && (
-        <div className="investment-form">
-          <select
-            value={selectedStock}
-            onChange={(e) => setSelectedStock(e.target.value)}
+        <div className="action-buttons">
+          <button
+            onClick={() => handleActionChange("buy")}
+            className={action === "buy" ? "active" : ""}
           >
+            Buy
+          </button>
+          <button
+            onClick={() => handleActionChange("sell")}
+            className={action === "sell" ? "active" : ""}
+          >
+            Sell
+          </button>
+        </div>
+        {action === "buy" && (
+          <div className="investment-form">
+            <select
+              value={selectedStock}
+              onChange={(e) => setSelectedStock(e.target.value)}
+            >
+              <option value="">Select a stock</option>
+              {stockData.map((stock) => (
+                <option key={stock.name} value={stock.name}>
+                  {stock.name}
+                </option>
+              ))}
+            </select>
+            <input
+              type="number"
+              value={numShares}
+              onChange={(e) => setNumShares(e.target.value)}
+              placeholder="Number of shares"
+            />
+            <button onClick={handleBuyStock}>Enter</button>
+          </div>
+        )}
+        {action === "sell" && (
+          <div className="investment-form">
+            <select
+              value={selectedStock}
+              onChange={(e) => setSelectedStock(e.target.value)}
+            >
             <option value="">Select a stock</option>
             {user_portfolio.map((stock) => (
               <option key={stock.ticker} value={stock.ticker}>
                 {stock.ticker}
               </option>
             ))}
-          </select>
+            </select>
           <input
             type="number"
             value={numShares}
@@ -140,18 +147,27 @@ function Invest({ user, stockData, user_portfolio, setPortfolio, balance, setBal
             placeholder="Number of shares"
           />
           <button onClick={handleSellStock}>Enter</button>
+          </div>
+        )}
+        <div className="error-message">
+          {successMessage && (
+            <ErrorMessage message={successMessage} onClose={() => setSuccessMessage(null)} />
+          )}
+          {errorMessage && (
+            <ErrorMessage message={errorMessage} onClose={() => setErrorMessage(null)} />
+          )}
         </div>
-      )}
-      <div className="error-message">
-        {successMessage && (
-          <ErrorMessage message={successMessage} onClose={() => setSuccessMessage(null)} />
-        )}
-        {errorMessage && (
-          <ErrorMessage message={errorMessage} onClose={() => setErrorMessage(null)} />
-        )}
       </div>
-      <div className="transaction-list">
-        <TransactionList userId={user.uid}/>
+      </div>
+
+      <div className="invest-invest-container">
+      <div className="investment-container">
+      <div className="investment-header investment-lists">
+          <p>Transaction History</p>
+        </div>
+        <div className="transaction-list">
+          <TransactionList userId={user.uid} reload={reloadTransactions}/>
+        </div>
       </div>
       </div>
     </div>
