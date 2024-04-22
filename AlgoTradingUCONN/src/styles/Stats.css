@@ -17,11 +17,11 @@
 }
 
 .stats__header {
+  background-color: #1E2023;
   display: flex;
   font-size: 16px;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid #42494D;
   padding: 10px 20px 10px 20px;
   font-weight: 500;
   position: sticky;
