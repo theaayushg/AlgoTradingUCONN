@@ -4,6 +4,7 @@ import { getAnalytics } from "firebase/analytics";
 import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "firebase/auth"; 
 import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
 import { getStorage, ref } from "firebase/storage"
+import stocksList from "../components/stocksList";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -66,6 +67,44 @@ const createOrUpdateUser = async (user) => {
     }
   } catch (error) {
     console.error("Error checking/updating user in Firestore:", error);
+  }
+};
+
+const checkStockData = async () => {
+  const sDocRef = doc(db, "StockData", "Data");
+
+  try{
+    const docSnapshot = await getDoc(sDocRef);
+    const StocksD = docSnapshot.data().Stocks;
+    for (const stock of stocksList){
+      if (StocksD && StocksD[stock]) {
+        console.log(`${stock} already exists in the database`);
+      } else {
+        console.log(`${stock} does not exist in the database`);
+
+        // Create a new map object for the stock
+        const newStockMap = {
+          name: stock,
+          c: 0.00,
+          d: 0.00,
+          dp: 0.00,
+          h: 0.00,
+          l: 0.00,
+          o: 0.00,
+          pc: 0.00,
+          t: 0
+        };
+
+        // Set the new map object in the 'Stocks' collection
+        await updateDoc(sDocRef, {
+          [`Stocks.${stock}`]: newStockMap,
+        });
+
+        console.log(`Created map for ${stock}`);
+      }
+    };
+  } catch (error){
+    console.log("failed", error);
   }
 };
 

@@ -12,7 +12,7 @@ import Learn from './components/Learn';
 import Stats from './components/Stats';
 import SignInPage from './components/SignInPage';
 import { db } from './services/firebase';
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { getStockData } from "./components/Stats";
 import './App.css';
 import news from "./components/News";
@@ -44,25 +44,67 @@ function App() {
   }, [user]);
 
   useEffect(() => {
+    const handleGetStocks = async () => {
+      const sDocRef = doc(db, "StockData", "Data");
 
-    let tempStockData = []
-    let promises = [];
-    stocksList.map((stock) => {
-      promises.push(
-        getStockData(stock)
-          .then((res) => {
-            tempStockData.push({
-              name: stock,
-              ...res.data
-            });
-          })
-      )
-    });
+      const docSnapshot = await getDoc(sDocRef);
+      const docTime = docSnapshot.data().TimeUpdated;
+      const curTime = new Date();
 
-    Promise.all(promises).then(() => {
-      setStockData(tempStockData);
-    })
+      let tempStockData = [];
 
+      if (curTime.getTime() - docTime < 300000) { //if less than 5 min before other update
+        console.log("Retrieving stock info from db");
+        const stocksData = docSnapshot.data().Stocks;
+
+        for (const stockName of stocksList) {
+          const temp_data = stocksData[stockName];
+          tempStockData.push({
+            name: stockName,
+            c: temp_data.c,
+            d: temp_data.d,
+            dp: temp_data.dp,
+            h: temp_data.h,
+            l: temp_data.l,
+            o: temp_data.o,
+            pc: temp_data.pc,
+            t: temp_data.t
+          });
+        }
+        setStockData(tempStockData);
+      }
+      else {
+        console.log("Retrieving stock info from API");
+        let promises = [];
+        stocksList.map((stock) => {
+          promises.push(
+            getStockData(stock)
+              .then((res) => {
+                tempStockData.push({
+                  name: stock,
+                  ...res.data
+                });
+
+                const stockRef = doc(db, "StockData", "Data");
+                updateDoc(stockRef, {
+                  [`Stocks.${stock}`]: res.data
+                });
+              })
+          )
+        });
+
+        Promise.all(promises).then(() => {
+          setStockData(tempStockData);
+        })
+
+        const timeRef = doc(db, "StockData", "Data");
+        await updateDoc(timeRef, {TimeUpdated: curTime.getTime()});
+      }
+    };
+
+    handleGetStocks();
+
+    return () =>{ }
   }, []);
 
   const getMyStocks = async (user) => {
