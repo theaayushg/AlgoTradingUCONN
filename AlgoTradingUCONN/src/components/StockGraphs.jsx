@@ -136,7 +136,7 @@ const StockGraphs = ({ selectStock, stockData, predictDisplay }) => {
     if (selectStock) {
       getPredictions();
     }
-  }, [selectStock]);
+  }, [selectStock, predict, predictDisplay]);
 
   const getPredictions = async () => {
     try {
