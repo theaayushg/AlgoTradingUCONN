@@ -14,13 +14,13 @@ const DefaultGraph = ({ selectStock, stockData, predict, predictDisplay }) => {
     if (selectedStock) {
       setSelectedStockClosePrice(selectedStock.c);
     }
-  }, [selectStock, stockData, predict, predictDisplay]);
+  }, [ stockData, predict, predictDisplay]);
 
   useEffect(() => {
     if (selectStock) {
       fetchData();
     }
-  }, [selectStock, selectedStockClosePrice, predictDisplay]);
+  }, [selectStock, predictDisplay]);
 
   const fetchData = async () => {
     try {
