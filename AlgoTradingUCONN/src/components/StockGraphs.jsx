@@ -1,140 +1,126 @@
 import React, { useEffect, useRef, useState } from 'react';
-import 'chartjs-adapter-date-fns';
 import { Chart, registerables } from 'chart.js';
-import Papa from 'papaparse'; // Library for parsing CSV data
-import "../styles/StockGraphs.css"
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../services/firebase";
-import { format, addDays } from 'date-fns'; // Import format and addDays from date-fns
-import stockgraphicon from '../assets/stock-chart.svg';
+import { format, addDays, parseISO, isToday } from 'date-fns';
+import 'chartjs-adapter-date-fns';
 
 const DefaultGraph = ({ selectStock, stockData, predict, predictDisplay }) => {
   const chartRef = useRef(null);
   const [selectedStockClosePrice, setSelectedStockClosePrice] = useState(0);
 
   useEffect(() => {
-    // Find the selected stock data in stockData
     const selectedStock = stockData.find(stock => stock.name === selectStock);
-
     if (selectedStock) {
-      setSelectedStockClosePrice(selectedStock.c); // Extract the close price for the selected stock
+      setSelectedStockClosePrice(selectedStock.c);
     }
   }, [selectStock, stockData]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Construct URL based on the selected stock
-        const response = await fetch(`./src/assets/csv/${selectStock}_stock_data.csv`);
-        const csvData = await response.text(); // Get CSV data as text
-        const parsedData = Papa.parse(csvData, {
-          header: true,
-          skipEmptyLines: true, // Skip empty lines
-          transform: (value, header) => {
-            // Convert 'Close' values to numbers
-            if (header === 'Close') {
-              return Number(value);
-            }
-            return value;
-          }
-        }).data;
+    if (selectStock) {
+      fetchData();
+    }
+  }, [selectStock, selectedStockClosePrice, predictDisplay]);
 
-        // Extracting data from the prediction
-        const dates = parsedData.map(item => item.Date);
-        const closePrices = parsedData.map(item => parseFloat(item.Close));
+  const fetchData = async () => {
+    try {
+      const userRef = doc(db, 'CSV', selectStock);
+      const userDoc = await getDoc(userRef);
+      const stockHistoryData = userDoc.data();
 
-        // Prepare label array
-        const labels = [...dates];
-        // Add current date label
-        const today = new Date();
-        labels.push(format(today, 'yyyy-MM-dd')); // Today's date
-        // Add tomorrow's date label if predictDisplay is true
-        if (predictDisplay) {
-          const tomorrow = addDays(today, 1); // Tomorrow's date
-          labels.push(format(tomorrow, 'yyyy-MM-dd'));
-        }
+      const dates = Object.keys(stockHistoryData).map(dateString => parseISO(dateString));
+      const closePrices = Object.values(stockHistoryData).map(price => parseFloat(price));
 
-        // Prepare data array for prediction line
-        const predictionData = Array(labels.length - 1).fill(null); // Fill array with null for existing dates
-        if (predictDisplay && predict) {
-          predictionData.push(predict); // Push prediction for the last date
-        } else {
-          predictionData.push(null); // Push null if no prediction available
-        }
+      const dataPoints = dates.map((date, index) => ({
+        x: date,
+        y: closePrices[index]
+      }));
 
-        // Destroy previous chart instance if exists
-        if (chartRef.current) {
-          chartRef.current.destroy();
-        }
+      dataPoints.sort((a, b) => a.x - b.x);
 
-        Chart.register(...registerables);
-        const ctx = document.getElementById('chart').getContext('2d');
-        chartRef.current = new Chart(ctx, {
-          type: 'line',
-          data: {
-            labels: labels,
-            datasets: [
-              {
-                label: 'Close Price',
-                data: [...closePrices, selectedStockClosePrice],
-                borderColor: 'rgba(75, 192, 192, 1)', // Close price line color
-                backgroundcolor: 'rgba(75, 192, 192, 1)',
-                tension: 0.1
-              },
-              {
-                label: 'Prediction',
-                data: predictionData,
-                borderColor: 'rgba(255, 99, 132, 1)', // Prediction line color
-                backgroundcolor: 'rgba(255, 99, 132, 1)',
-                tension: 0.1
-              }
-            ]
-          },
-          options: {
-            plugins: {
-              title: {
-                display: true,
-                text: 'Stock Price Trend',
-                font: {
-                  size: 16
-                }
-              },
-              legend: {
-                display: true,
-                position: 'bottom'
-              }
-            },
-            scales: {
-              x: {
-                type: 'time',
-                title: {
-                  display: true,
-                  text: 'Date'
-                }
-              },
-              y: {
-                title: {
-                  display: true,
-                  text: 'Close Price'
-                }
-              }
-            }
-          }
-        });
-      } catch (error) {
-        console.error('Error fetching or parsing data:', error);
+      const sortedDates = dataPoints.map(dataPoint => dataPoint.x);
+      const sortedClosePrices = dataPoints.map(dataPoint => dataPoint.y);
+
+      const labels = [...sortedDates];
+      if (isToday(sortedDates[sortedDates.length - 1])) {
+        const todayPriceIndex = sortedDates.length - 1;
+        setSelectedStockClosePrice(sortedClosePrices[todayPriceIndex]);
       }
-    };
+      labels.push(format(new Date(), 'yyyy-MM-dd'));
+      if (predictDisplay) {
+        const tomorrow = addDays(new Date(), 1);
+        labels.push(format(tomorrow, 'yyyy-MM-dd'));
+      }
 
-    fetchData();
+      const predictionData = Array(labels.length - 1).fill(null);
+      if (predictDisplay && predict) {
+        predictionData.push(predict);
+      } else {
+        predictionData.push(null);
+      }
 
-    return () => {
       if (chartRef.current) {
         chartRef.current.destroy();
-        chartRef.current = null;
       }
-    };
-  }, [selectStock, stockData, predict, selectedStockClosePrice, predictDisplay]);
+
+      Chart.register(...registerables);
+      const ctx = document.getElementById('chart').getContext('2d');
+      chartRef.current = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: 'Close Price',
+              data: [...sortedClosePrices, selectedStockClosePrice],
+              borderColor: 'rgba(75, 192, 192, 1)',
+              backgroundColor: 'rgba(75, 192, 192, 1)',
+              tension: 0.1
+            },
+            {
+              label: 'Prediction',
+              data: predictionData,
+              borderColor: 'rgba(255, 99, 132, 1)',
+              backgroundColor: 'rgba(255, 99, 132, 1)',
+              tension: 0.1
+            }
+          ]
+        },
+        options: {
+          plugins: {
+            title: {
+              display: true,
+              text: 'Stock Price Trend',
+              font: {
+                size: 16
+              }
+            },
+            legend: {
+              display: true,
+              position: 'bottom'
+            }
+          },
+          scales: {
+            x: {
+              type: 'time',
+              time: {
+                unit: 'day',
+                tooltipFormat: 'yyyy-MM-dd'
+              }
+            },
+            y: {
+              title: {
+                display: true,
+                text: 'Close Price'
+              }
+            }
+          }
+        }
+      });
+    } catch (error) {
+      console.error('Error fetching or parsing data:', error);
+    }
+  };
 
   return (
     <div className="graph-container">
@@ -153,34 +139,33 @@ const StockGraphs = ({ selectStock, stockData, predictDisplay }) => {
   }, [selectStock]);
 
   const getPredictions = async () => {
-      try {
-        const tomorrow = addDays(new Date(), 1); // Tomorrow's date
-        const year = tomorrow.getFullYear();
-        const month = String(tomorrow.getMonth() + 1).padStart(2, '0');
-        const day = String(tomorrow.getDate()).padStart(2, '0');
-        const formattedDate = `${year}-${month}-${day}`;
-    
-        const userRef = doc(db, 'Prediction', formattedDate);
-        const userDoc = await getDoc(userRef);
-    
-        if (userDoc.exists()) {
-          const predictions = userDoc.data();
-          if (predictions[selectStock]) {
-            // Extract the prediction value for the selected stock ticker
-            const predictionValue = predictions[selectStock];
-            setPredict(predictionValue);
-          } else {
-            setPredict();
-            console.log(`No prediction found for ${selectStock}`);
-          }
+    try {
+      const tomorrow = addDays(new Date(), 1);
+      const year = tomorrow.getFullYear();
+      const month = String(tomorrow.getMonth() + 1).padStart(2, '0');
+      const day = String(tomorrow.getDate()).padStart(2, '0');
+      const formattedDate = `${year}-${month}-${day}`;
+
+      const userRef = doc(db, 'Prediction', formattedDate);
+      const userDoc = await getDoc(userRef);
+
+      if (userDoc.exists()) {
+        const predictions = userDoc.data();
+        if (predictions[selectStock]) {
+          const predictionValue = predictions[selectStock];
+          setPredict(predictionValue);
         } else {
           setPredict();
-          console.log('Prediction document does not exist');
+          console.log(`No prediction found for ${selectStock}`);
         }
-      } catch (error) {
-        console.error('Error fetching predictions:', error);
+      } else {
+        setPredict();
+        console.log('Prediction document does not exist');
       }
-    };
+    } catch (error) {
+      console.error('Error fetching predictions:', error);
+    }
+  };
 
   return (
     <div className="StockGraph-container">
