@@ -20,7 +20,7 @@ const DefaultGraph = ({ selectStock, stockData, predict, predictDisplay }) => {
     if (selectStock) {
       fetchData();
     }
-  }, [selectStock, predictDisplay]);
+  }, [selectStock, selectedStockClosePrice, predictDisplay, predict]);
 
   const fetchData = async () => {
     try {
