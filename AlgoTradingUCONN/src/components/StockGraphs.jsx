@@ -14,7 +14,7 @@ const DefaultGraph = ({ selectStock, stockData, predict, predictDisplay }) => {
     if (selectedStock) {
       setSelectedStockClosePrice(selectedStock.c);
     }
-  }, [selectStock, stockData]);
+  }, [selectStock, stockData, predict, predictDisplay]);
 
   useEffect(() => {
     if (selectStock) {
