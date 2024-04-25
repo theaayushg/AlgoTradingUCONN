@@ -2,6 +2,7 @@
     max-width: 600px;
     margin: 0 auto;
     padding: 20px;
+    align-items: center;
   }
   
   .investment-header {
@@ -18,7 +19,7 @@
   .invest-invest-container {
     display: flex;
     background-color: black;
-    padding-top: 48px;
+    padding-top: 10px;
     box-shadow: -1px 4px 20px -6px rgba(0, 0, 0, 0.7);
     color: white;
     z-index: 50;
@@ -33,6 +34,7 @@
     background-color: #1E2023;
     border-radius: 5px;           
     color: white;
+    align-items: center;
   }
 
   .investment-header p {
@@ -110,5 +112,10 @@
   .error-message .error {
     color: #dc3545;
     font-weight: bold;
+  }
+
+  .view-buttons {
+    padding: 20px 130px 20px;
+    align-items: center;
   }
   
