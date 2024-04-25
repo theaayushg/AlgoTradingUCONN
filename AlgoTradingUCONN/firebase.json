@@ -19,6 +19,12 @@
     ],
     "predeploy": [
       "npm run build"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
     ]
   }
 }

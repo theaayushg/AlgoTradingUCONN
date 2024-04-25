@@ -3,9 +3,9 @@
   color: white;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  height: 64px;
-  padding: 0 20px; /* Adjusted padding for more consistent spacing */
+  /* justify-content: space-between; */
+  height: 90px;
+  padding: 0 20px; /*Adjusted padding for more consistent spacing */
   position: sticky;
   top: 0; /* Sticky position to stay at the top */
   z-index: 1000; /* Ensure header is on top of other elements */
@@ -14,14 +14,15 @@
 .header__logo img {
   width: 55px;
   height: auto;
-  margin-right: 24px; /* Adjusted margin for better spacing */
-  margin-left: 70px;
+
+  margin-top: 7px;
 }
 
 .header__title {
   color: #64b9ff;
   font-size: 1.5rem; /* Using rem units for scalable font size */
-  margin: 0; /* Removed margin-left */
+  margin-left: 10px;
+  margin-right: 60px;
 }
 
 .header__menuItems {
@@ -32,10 +33,16 @@
 .header__menuItems a {
   color: #64b9ff;
   font-weight: bold;
+  font-size: large;
   text-decoration: none;
+  justify-content: space-between;
   padding: 10px 15px; /* Adjusted padding */
   border-radius: 4px; /* Added rounded corners for a button-like appearance */
   transition: color 0.3s ease; /* Smooth color transition on hover */
+}
+
+.header__userInfo {
+  margin-left: 50px;
 }
 
 .header__menuItems a:hover,
