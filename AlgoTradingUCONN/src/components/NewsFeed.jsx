@@ -53,7 +53,7 @@ function NewsFeed({ user_portfolio, selectStock, stockData, portfolioStock, user
         <div className="newsfeed__chartSection">
           <div className="newsfeed__chart">
             <GraphOrStock user_portfolio={user_portfolio} selectStock={selectStock} PortfolioData={PortfolioData} stockData={stockData} predictDisplay={predictDisplay} portfolioStock={portfolioStock} view={viewPerformance} userid={userid}/>
-            <TimeLine setPredictDisplay={setPredictDisplay} setViewPerformance={setviewPerformance} viewPerformance={viewPerformance} />
+            <TimeLine setPredictDisplay={setPredictDisplay} selectStock={selectStock} viewPerformance={viewPerformance} setviewPerformance={setviewPerformance} />
             <News selectStock={selectStock} />
           </div>
         </div>

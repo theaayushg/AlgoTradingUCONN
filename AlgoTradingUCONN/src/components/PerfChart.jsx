@@ -2,16 +2,21 @@ import React, { useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
 import { getDoc, doc } from 'firebase/firestore';
 import { db } from "../services/firebase";
+import { data } from '@tensorflow/tfjs';
 
 
 function PerformanceChart({ userId }) {
     const [chartData, setChartData] = useState({});
+    const [todayData, setTodayData] = useState({value: 0, previousValue: 0});
+    const [todayPercent, setTodayPercent] = useState(0);
 
     useEffect(() => {
         const fetchData = async () => {
             const transactions = await fetchTransactions();
             const stockPrices = await fetchStockPrices();
             const dataByDate = processData(transactions, stockPrices);
+            const dateKey = Object.keys(dataByDate).reduce((a, b) => dataByDate[a] > dataByDate[b] ? a : b);
+            setTodayData(dataByDate[dateKey]);
             const chartData = prepareChartData(dataByDate);
             setChartData(chartData);
         };
@@ -118,6 +123,9 @@ function PerformanceChart({ userId }) {
 
     return (
         <div>
+            <div className="newsfeed__portfolio">
+                <h1>Net Gain Value: ${Number(todayData.value).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</h1>
+            </div>
             {Object.keys(chartData).length > 0 ? <Line data={chartData} /> : <p>Loading chart...</p>}
         </div>
     );

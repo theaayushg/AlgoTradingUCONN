@@ -10,7 +10,7 @@ const BASE_URL = "https://finnhub.io/api/v1/news";
 const from  ="2024-02-02";
 const to = "2024-04-10";
 
-const News = ({ selectStock}) => {
+const News = ({ selectStock }) => {
     const [news, setNews] = useState([]);
     const [foundNews, setfoundNews] = useState(false);
 
@@ -54,7 +54,7 @@ const News = ({ selectStock}) => {
                     ))}
                 </div>
             ) : (
-                <p>No news available for the selected stock.</p>
+                <p></p>
             )}
         </div>
     );
