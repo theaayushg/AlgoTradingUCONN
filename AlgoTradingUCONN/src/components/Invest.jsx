@@ -7,7 +7,6 @@ import { Timestamp } from "firebase/firestore"
 import ErrorMessage from "../services/ErrorMessage";
 import TransactionList from "./TransactionList";
 import "../styles/investment.css";
-import PerformanceChart from "./PerfChart";
 
 function Invest({ user, stockData, user_portfolio, setPortfolio, balance, setBalance }) {
   const [selectedStock, setSelectedStock] = useState("");
@@ -16,7 +15,6 @@ function Invest({ user, stockData, user_portfolio, setPortfolio, balance, setBal
   const [errorMessage, setErrorMessage] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
   const [reloadTransactions, setreloadTransactions] = useState(false);
-  const [view, setView] = useState("transactions");
 
   const handleActionChange = (e) => {
     setAction(e);
@@ -84,15 +82,6 @@ function Invest({ user, stockData, user_portfolio, setPortfolio, balance, setBal
     else{
       setErrorMessage("Please enter a valid number of shares to sell");
     }
-  };
-
-  const handleViewChange = (action) => {
-    setAction(action);
-    setView("invest");
-  };
-
-  const toggleView = (view) => {
-    setView(view);
   };
 
   return (
@@ -171,32 +160,16 @@ function Invest({ user, stockData, user_portfolio, setPortfolio, balance, setBal
       </div>
       </div>
 
-      <div className="view-buttons">
-              <button onClick={() => toggleView("transactions")} className={view === "transactions" ? "active" : ""}>Transaction History</button>
-              <button onClick={() => toggleView("performance")} className={view === "performance" ? "active" : ""}>Performance</button>
+      <div className="invest-invest-container">
+      <div className="investment-container">
+      <div className="investment-header investment-lists">
+          <p>Transaction History</p>
+        </div>
+        <div className="transaction-list">
+          <TransactionList userId={user.uid} reload={reloadTransactions}/>
+        </div>
       </div>
-      
-      {view === "transactions" && (
-        <div className="invest-invest-container">
-        <div className="investment-container">
-          <div className="investment-header investment-lists">
-            <p>Transaction History</p>
-          </div>
-          <TransactionList userId={user.uid} reload={view === "transactions"}/>
-        </div>
-        </div>
-      )}
-      
-      {view === "performance" && (
-        <div className="investment-container">
-          <div className="investment-header investment-lists">
-            <p>Performance</p>
-          </div>
-          <div className="performance-content">
-            <PerformanceChart userId={user.uid} />
-          </div>
-        </div>
-      )}
+      </div>
     </div>
   );
 }

@@ -4,18 +4,23 @@ import Graph from "./Graph";
 import TimeLine from "./TimeLine";
 import StockGraphs from "./StockGraphs";
 import News from "./News.jsx";
+import PerformanceChart from "./PerfChart";
 
-function GraphOrStock({ selectStock, user_portfolio, PortfolioData ,stockData, predictDisplay, portfolioStock}) {
-  if (selectStock == "portfolio") {
+function GraphOrStock({ selectStock, user_portfolio, PortfolioData ,stockData, predictDisplay, portfolioStock, view, userid}) {
+  if (selectStock == "portfolio" && view === false) {
     return <Graph user_portfolio={user_portfolio} PortfolioData={PortfolioData} portfolioStock={portfolioStock}/>;
-  } else {
+  } else if (selectStock == "portfolio" && view === true) {
+    return <PerformanceChart userId={userid} />;
+  }
+  else {
     return <StockGraphs selectStock={selectStock} stockData={stockData} predictDisplay={predictDisplay}/>;
   }
 }
 
-function NewsFeed({ user_portfolio, selectStock, stockData, portfolioStock }) {
+function NewsFeed({ user_portfolio, selectStock, stockData, portfolioStock, userid}) {
   const [PortfolioData, setPortfolioData] = useState({price: 0, priceChange: 0, percentageChange: 0 });
   const [predictDisplay,setPredictDisplay]=useState(false);
+  const [viewPerformance ,setviewPerformance]=useState(false);
 
   const calc_PPrice = () => {
     let total_worth = 0;
@@ -47,8 +52,8 @@ function NewsFeed({ user_portfolio, selectStock, stockData, portfolioStock }) {
       <div className="newsfeed__container">
         <div className="newsfeed__chartSection">
           <div className="newsfeed__chart">
-            <GraphOrStock user_portfolio={user_portfolio} selectStock={selectStock} PortfolioData={PortfolioData} stockData={stockData} predictDisplay={predictDisplay} portfolioStock={portfolioStock}/>
-            <TimeLine setPredictDisplay={setPredictDisplay}/>
+            <GraphOrStock user_portfolio={user_portfolio} selectStock={selectStock} PortfolioData={PortfolioData} stockData={stockData} predictDisplay={predictDisplay} portfolioStock={portfolioStock} view={viewPerformance} userid={userid}/>
+            <TimeLine setPredictDisplay={setPredictDisplay} setViewPerformance={setviewPerformance} viewPerformance={viewPerformance} />
             <News selectStock={selectStock} />
           </div>
         </div>
