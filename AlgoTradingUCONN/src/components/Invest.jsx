@@ -7,6 +7,7 @@ import { Timestamp } from "firebase/firestore"
 import ErrorMessage from "../services/ErrorMessage";
 import TransactionList from "./TransactionList";
 import "../styles/investment.css";
+import PerformanceChart from "./PerfChart";
 
 function Invest({ user, stockData, user_portfolio, setPortfolio, balance, setBalance }) {
   const [selectedStock, setSelectedStock] = useState("");
@@ -192,7 +193,7 @@ function Invest({ user, stockData, user_portfolio, setPortfolio, balance, setBal
             <p>Performance</p>
           </div>
           <div className="performance-content">
-            {/* Empty container for now */}
+            <PerformanceChart userId={user.uid} />
           </div>
         </div>
       )}

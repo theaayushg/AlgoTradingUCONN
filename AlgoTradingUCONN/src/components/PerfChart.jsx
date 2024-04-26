@@ -3,19 +3,37 @@ import { Line } from 'react-chartjs-2';
 import { getDoc, doc } from 'firebase/firestore';
 import { db } from "../services/firebase";
 
+
 function PerformanceChart({ userId }) {
     const [chartData, setChartData] = useState({});
 
     useEffect(() => {
         const fetchData = async () => {
             const transactions = await fetchTransactions();
-            const dataByDate = processData(transactions);
+            const stockPrices = await fetchStockPrices();
+            const dataByDate = processData(transactions, stockPrices);
             const chartData = prepareChartData(dataByDate);
             setChartData(chartData);
         };
 
         fetchData();
-    }, [userId]); 
+    }, [userId]);
+
+    const fetchStockPrices = async () => {
+        const stockDataRef = doc(db, 'StockData', 'Data');
+        const stockDataSnap = await getDoc(stockDataRef);
+        if (stockDataSnap.exists()) {
+            const stocks = stockDataSnap.data().Stocks;
+            const stockPrices = {};
+            Object.keys(stocks).forEach(ticker => {
+                stockPrices[ticker] = stocks[ticker].c;
+            });
+            return stockPrices;
+        } else {
+            console.log('No stock data available');
+            return {};
+        }
+    };
 
     const fetchTransactions = async () => {
         if (!userId) {
@@ -50,13 +68,13 @@ function PerformanceChart({ userId }) {
         }
     };
 
-    const processData = (transactions) => {
+    const processData = (transactions, stockPrices) => {
         let dailyValues = {};
         let portfolio = {};
 
         transactions.forEach(transaction => {
             const { stockTicker, stockData, orderType, timeStamp } = transaction;
-            const dateKey = timeStamp.toISOString().split('T')[0]; // Convert timestamp to YYYY-MM-DD format
+            const dateKey = timeStamp.toISOString().split('T')[0];
 
             if (!dailyValues[dateKey]) {
                 dailyValues[dateKey] = {
@@ -65,17 +83,15 @@ function PerformanceChart({ userId }) {
                 };
             }
 
+            let closingPrice = stockPrices[stockTicker]; // Using the closing price from fetched stock data
+
             if (orderType === "BUY") {
                 portfolio[stockTicker] = (portfolio[stockTicker] || 0) + stockData.Shares;
             } else if (orderType === "SELL") {
                 portfolio[stockTicker] = (portfolio[stockTicker] || 0) - stockData.Shares;
             }
 
-            // Simulate a method to get the closing price for the stock on that day
-            const stockDocRef = doc(db, "StockData", "Data");
-            let closingPrice = stockData.BuyPrice; // Placeholder for actual logic to fetch daily closing prices
-
-            dailyValues[dateKey].value += portfolio[stockTicker] * closingPrice; // Update daily total value
+            dailyValues[dateKey].value += (portfolio[stockTicker] || 0) * closingPrice;
         });
 
         return dailyValues;
