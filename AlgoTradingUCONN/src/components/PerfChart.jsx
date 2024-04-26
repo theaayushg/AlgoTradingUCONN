@@ -5,9 +5,9 @@ import { db } from "../services/firebase";
 import { data } from '@tensorflow/tfjs';
 
 
-function PerformanceChart({ userId }) {
+function PerformanceChart({ userId, user_portfolio }) {
     const [chartData, setChartData] = useState({});
-    const [todayData, setTodayData] = useState({value: 0, previousValue: 0});
+    const [todayData, setTodayData] = useState({value: 0, presentDayValue: 0});
     const [todayPercent, setTodayPercent] = useState(0);
 
     useEffect(() => {
@@ -22,7 +22,7 @@ function PerformanceChart({ userId }) {
         };
 
         fetchData();
-    }, [userId]);
+    }, [userId, user_portfolio]);
 
     const fetchStockPrices = async () => {
         const stockDataRef = doc(db, 'StockData', 'Data');
@@ -76,6 +76,8 @@ function PerformanceChart({ userId }) {
     const processData = (transactions, stockPrices) => {
         let dailyValues = {};
         let portfolio = {};
+        let totalWorth = 0;
+        let cur_totalWorth = 0;
     
         transactions.forEach(transaction => {
             const { stockTicker, stockData, orderType, timeStamp } = transaction;
@@ -88,8 +90,10 @@ function PerformanceChart({ userId }) {
             const sharesChange = orderType === "BUY" ? stockData.Shares : -stockData.Shares;
             portfolio[stockTicker] = (portfolio[stockTicker] || 0) + sharesChange;
     
-            dailyValues[dateKey].value += sharesChange * (orderType === "BUY" ? stockData.BuyPrice : stockData.SellPrice);
-            dailyValues[dateKey].presentDayValue += (portfolio[stockTicker] || 0) * stockPrices[stockTicker];
+            totalWorth += sharesChange * (orderType === "BUY" ? stockData.BuyPrice : stockData.SellPrice);
+            dailyValues[dateKey].value = totalWorth;
+            cur_totalWorth += sharesChange * stockPrices[stockTicker];
+            dailyValues[dateKey].presentDayValue = cur_totalWorth
         });
     
         return dailyValues;
@@ -99,15 +103,15 @@ function PerformanceChart({ userId }) {
         const labels = Object.keys(dataByDate);
         const data = labels.map(date => {
             const { value, presentDayValue } = dataByDate[date];
-            let value_log = ((presentDayValue - value) / value) * 100;
+            let value_log = (presentDayValue - value);
             console.log(value_log);
-            return ((presentDayValue - value) / value) * 100; // Percentage change formula
+            return (presentDayValue - value); // Percentage change formula
         });
 
         return {
             labels,
             datasets: [{
-                label: 'Portfolio Net Gain/Loss Percentage',
+                label: 'Portfolio value ($)',
                 data,
                 fill: false,
                 borderColor: 'rgb(75, 192, 192)',
@@ -119,7 +123,8 @@ function PerformanceChart({ userId }) {
     return (
         <div>
             <div className="newsfeed__portfolio">
-                <h1>Net Gain Value</h1>
+                <h1>Portfolio Performance</h1>
+                <h3>Current Gain: ${(todayData.presentDayValue - todayData.value).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</h3>
             </div>
             {Object.keys(chartData).length > 0 ? <Line data={chartData} /> : <p>Loading chart...</p>}
         </div>

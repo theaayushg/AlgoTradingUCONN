@@ -10,7 +10,7 @@ function GraphOrStock({ selectStock, user_portfolio, PortfolioData ,stockData, p
   if (selectStock == "portfolio" && view === false) {
     return <Graph user_portfolio={user_portfolio} PortfolioData={PortfolioData} portfolioStock={portfolioStock}/>;
   } else if (selectStock == "portfolio" && view === true) {
-    return <PerformanceChart userId={userid} />;
+    return <PerformanceChart userId={userid} user_portfolio={user_portfolio}/>;
   }
   else {
     return <StockGraphs selectStock={selectStock} stockData={stockData} predictDisplay={predictDisplay}/>;
