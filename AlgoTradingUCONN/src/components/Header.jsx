@@ -13,15 +13,19 @@ function Header({ user, balance, setBalance }) {
   return (
     <div className="header__wrapper">
       {/* logo */}
-      <div className="header__logo">
-        <Link to="/">
-          <img src={Logo} alt="AlgoTradingUCONN Logo" />
-        </Link>
+      <div className="header__left">
+        <div className="header__logo">
+          <Link to="/">
+            <img src={Logo} alt="AlgoTradingUCONN Logo" />
+          </Link>
+        </div>
+        {/* page title */}
+        <div className="header__title">
+          <Link to="/">
+            <h1>AlgoTradingUCONN</h1>
+          </Link>
+        </div>
       </div>
-      {/* page title */}
-        <Link to="/">
-          <h1 className="header__title">AlgoTradingUCONN</h1>
-        </Link>
       {/* menu items */}
       <div className="header__menuItems">
         <Link to="/AboutUs">About Us</Link>

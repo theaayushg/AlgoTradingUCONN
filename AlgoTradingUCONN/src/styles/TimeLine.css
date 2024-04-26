@@ -1,6 +1,7 @@
 .timeline__container {
   display: flex;
   border-bottom: 1px solid #3b4754;
+  padding-bottom: 5px;
 }
 
 .timeline__buttons__container {

@@ -3,31 +3,40 @@
   color: white;
   display: flex;
   align-items: center;
-  /* justify-content: space-between; */
+  justify-content: space-between;
   height: 90px;
-  padding: 0 20px; /*Adjusted padding for more consistent spacing */
+  /*padding: 0 20px; /* Adjusted padding for more consistent spacing */
   position: sticky;
   top: 0; /* Sticky position to stay at the top */
   z-index: 1000; /* Ensure header is on top of other elements */
 }
 
+.header__left {
+  display: flex;
+  padding-left: 3%;
+}
+
 .header__logo img {
+  /* width: 30%; */
   width: 55px;
   height: auto;
-
   margin-top: 7px;
 }
 
-.header__title {
+.header__title{
+  padding-top: 29px;
+  padding-left: 7px;
+}
+
+.header__title h1{
   color: #64b9ff;
   font-size: 1.5rem; /* Using rem units for scalable font size */
-  margin-left: 10px;
   margin-right: 60px;
 }
 
 .header__menuItems {
   display: flex;
-  gap: 20px; /* Adjusted gap for better spacing between menu items */
+  gap: 20px; /* Adjusted gap for better spacing between smenu items */
 }
 
 .header__menuItems a {
@@ -42,7 +51,8 @@
 }
 
 .header__userInfo {
-  margin-left: 50px;
+  padding-right: 2.5%;
+  /* margin-left: 50px; */
 }
 
 .header__menuItems a:hover,

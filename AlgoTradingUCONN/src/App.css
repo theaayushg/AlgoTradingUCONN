@@ -45,6 +45,11 @@
   box-sizing: border-box;
 } 
 
+.account__page {
+  width: 100vw;
+  height: 100vw;
+}
+
 .app__account__container {
   display: flex;
   background-color: black;

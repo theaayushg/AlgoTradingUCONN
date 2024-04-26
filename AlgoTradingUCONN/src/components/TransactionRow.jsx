@@ -14,8 +14,8 @@ const TransactionRow = ({ order }) => {
             </div>
             <div className="orderrow__numbers">
                 <p>Shares: {Shares}</p>
-                <p className="orderrow__price">Price: ${orderType === 'BUY' ? BuyPrice : SellPrice}</p>
                 <p>Date: {timeStamp.toLocaleDateString()}</p> {/* Ensure timestamp is a Date object */}
+                <p className="orderrow__price">Price: ${orderType === 'BUY' ? BuyPrice : SellPrice}</p>
             </div>
         </div>
     );
