@@ -32,7 +32,9 @@ function Stats({ stockData, user_portfolio, setSelectStock, setPortfolioStock })
            {user_portfolio.length === 0 && 
             <div>You own no stocks, go to Invest page to buy some!</div>
            }
-           {user_portfolio.map((stock) => (
+           {user_portfolio
+            .sort((a, b) => a.ticker.localeCompare(b.ticker))
+            .map((stock) => (
             <StatsRow
               key={stock.ticker}
               name={stock.ticker}
@@ -51,7 +53,9 @@ function Stats({ stockData, user_portfolio, setSelectStock, setPortfolioStock })
         </div>
         <div className="stats__content">
           <div className="stats__rows">
-            {stockData.map((stock) => (
+            {stockData
+              .sort((a, b) => a.name.localeCompare(b.name))
+              .map((stock) => (
               <StatsRow
                 key={stock.name}
                 name={stock.name}
