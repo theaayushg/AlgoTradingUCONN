@@ -47,8 +47,13 @@ const DefaultGraph = ({ selectStock, stockData, predict, predictDisplay }) => {
         setSelectedStockClosePrice(sortedClosePrices[todayPriceIndex]);
       }
       labels.push(format(new Date(), 'yyyy-MM-dd'));
-      if (predictDisplay) {
-        const tomorrow = addDays(new Date(), 1);
+     if (predictDisplay) {
+        let tomorrow;
+        if (new Date().getDay() === 5) { // if its Friday tomorrow will be monday instead of actual tomorrow
+          tomorrow = addDays(new Date(), 3);
+        } else {
+          tomorrow = addDays(new Date(), 1);
+        }
         labels.push(format(tomorrow, 'yyyy-MM-dd'));
       }
 
