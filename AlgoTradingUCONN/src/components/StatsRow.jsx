@@ -1,4 +1,3 @@
-import React from 'react'
 import "../styles/StatsRow.css"
 import StockSVG from "../assets/stock.svg"
 import stocknegative from "../assets/stock-red.svg"
@@ -9,8 +8,15 @@ function StatsRow(props) {
   const stockImage = percentage < 0 ? stocknegative : StockSVG;
   const percentageColor = percentage < 0 ? "red" : "green";
 
+  function isPortfolio(flag,name,setSelectStock){
+    if(flag){
+      flag("portfolio");
+    }
+    setSelectStock(name);
+  }
+
   return (
-    <button className="row" onClick={() => props.setSelectStock(props.name)}>
+    <button className="row" onClick={() => isPortfolio(props.flag,props.name,props.setSelectStock)}>
       <div className="row__intro">
         <h1>{props.name}</h1>
         <p>
