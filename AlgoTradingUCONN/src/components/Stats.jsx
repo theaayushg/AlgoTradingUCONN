@@ -40,7 +40,7 @@ function Stats({ stockData, user_portfolio, setSelectStock, setPortfolioStock })
               volume={stock.numShares}
               price={stock.info.c}
               setSelectStock={setPortfolioStock}
-              flag={true}
+              flag={setSelectStock}
             />
            ))}
           </div>
