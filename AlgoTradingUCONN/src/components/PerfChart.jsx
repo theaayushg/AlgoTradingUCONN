@@ -76,43 +76,38 @@ function PerformanceChart({ userId }) {
     const processData = (transactions, stockPrices) => {
         let dailyValues = {};
         let portfolio = {};
-
+    
         transactions.forEach(transaction => {
             const { stockTicker, stockData, orderType, timeStamp } = transaction;
             const dateKey = timeStamp.toISOString().split('T')[0];
-
+    
             if (!dailyValues[dateKey]) {
-                dailyValues[dateKey] = {
-                    value: 0,
-                    previousValue: Object.keys(dailyValues).length > 0 ? dailyValues[Object.keys(dailyValues).at(-1)].value : 0
-                };
+                dailyValues[dateKey] = { value: 0, presentDayValue: 0 };
             }
-
-            let closingPrice = stockPrices[stockTicker]; // Using the closing price from fetched stock data
-
-            if (orderType === "BUY") {
-                portfolio[stockTicker] = (portfolio[stockTicker] || 0) + stockData.Shares;
-            } else if (orderType === "SELL") {
-                portfolio[stockTicker] = (portfolio[stockTicker] || 0) - stockData.Shares;
-            }
-
-            dailyValues[dateKey].value += (portfolio[stockTicker] || 0) * closingPrice;
+    
+            const sharesChange = orderType === "BUY" ? stockData.Shares : -stockData.Shares;
+            portfolio[stockTicker] = (portfolio[stockTicker] || 0) + sharesChange;
+    
+            dailyValues[dateKey].value += sharesChange * (orderType === "BUY" ? stockData.BuyPrice : stockData.SellPrice);
+            dailyValues[dateKey].presentDayValue += (portfolio[stockTicker] || 0) * stockPrices[stockTicker];
         });
-
+    
         return dailyValues;
     };
 
     const prepareChartData = (dataByDate) => {
         const labels = Object.keys(dataByDate);
         const data = labels.map(date => {
-            const { value, previousValue } = dataByDate[date];
-            return ((value - previousValue) / previousValue) * 100; // Percentage change formula
+            const { value, presentDayValue } = dataByDate[date];
+            let value_log = ((presentDayValue - value) / value) * 100;
+            console.log(value_log);
+            return ((presentDayValue - value) / value) * 100; // Percentage change formula
         });
 
         return {
             labels,
             datasets: [{
-                label: 'Daily Percentage Change',
+                label: 'Portfolio Net Gain/Loss Percentage',
                 data,
                 fill: false,
                 borderColor: 'rgb(75, 192, 192)',
@@ -124,7 +119,7 @@ function PerformanceChart({ userId }) {
     return (
         <div>
             <div className="newsfeed__portfolio">
-                <h1>Net Gain Value: ${Number(todayData.value).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</h1>
+                <h1>Net Gain Value</h1>
             </div>
             {Object.keys(chartData).length > 0 ? <Line data={chartData} /> : <p>Loading chart...</p>}
         </div>
