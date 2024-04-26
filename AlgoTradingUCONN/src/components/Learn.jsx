@@ -71,7 +71,7 @@ function Learn() {
                 </button>
             </div>
             <div key={curResource} className="category-section">
-                <h2>{curResource}</h2>
+                {/* <h2>{curResource}</h2> */}
                 <div className="resources">
                     {resources.filter(resource => resource.category === curResource).map((resource, index) => (
                         <div key={index} className="resource-card">

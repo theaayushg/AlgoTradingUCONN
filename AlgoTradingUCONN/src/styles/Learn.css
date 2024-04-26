@@ -1,8 +1,8 @@
 .learn-container {
-  min-width: 97vw;            /* Use the full width of the viewport */
-  min-height: 100vh;          /* Minimum height to occupy the full viewport height */
+  min-width: 100vw;            /* Use the full width of the viewport */
+  height: 52vw;          /* Minimum height to occupy the full viewport height */
   margin: auto;          /* Center horizontally with auto margins */
-  padding: 20px;
+  /* padding: 20px; */
   display: flex;              /* Use flexbox layout */
   flex-direction: column;     /* Arrange children in a column */
   justify-content: center;    /* Center content vertically */
@@ -16,6 +16,7 @@
 }
 
 .category-section {
+  margin-top: 10px;
   margin-bottom: 30px;
 }
 

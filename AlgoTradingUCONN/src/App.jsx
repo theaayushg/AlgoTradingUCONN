@@ -173,7 +173,7 @@ function App() {
               />
 
               <Route path="/account" element={user ? 
-                <div>
+                <div className='account__page'>
                   <div className='app__container'>
                     <AddFunds user={user} balance={balance} setBalance={setBalance} />
                   </div>
